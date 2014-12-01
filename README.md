@@ -1,4 +1,4 @@
-ravenclaw
+Ravenclaw
 =========
 
 Yet another database management written in PHP.
