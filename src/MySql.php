@@ -4,14 +4,16 @@ use Describe\DescribeInterface;
 
 class MySql implements DescribeInterface {
 
+	private $_columns        = array();
 	private $_databaseHandle = NULL;
-	private $_columns = array();
 
 	/**
 	 * Get the properties and attributes of the specified table
 	 * 
-	 * @param 	$table
-	 * @return 	array
+	 * @param string $hostname
+	 * @param string $database
+	 * @param string $username
+	 * @param string $password
 	 */
 	public function __construct($hostname, $database, $username, $password)
 	{
@@ -90,6 +92,12 @@ class MySql implements DescribeInterface {
 		return $this->_columns;
 	}
 
+	/**
+	 * Get the primary key in the specified table
+	 * 
+	 * @param  string $table
+	 * @return string
+	 */
 	public function getPrimaryKey($table)
 	{
 		$columns = (empty($this->_columns)) ? $this->getInformationFromTable($table) : $this->_columns;

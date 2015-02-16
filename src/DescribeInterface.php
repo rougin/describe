@@ -1,4 +1,3 @@
 <?php namespace Describe;
 
-interface DescribeInterface {
-}
+interface DescribeInterface {}
