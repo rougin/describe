@@ -25,7 +25,7 @@ To initialize:
 ```
 $database       = 'hello';
 $databaseDriver = 'mysql';
-$hostname      = 'localhost';
+$hostname       = 'localhost';
 $password       = '';
 $username       = 'root';
 
