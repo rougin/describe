@@ -1,46 +1,15 @@
 <?php namespace Describe;
 
+use Describe\Describe;
 use Describe\DescribeInterface;
 
 class MySql implements DescribeInterface {
 
-	private $_columns        = array();
 	private $_databaseHandle = NULL;
 
-	/**
-	 * Get the properties and attributes of the specified table
-	 * 
-	 * @param string $hostname
-	 * @param string $database
-	 * @param string $username
-	 * @param string $password
-	 */
-	public function __construct($hostname, $database, $username, $password)
+	public function __construct($databaseHandle)
 	{
-		if (is_array($hostname)) {
-			$hostname = $hostname['hostname'];
-			$database = $hostname['database'];
-			$username = $hostname['username'];
-			$password = $hostname['password'];
-		}
-
-		/**
-		 * Connect to the database
-		 */
-
-		try {
-			$this->_databaseHandle = new \PDO(
-				'mysql:host=' . $hostname . 
-				';dbname=' . $database,
-				$username,
-				$password
-			);
-
-			$this->_databaseHandle->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-		}
-		catch (\PDOException $error) {
-			exit($error->getMessage());
-		}
+		$this->_databaseHandle = $databaseHandle;
 	}
 
 	/**
@@ -50,6 +19,7 @@ class MySql implements DescribeInterface {
 	 */
 	public function getInformationFromTable($table)
 	{
+		$columns = array();
 		$tableInformation = $this->_databaseHandle->prepare('DESCRIBE ' . $table);
 		$tableInformation->execute();
 		$tableInformation->setFetchMode(\PDO::FETCH_OBJ);
@@ -59,7 +29,7 @@ class MySql implements DescribeInterface {
 				'defaultValue'     => $row->Default,
 				'extra'            => $row->Extra,
 				'field'            => $row->Field,
-				'isNull'           => $row->Null,
+				'isNull'           => NULL,
 				'key'              => $row->Key,
 				'referencedColumn' => NULL,
 				'referencedTable'  => NULL,
@@ -82,31 +52,15 @@ class MySql implements DescribeInterface {
 					$column['referencedColumn'] = $foreignRow->referenced_column;
 					$column['referencedTable']  = $foreignRow->referenced_table;
 				}
+
 			}
 
-			$this->_columns[] = (object) $column;
+			$column['isNull'] = ($row->Null == 'YES') ? TRUE : FALSE;
+
+			$columns[] = (object) $column;
 		}
 
-		$this->_databaseHandle = NULL;
-
-		return $this->_columns;
-	}
-
-	/**
-	 * Get the primary key in the specified table
-	 * 
-	 * @param  string $table
-	 * @return string
-	 */
-	public function getPrimaryKey($table)
-	{
-		$columns = (empty($this->_columns)) ? $this->getInformationFromTable($table) : $this->_columns;
-
-		foreach ($columns as $column) {
-			if ($column->key == 'PRI') {
-				return $column->field;
-			}
-		}
+		return $columns;
 	}
 
 }

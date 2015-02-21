@@ -1,3 +1,5 @@
 <?php namespace Describe;
 
-interface DescribeInterface {}
+interface DescribeInterface {
+	public function getInformationFromTable($table);
+}
