@@ -25,9 +25,20 @@ class Describe {
 			$password = $hostname['password'];
 			$username = $hostname['username'];
 
-			$this->_databaseDriver = $hostname['driver'];
 			$hostname = $hostname['hostname'];
 		}
+
+		/**
+		 * Change to "mysql" if the driver specified is "mysqli"
+		 */
+
+		$driver = ($driver == 'mysqli') ? 'mysql' : $driver;
+
+		/**
+		 * Set as the currently selected driver
+		 */
+
+		$this->_databaseDriver = $driver;
 
 		/**
 		 * Connect to the database
@@ -61,10 +72,12 @@ class Describe {
 				$mysql = new MySql($this->_databaseHandle);
 				$this->_columns = $mysql->getInformationFromTable($table);
 
-				return $this->_columns;
+				break;
 			default:
-				return $this->_columns;
+				break;
 		}
+
+		return $this->_columns;
 	}
 
 	/**
@@ -75,7 +88,11 @@ class Describe {
 	 */
 	public function getPrimaryKey($table)
 	{
-		$columns = (empty($this->_columns)) ? $this->getInformationFromTable($table) : $this->_columns;
+		$columns = $this->_columns;
+
+		if (empty($columns)) {
+			$columns = $this->getInformationFromTable($table);
+		}
 
 		foreach ($columns as $column) {
 			if ($column->key == 'PRI') {

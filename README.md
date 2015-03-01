@@ -1,3 +1,5 @@
+[![endorse](https://api.coderwall.com/rougin/endorsecount.png)](https://coderwall.com/rougin)
+
 Describe
 ========
 
@@ -69,27 +71,26 @@ foreach ($tableInformation as $column) {
 }
 ```
 
-Returned methods or properties
-==============================
+### Returned methods or properties
 
-```$tableInformation->getPrimaryKey()``` Returns the primary key in the "described" table
+* ```$tableInformation->getPrimaryKey()``` Returns the primary key in the "described" table
 
 The object named ```$column``` in the example above will return the following properties:
 
-```defaultValue``` Check if the field has a default value
+* ```defaultValue``` Check if the field has a default value
 
-```extra``` Returns an extra information
+* ```extra``` Returns an extra information
 
 (for example, 'extra' will return 'auto_increment' if the column is a primary key in MySQL)
 
-```field``` Name of the column
+* ```field``` Name of the column
 
-```isNull``` Check if the column can accept NULL values or not
+* ```isNull``` Check if the column can accept ```NULL``` values or not
 
-```key``` Check if it is a primary key or a foreign key
+* ```key``` Check if it is a primary key or a foreign key
 
-```referencedColumn``` Return the referenced column if the column is an foreign key
+* ```referencedColumn``` Return the referenced column if the column is an foreign key
 
-```referencedTable``` Return the referenced table if the column is an foreign key
+* ```referencedTable``` Return the referenced table if the column is an foreign key
 
-```type``` Return the data type and its length (if any)
+* ```type``` Return the data type and its length (if any)
