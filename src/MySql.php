@@ -3,10 +3,19 @@
 use Describe\Describe;
 use Describe\DescribeInterface;
 
+/**
+ * MySql Class
+ */
+
 class MySql implements DescribeInterface {
 
 	private $_databaseHandle = NULL;
 
+	/**
+	 * Inject the database handle
+	 * 
+	 * @param \PDO $databaseHandle
+	 */
 	public function __construct($databaseHandle)
 	{
 		$this->_databaseHandle = $databaseHandle;
@@ -52,7 +61,6 @@ class MySql implements DescribeInterface {
 					$column['referencedColumn'] = $foreignRow->referenced_column;
 					$column['referencedTable']  = $foreignRow->referenced_table;
 				}
-
 			}
 
 			$column['isNull'] = ($row->Null == 'YES') ? TRUE : FALSE;

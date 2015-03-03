@@ -2,6 +2,10 @@
 
 use Describe\MySql;
 
+/**
+ * Describe Class
+ */
+
 class Describe {
 
 	private $_columns        = array();
@@ -62,22 +66,23 @@ class Describe {
 
 	/**
 	 * Return the result
-	 * 
+	 *
+	 * @param  string $table
 	 * @return array
 	 */
 	public function getInformationFromTable($table)
 	{
+		$driver = NULL;
+
 		switch ($this->_databaseDriver) {
 			case 'mysql':
-				$mysql = new MySql($this->_databaseHandle);
-				$this->_columns = $mysql->getInformationFromTable($table);
-
+				$driver = new MySql($this->_databaseHandle);
 				break;
 			default:
 				break;
 		}
 
-		return $this->_columns;
+		return ($driver != NULL) ? $driver->getInformationFromTable($table) : array();
 	}
 
 	/**
@@ -99,6 +104,28 @@ class Describe {
 				return $column->field;
 			}
 		}
+	}
+
+	/**
+	 * Return the result
+	 * 
+	 * @param  string $table
+	 * @return array
+	 */
+	public function get_information_from_table($table)
+	{
+		return $this->getInformationFromTable($table);
+	}
+
+	/**
+	 * Get the primary key in the specified table
+	 * 
+	 * @param  string $table
+	 * @return string
+	 */
+	public function get_primary_key($table)
+	{
+		return $this->getPrimaryKey($table);
 	}
 
 }
