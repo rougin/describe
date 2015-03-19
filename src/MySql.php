@@ -5,8 +5,10 @@ use Describe\DescribeInterface;
 
 /**
  * MySql Class
+ *
+ * @package  Describe
+ * @category MySQL
  */
-
 class MySql implements DescribeInterface {
 
 	private $_databaseHandle = NULL;
@@ -45,14 +47,15 @@ class MySql implements DescribeInterface {
 				'type'             => $row->Type
 			);
 
-			$foreignTableInformation = $this->_databaseHandle->prepare('
-				SELECT
-					COLUMN_NAME as "column",
-					REFERENCED_TABLE_NAME as "referenced_table",
-					REFERENCED_COLUMN_NAME as "referenced_column"
-				FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
-				WHERE TABLE_NAME = "' . $table . '";
-			');
+			$query = '
+			SELECT
+				COLUMN_NAME as "column",
+				REFERENCED_TABLE_NAME as "referenced_table",
+				REFERENCED_COLUMN_NAME as "referenced_column"
+			FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+			WHERE TABLE_NAME = "' . $table . '";';
+
+			$foreignTableInformation = $this->_databaseHandle->prepare($query);
 			$foreignTableInformation->execute();
 			$foreignTableInformation->setFetchMode(\PDO::FETCH_OBJ);
 
@@ -64,6 +67,10 @@ class MySql implements DescribeInterface {
 			}
 
 			$column['isNull'] = ($row->Null == 'YES') ? TRUE : FALSE;
+
+			$column['is_null']           = $column['isNull'];
+			$column['referenced_column'] = $column['referencedColumn'];
+			$column['referenced_table']  = $column['referencedTable'];
 
 			$columns[] = (object) $column;
 		}

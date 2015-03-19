@@ -22,9 +22,7 @@ Install ```Describe``` via [Composer](https://getcomposer.org):
 Usage
 ========
 
-To initialize:
-
-```
+```php
 require 'vendor/autoload.php';
 
 $database       = 'hello';
@@ -38,7 +36,7 @@ $describe = new Describe($hostname, $database, $username, $password, $driver);
 
 You can also initialize it via an array:
 
-```
+```php
 require 'vendor/autoload.php';
 
 $databaseCredentials = array(
@@ -54,14 +52,14 @@ $describe = new Describe($databaseCredentials);
 
 To get the information of your specified table from the database:
 
-**Example**: Let's use a table named ```accounts``` and it contains 3 columns:
+**Example**: Let's use a table named ```account``` and it contains 3 columns:
 
 * ```id```       int(10)
 * ```name```     varchar(100)
-* ```username``` varchar(100) 
+* ```username``` varchar(100)
 
-```
-$tableName = 'accounts';
+```php
+$tableName = 'account';
 $tableInformation = $describe->getTableInformation($tableName);
 
 foreach ($tableInformation as $column) {
@@ -73,7 +71,9 @@ foreach ($tableInformation as $column) {
 
 ### Returned methods or properties
 
-* ```$tableInformation->getPrimaryKey()``` Returns the primary key in the "described" table
+* ```getPrimaryKey($table)``` Returns the primary key in the *described* table
+
+	* You can also use ```get_primary_key($table)```
 
 The object named ```$column``` in the example above will return the following properties:
 
