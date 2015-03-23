@@ -40,11 +40,11 @@ You can also initialize it via an array:
 require 'vendor/autoload.php';
 
 $databaseCredentials = array(
-	'database' = 'hello',
-	'driver'   = 'mysql',
-	'hostname' = 'localhost',
-	'password' = '',
-	'username' = 'root'
+	'database' => 'hello',
+	'driver'   => 'mysql',
+	'hostname' => 'localhost',
+	'password' => '',
+	'username' => 'root'
 );
 
 $describe = new Describe($databaseCredentials);
