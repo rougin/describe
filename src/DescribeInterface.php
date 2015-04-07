@@ -3,8 +3,9 @@
 /**
  * Describe Interface
  *
- * @package     Describe
- * @category    Interface
+ * @package  Describe
+ * @category Interface
+ * @author   Rougin Royce Gutib <rougingutib@gmail.com>
  */
 interface DescribeInterface {
 

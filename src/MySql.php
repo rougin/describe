@@ -8,6 +8,7 @@ use Describe\DescribeInterface;
  *
  * @package  Describe
  * @category MySQL
+ * @author   Rougin Royce Gutib <rougingutib@gmail.com>
  */
 class MySql implements DescribeInterface {
 

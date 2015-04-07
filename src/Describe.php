@@ -4,8 +4,10 @@ use Describe\MySql;
 
 /**
  * Describe Class
+ *
+ * @package Describe
+ * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  */
-
 class Describe {
 
 	private $_columns        = array();
@@ -65,7 +67,7 @@ class Describe {
 	}
 
 	/**
-	 * Return the result
+	 * Returns the table information
 	 *
 	 * @param  string $table
 	 * @return array
@@ -107,7 +109,7 @@ class Describe {
 	}
 
 	/**
-	 * Return the result
+	 * Returns the table information
 	 * 
 	 * @param  string $table
 	 * @return array

@@ -1,12 +1,10 @@
 [![endorse](https://api.coderwall.com/rougin/endorsecount.png)](https://coderwall.com/rougin)
 
-Describe
-========
+# Describe
 
 Get the information about the database you're working on using PHP. It provides information of the specified database (from its tables down to its respective columns) in any relational database management system (RDMS).
 
-Installation
-============
+# Installation
 
 Install ```Describe``` via [Composer](https://getcomposer.org):
 
@@ -14,8 +12,7 @@ Install ```Describe``` via [Composer](https://getcomposer.org):
 
 ```$ composer install```
 
-Usage
-========
+# Usage
 
 ```php
 require 'vendor/autoload.php';
@@ -64,28 +61,28 @@ foreach ($tableInformation as $column) {
 }
 ```
 
-### Returned methods or properties
+# Methods
 
-* ```getPrimaryKey($table)``` Returns the primary key in the *described* table
+* ```getPrimaryKey($table)``` - (or ```get_primary_key($table)```) Returns the primary key in the *described* ```$table```
 
-	* You can also use ```get_primary_key($table)```
+* ```getTableInformation($table)``` - (or ```get_table_information($table)```) Returns the details in the *described* ```$table```
 
-The object named ```$column``` in the example above will return the following properties:
+	* This method will return the following properties for each row of returned data:
 
-* ```defaultValue``` Check if the field has a default value
+		* ```defaultValue``` - (or ```default_value```) Checks if the field has a default value
 
-* ```extra``` Returns an extra information
+		* ```extra``` - Returns an extra information
 
-(for example, 'extra' will return 'auto_increment' if the column is a primary key in MySQL)
+			* (for example, 'extra' will return 'auto_increment' if the column is a primary key in MySQL)
 
-* ```field``` Name of the column
+		* ```field``` - Name of the column
 
-* ```isNull``` Check if the column can accept ```NULL``` values or not
+		* ```isNull``` - (or ```is_null```) Checks if the column can accept ```NULL``` values or not
 
-* ```key``` Check if it is a primary key or a foreign key
+		* ```key``` - Checks if it is a primary key or a foreign key
 
-* ```referencedColumn``` Return the referenced column if the column is an foreign key
+		* ```referencedColumn``` - (or ```referenced_column```) Returns the referenced column if the column is an foreign key
 
-* ```referencedTable``` Return the referenced table if the column is an foreign key
+		* ```referencedTable``` - (or ```referenced_table```) Returns the referenced table if the column is an foreign key
 
-* ```type``` Return the data type and its length (if any)
+		* ```type``` - Returns the data type and its length (if any)
