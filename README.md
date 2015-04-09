@@ -17,6 +17,8 @@ Install ```Describe``` via [Composer](https://getcomposer.org):
 ```php
 require 'vendor/autoload.php';
 
+use Describe\Describe;
+
 $database       = 'hello';
 $databaseDriver = 'mysql';
 $hostname       = 'localhost';
@@ -30,6 +32,8 @@ You can also initialize it via an array:
 
 ```php
 require 'vendor/autoload.php';
+
+use Describe\Describe;
 
 $databaseCredentials = array(
 	'database' => 'hello',
@@ -86,3 +90,5 @@ foreach ($tableInformation as $column) {
 		* ```referencedTable``` - (or ```referenced_table```) Returns the referenced table if the column is an foreign key
 
 		* ```type``` - Returns the data type and its length (if any)
+
+* ```showTables()``` - (or ```show_tables()```) Returns a listing of tables in the specified database

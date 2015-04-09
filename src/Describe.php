@@ -67,7 +67,7 @@ class Describe {
 	}
 
 	/**
-	 * Returns the table information
+	 * Return the result
 	 *
 	 * @param  string $table
 	 * @return array
@@ -109,7 +109,7 @@ class Describe {
 	}
 
 	/**
-	 * Returns the table information
+	 * Return the result
 	 * 
 	 * @param  string $table
 	 * @return array
@@ -128,6 +128,36 @@ class Describe {
 	public function get_primary_key($table)
 	{
 		return $this->getPrimaryKey($table);
+	}
+
+	/**
+	 * Show the list of tables
+	 * 
+	 * @return array
+	 */
+	public function showTables()
+	{
+		$driver = NULL;
+
+		switch ($this->_databaseDriver) {
+			case 'mysql':
+				$driver = new MySql($this->_databaseHandle);
+				break;
+			default:
+				break;
+		}
+
+		return ($driver != NULL) ? $driver->showTables() : array();
+	}
+
+	/**
+	 * Show the list of tables
+	 * 
+	 * @return array
+	 */
+	public function show_tables()
+	{
+		return $this->showTables();
 	}
 
 }

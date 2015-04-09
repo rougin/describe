@@ -79,4 +79,22 @@ class MySql implements DescribeInterface {
 		return $columns;
 	}
 
+	/**
+	 * Show the list of tables
+	 * 
+	 * @return array
+	 */
+	public function showTables()
+	{
+		$tables = array();
+		$showTablesQuery = $this->_databaseHandle->prepare('SHOW TABLES');
+		$showTablesQuery->execute();
+
+		while ($row = $showTablesQuery->fetch()) {
+			$tables[] = $row[0];
+		}
+
+		return $tables;
+	}
+
 }

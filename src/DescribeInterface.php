@@ -16,4 +16,11 @@ interface DescribeInterface {
 	 */
 	public function getInformationFromTable($table);
 
+	/**
+	 * Show the list of tables
+	 * 
+	 * @return array
+	 */
+	public function showTables();
+
 }
