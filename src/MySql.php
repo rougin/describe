@@ -36,6 +36,10 @@ class MySql implements DescribeInterface {
 		$tableInformation->execute();
 		$tableInformation->setFetchMode(\PDO::FETCH_OBJ);
 
+		if (strpos($table, '.')) {
+			$table = substr($table, strpos($table, '.') + 1);
+		}
+
 		while ($row = $tableInformation->fetch()) {
 			$column = array(
 				'defaultValue'     => $row->Default,
@@ -51,7 +55,7 @@ class MySql implements DescribeInterface {
 			$query = '
 			SELECT
 				COLUMN_NAME as "column",
-				REFERENCED_TABLE_NAME as "referenced_table",
+				CONCAT(REFERENCED_TABLE_SCHEMA, ".", REFERENCED_TABLE_NAME) as "referenced_table",
 				REFERENCED_COLUMN_NAME as "referenced_column"
 			FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
 			WHERE TABLE_NAME = "' . $table . '";';
