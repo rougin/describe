@@ -1,4 +1,4 @@
-<?php namespace Describe;
+<?php namespace Rougin\Describe;
 
 /**
  * Describe Interface

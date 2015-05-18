@@ -17,7 +17,7 @@ Install ```Describe``` via [Composer](https://getcomposer.org):
 ```php
 require 'vendor/autoload.php';
 
-use Describe\Describe;
+use Rougin\Describe\Describe;
 
 $database       = 'hello';
 $databaseDriver = 'mysql';
@@ -33,7 +33,7 @@ You can also initialize it via an array:
 ```php
 require 'vendor/autoload.php';
 
-use Describe\Describe;
+use Rougin\Describe\Describe;
 
 $databaseCredentials = array(
 	'database' => 'hello',

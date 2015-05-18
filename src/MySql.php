@@ -1,7 +1,7 @@
-<?php namespace Describe;
+<?php namespace Rougin\Describe;
 
-use Describe\Describe;
-use Describe\DescribeInterface;
+use Rougin\Describe\Describe;
+use Rougin\Describe\DescribeInterface;
 
 /**
  * MySql Class
