@@ -8,9 +8,7 @@ Get the information about the database you're working on using PHP. It provides 
 
 Install ```Describe``` via [Composer](https://getcomposer.org):
 
-```$ composer require rougin/describe:dev-master```
-
-```$ composer install```
+```$ composer require rougin/describe```
 
 # Usage
 
