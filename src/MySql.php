@@ -1,6 +1,5 @@
 <?php namespace Rougin\Describe;
 
-use Rougin\Describe\Describe;
 use Rougin\Describe\DescribeInterface;
 
 /**
