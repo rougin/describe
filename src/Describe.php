@@ -1,6 +1,7 @@
 <?php namespace Rougin\Describe;
 
 use Rougin\Describe\MySql;
+use Rougin\Describe\MsSql;
 
 /**
  * Describe Class
@@ -80,6 +81,9 @@ class Describe {
 			case 'mysql':
 				$driver = new MySql($this->_databaseHandle);
 				break;
+			case 'mssql':
+				$driver = new MsSql($this->_databaseHandle);
+				break;
 			default:
 				break;
 		}
@@ -142,6 +146,9 @@ class Describe {
 		switch ($this->_databaseDriver) {
 			case 'mysql':
 				$driver = new MySql($this->_databaseHandle);
+				break;
+			case 'mssql':
+				$driver = new MsSql($this->_databaseHandle);
 				break;
 			default:
 				break;
