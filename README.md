@@ -1,4 +1,4 @@
-[![endorse](https://api.coderwall.com/rougin/endorsecount.png)](https://coderwall.com/rougin)
+[![Latest Stable Version](https://poser.pugx.org/rougin/describe/v/stable)](https://packagist.org/packages/rougin/describe) [![Total Downloads](https://poser.pugx.org/rougin/describe/downloads)](https://packagist.org/packages/rougin/describe) [![Latest Unstable Version](https://poser.pugx.org/rougin/describe/v/unstable)](https://packagist.org/packages/rougin/describe) [![License](https://poser.pugx.org/rougin/describe/license)](https://packagist.org/packages/rougin/describe) [![endorse](https://api.coderwall.com/rougin/endorsecount.png)](https://coderwall.com/rougin)
 
 # Describe
 
