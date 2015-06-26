@@ -2,6 +2,7 @@
 
 use Rougin\Describe\MySql;
 use Rougin\Describe\MsSql;
+use Rougin\Describe\Sqlite;
 
 /**
  * Describe Class
@@ -11,9 +12,9 @@ use Rougin\Describe\MsSql;
  */
 class Describe {
 
-	private $_columns        = array();
-	private $_databaseHandle = NULL;
-	private $_databaseDriver = NULL;
+	private $_columns = array();
+	private $_driver  = NULL;
+	private $_handle  = NULL;
 
 	/**
 	 * Get the properties and attributes of the specified table
@@ -42,29 +43,68 @@ class Describe {
 		$driver = ($driver == 'mysqli') ? 'mysql' : $driver;
 
 		/**
-		 * Set as the currently selected driver
+		 * Parse the given credentials into a string parameter
 		 */
 
-		$this->_databaseDriver = $driver;
+		if ($database == NULL || $driver == 'pdo' || strpos($hostname, ':') !== FALSE) {
+			$parameters = $hostname;
+
+			$keys = explode(':', $hostname);
+			$driver = $keys[0];
+		}
+
+		$parameters = $driver . ':' .'host=' . $hostname . ';dbname=' . $database;
+
+		if ($driver != 'mysql') {
+			$parameters = $parameters . ', ' . $username . ', ' . $password;
+		}
+
+		if ($driver == 'sqlite') {
+			$parameters = $hostname;
+		}
 
 		/**
 		 * Connect to the database
 		 */
 
 		try {
-			$this->_databaseHandle = new \PDO(
-				$driver .
-				':host=' . $hostname .
-				';dbname=' . $database,
-				$username,
-				$password
-			);
+			if ($driver == 'mysql') {
+				$this->_handle = new \PDO($parameters, $username, $password);
+			} else {
+				$this->_handle = new \PDO($parameters);
+			}
 
-			$this->_databaseHandle->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+			$this->_handle->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
+			/**
+			 * Set as the currently selected driver
+			 */
+			
+			$this->_driver = $this->_getDatabaseDriver($driver);
 		}
 		catch (\PDOException $error) {
 			exit($error->getMessage());
 		}
+	}
+
+	/**
+	 * Return the specified database driver
+	 * 
+	 * @param  string $driver
+	 * @return object
+	 */
+	private function _getDatabaseDriver($driver)
+	{
+		switch ($driver) {
+			case 'mysql':
+				return new MySql($this->_handle);
+			case 'mssql':
+				return new MsSql($this->_handle);
+			case 'sqlite':
+				return new Sqlite($this->_handle);
+		}
+
+		return (object) array();
 	}
 
 	/**
@@ -75,20 +115,11 @@ class Describe {
 	 */
 	public function getInformationFromTable($table)
 	{
-		$driver = NULL;
-
-		switch ($this->_databaseDriver) {
-			case 'mysql':
-				$driver = new MySql($this->_databaseHandle);
-				break;
-			case 'mssql':
-				$driver = new MsSql($this->_databaseHandle);
-				break;
-			default:
-				break;
+		if ($this->_driver != NULL) {
+			return $this->_driver->getInformationFromTable($table);
 		}
 
-		return ($driver != NULL) ? $driver->getInformationFromTable($table) : array();
+		return array();
 	}
 
 	/**
@@ -106,8 +137,8 @@ class Describe {
 		}
 
 		foreach ($columns as $column) {
-			if ($column->key == 'PRI') {
-				return $column->field;
+			if ($column->isPrimaryKey()) {
+				return $column->get_field();
 			}
 		}
 	}
@@ -141,20 +172,11 @@ class Describe {
 	 */
 	public function showTables()
 	{
-		$driver = NULL;
-
-		switch ($this->_databaseDriver) {
-			case 'mysql':
-				$driver = new MySql($this->_databaseHandle);
-				break;
-			case 'mssql':
-				$driver = new MsSql($this->_databaseHandle);
-				break;
-			default:
-				break;
+		if ($this->_driver != NULL) {
+			return $this->_driver->showTables($table);
 		}
 
-		return ($driver != NULL) ? $driver->showTables() : array();
+		return array();
 	}
 
 	/**

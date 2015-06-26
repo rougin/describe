@@ -2,7 +2,7 @@
 
 [![Latest Stable Version](https://poser.pugx.org/rougin/describe/v/stable)](https://packagist.org/packages/rougin/describe) [![Total Downloads](https://poser.pugx.org/rougin/describe/downloads)](https://packagist.org/packages/rougin/describe) [![Latest Unstable Version](https://poser.pugx.org/rougin/describe/v/unstable)](https://packagist.org/packages/rougin/describe) [![License](https://poser.pugx.org/rougin/describe/license)](https://packagist.org/packages/rougin/describe) [![endorse](https://api.coderwall.com/rougin/endorsecount.png)](https://coderwall.com/rougin)
 
-Get the information about the database you're working on using PHP. It provides information of the specified database (from its tables down to its respective columns) in any relational database management system (RDMS).
+Get the information about the database you're working on in PHP. It provides information of the specified database (from its tables down to its respective columns) in any relational database management system (RDMS).
 
 # Installation
 
@@ -44,6 +44,26 @@ $databaseCredentials = array(
 $describe = new Describe($databaseCredentials);
 ```
 
+Or via one-line:
+
+```php
+require 'vendor/autoload.php';
+
+use Rougin\Describe\Describe;
+
+# MS SQL Server and Sybase with PDO_DBLIB
+$databaseCredentials = new PDO("mssql:host=$host;dbname=$dbname, $user, $pass");
+$databaseCredentials = new PDO("sybase:host=$host;dbname=$dbname, $user, $pass");
+
+# MySQL with PDO_MYSQL
+$databaseCredentials = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass);
+
+# SQLite Database
+$databaseCredentials = new PDO("sqlite:my/database/path/database.db");
+
+$describe = new Describe($databaseCredentials);
+```
+
 To get the information of your specified table from the database:
 
 **Example**: Let's use a table named ```account``` and it contains 3 columns:
@@ -71,22 +91,29 @@ foreach ($tableInformation as $column) {
 
 	* This method will return the following properties for each row of returned data:
 
-		* ```defaultValue``` - (or ```default_value```) Checks if the field has a default value
+		* ```getDataType()``` - (or ```get_data_type()```) Get the specified data type
 
-		* ```extra``` - Returns an extra information
+		* ```getDefaultValue()``` - (or ```get_default_value()```) Checks if the field has a default value
 
-			* (for example, 'extra' will return 'auto_increment' if the column is a primary key in MySQL)
+		* ```getField()``` - (or ```get_field()```) Name of the column
 
-		* ```field``` - Name of the column
+		* ```getLength()``` - (or ```get_length()```) Return the length of its corresponding data type (if any)
 
-		* ```isNull``` - (or ```is_null```) Checks if the column can accept ```NULL``` values or not
+		* ```getReferencedField()``` - (or ```get_referenced_field()```) Returns the referenced column if the column is an foreign key
 
-		* ```key``` - Checks if it is a primary key or a foreign key
+		* ```getReferencedTable()``` - (or ```get_referenced_table()```) Returns the referenced table if the column is an foreign key
 
-		* ```referencedColumn``` - (or ```referenced_column```) Returns the referenced column if the column is an foreign key
+		* ```isAutoIncrement()``` - (or ```is_auto_increment()```) Check if the field is an auto incrementing field
 
-		* ```referencedTable``` - (or ```referenced_table```) Returns the referenced table if the column is an foreign key
+		* ```isForeignKey()``` - (or ```is_foreign_key()```) Check if the field is a foreign key
 
-		* ```type``` - Returns the data type and its length (if any)
+		* ```isNull()``` - (or ```is_null()```) Check if the field accept ```NULL``` values
+
+		* ```isPrimaryKey()``` - (or ```is_primary_key()```) Check if the field is a primary key
+
+		* ```isUnique()``` - (or ```is_unique()```) Check if field is unique
+
+		* ```isUnsigned()``` - (or ```is_unsigned()```) Check if field is unsigned
+
 
 * ```showTables()``` - (or ```show_tables()```) Returns a listing of tables in the specified database

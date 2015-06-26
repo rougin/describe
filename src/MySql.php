@@ -1,6 +1,7 @@
 <?php namespace Rougin\Describe;
 
 use Rougin\Describe\DescribeInterface;
+use Rougin\Describe\Column;
 
 /**
  * MySql Class
@@ -11,16 +12,16 @@ use Rougin\Describe\DescribeInterface;
  */
 class MySql implements DescribeInterface {
 
-	private $_databaseHandle = NULL;
+	private $_handle = NULL;
 
 	/**
 	 * Inject the database handle
 	 * 
-	 * @param \PDO $databaseHandle
+	 * @param \PDO $handle
 	 */
-	public function __construct($databaseHandle)
+	public function __construct($handle)
 	{
-		$this->_databaseHandle = $databaseHandle;
+		$this->_handle = $handle;
 	}
 
 	/**
@@ -31,7 +32,9 @@ class MySql implements DescribeInterface {
 	public function getInformationFromTable($table)
 	{
 		$columns = array();
-		$tableInformation = $this->_databaseHandle->prepare('DESCRIBE ' . $table);
+		$query = 'DESCRIBE ' . $table;
+
+		$tableInformation = $this->_handle->prepare($query);
 		$tableInformation->execute();
 		$tableInformation->setFetchMode(\PDO::FETCH_OBJ);
 
@@ -40,43 +43,46 @@ class MySql implements DescribeInterface {
 		}
 
 		while ($row = $tableInformation->fetch()) {
-			$column = array(
-				'defaultValue'     => $row->Default,
-				'extra'            => $row->Extra,
-				'field'            => $row->Field,
-				'isNull'           => NULL,
-				'key'              => $row->Key,
-				'referencedColumn' => NULL,
-				'referencedTable'  => NULL,
-				'type'             => $row->Type
-			);
+			preg_match('/(.*?)\((.*?)\)/', $row->Type, $match);
+			$column = new Column();
 
-			$query = '
-			SELECT
-				COLUMN_NAME as "column",
-				CONCAT(REFERENCED_TABLE_SCHEMA, ".", REFERENCED_TABLE_NAME) as "referenced_table",
-				REFERENCED_COLUMN_NAME as "referenced_column"
-			FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
-			WHERE TABLE_NAME = "' . $table . '";';
+			if ($row->Extra == 'auto_increment') {
+				$column->setAutoIncrement(TRUE);
+			}
 
-			$foreignTableInformation = $this->_databaseHandle->prepare($query);
+			if ($row->Null == 'YES') {
+				$column->setNull(TRUE);
+			}
+
+			if ($row->Key == 'PRI') {
+				$column->setPrimary(TRUE);
+			} else if ($row->Key == 'MUL') {
+				$column->setForeign(TRUE);
+			} else if ($row->Key == 'UNI') {
+				$column->setUnique(TRUE);
+			}
+
+			$column->setDataType($match[1]);
+			$column->setDefaultValue($row->Default);
+			$column->setField($row->Field);
+			$column->setLength($match[2]);
+
+			$query = 'SELECT COLUMN_NAME as "column", REFERENCED_COLUMN_NAME as "referenced_column",
+			CONCAT(REFERENCED_TABLE_SCHEMA, ".", REFERENCED_TABLE_NAME) as "referenced_table"
+			FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE TABLE_NAME = "' . $table . '";';
+
+			$foreignTableInformation = $this->_handle->prepare($query);
 			$foreignTableInformation->execute();
 			$foreignTableInformation->setFetchMode(\PDO::FETCH_OBJ);
 
 			while ($foreignRow = $foreignTableInformation->fetch()) {
 				if ($foreignRow->column == $row->Field) {
-					$column['referencedColumn'] = $foreignRow->referenced_column;
-					$column['referencedTable']  = $foreignRow->referenced_table;
+					$column->setReferencedField($foreignRow->referenced_column);
+					$column->setReferencedTable($foreignRow->referenced_table);
 				}
 			}
 
-			$column['isNull'] = ($row->Null == 'YES') ? TRUE : FALSE;
-
-			$column['is_null']           = $column['isNull'];
-			$column['referenced_column'] = $column['referencedColumn'];
-			$column['referenced_table']  = $column['referencedTable'];
-
-			$columns[] = (object) $column;
+			$columns[] = $column;
 		}
 
 		return $columns;
@@ -90,10 +96,12 @@ class MySql implements DescribeInterface {
 	public function showTables()
 	{
 		$tables = array();
-		$showTablesQuery = $this->_databaseHandle->prepare('SHOW TABLES');
-		$showTablesQuery->execute();
+		$query = 'SHOW TABLES';
 
-		while ($row = $showTablesQuery->fetch()) {
+		$showTables = $this->_handle->prepare($query);
+		$showTables->execute();
+
+		while ($row = $showTables->fetch()) {
 			$tables[] = $row[0];
 		}
 
