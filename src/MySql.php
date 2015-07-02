@@ -62,10 +62,15 @@ class MySql implements DescribeInterface {
 				$column->setUnique(TRUE);
 			}
 
-			$column->setDataType($match[1]);
 			$column->setDefaultValue($row->Default);
 			$column->setField($row->Field);
-			$column->setLength($match[2]);
+
+			if (isset($match[1])) {
+				$column->setDataType($match[1]);
+				$column->setLength($match[2]);
+			} else {
+				$column->setDataType($row->Type);
+			}
 
 			$query = 'SELECT COLUMN_NAME as "column", REFERENCED_COLUMN_NAME as "referenced_column",
 			CONCAT(REFERENCED_TABLE_SCHEMA, ".", REFERENCED_TABLE_NAME) as "referenced_table"

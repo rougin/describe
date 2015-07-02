@@ -111,7 +111,7 @@ class Column
 	 * 
 	 * @return string
 	 */
-	public function get_foreign_field()
+	public function get_referenced_field()
 	{
 		return $this->_referencedField;
 	}
@@ -121,7 +121,7 @@ class Column
 	 * 
 	 * @return string
 	 */
-	public function get_foreign_table()
+	public function get_referenced_table()
 	{
 		return $this->_referencedTable;
 	}
@@ -302,6 +302,16 @@ class Column
 	public function setField($field)
 	{
 		$this->_field = $field;
+	}
+
+	/**
+	 * Set if field is a foreign key
+	 * 
+	 * @param string $field
+	 */
+	public function setForeign($foreign)
+	{
+		$this->_foreign = $foreign;
 	}
 
 	/**
