@@ -52,14 +52,14 @@ require 'vendor/autoload.php';
 use Rougin\Describe\Describe;
 
 # MS SQL Server and Sybase with PDO_DBLIB
-$databaseCredentials = new PDO("mssql:host=$host;dbname=$dbname, $user, $pass");
-$databaseCredentials = new PDO("sybase:host=$host;dbname=$dbname, $user, $pass");
+$databaseCredentials = "mssql:host=$host;dbname=$dbname, $user, $pass";
+$databaseCredentials = "sybase:host=$host;dbname=$dbname, $user, $pass";
 
 # MySQL with PDO_MYSQL
-$databaseCredentials = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass);
+$databaseCredentials = "mysql:host=$host;dbname=$dbname", $user, $pas";
 
 # SQLite Database
-$databaseCredentials = new PDO("sqlite:my/database/path/database.db");
+$databaseCredentials = "sqlite:my/database/path/database.db";
 
 $describe = new Describe($databaseCredentials);
 ```
