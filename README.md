@@ -51,13 +51,6 @@ require 'vendor/autoload.php';
 
 use Rougin\Describe\Describe;
 
-# MS SQL Server and Sybase with PDO_DBLIB
-$databaseCredentials = "mssql:host=$host;dbname=$dbname, $user, $pass";
-$databaseCredentials = "sybase:host=$host;dbname=$dbname, $user, $pass";
-
-# MySQL with PDO_MYSQL
-$databaseCredentials = "mysql:host=$host;dbname=$dbname", $user, $pas";
-
 # SQLite Database
 $databaseCredentials = "sqlite:my/database/path/database.db";
 
