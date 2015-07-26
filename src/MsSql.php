@@ -11,16 +11,18 @@ use Rougin\Describe\DescribeInterface;
  */
 class MsSql implements DescribeInterface {
 
-	private $_databaseHandle = NULL;
+	private $handle = NULL;
 
 	/**
 	 * Inject the database handle
 	 * 
-	 * @param \PDO $databaseHandle
+	 * @param \PDO   $handle
+	 * @param string $database
 	 */
-	public function __construct($databaseHandle)
+	public function __construct($handle, $database)
 	{
-		$this->_databaseHandle = $databaseHandle;
+		$this->handle = $handle;
+		$this->database = $database;
 	}
 
 	/**

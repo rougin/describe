@@ -12,16 +12,19 @@ use Rougin\Describe\Column;
  */
 class MySql implements DescribeInterface {
 
-	private $_handle = NULL;
+	private $database;
+	private $handle;
 
 	/**
 	 * Inject the database handle
 	 * 
-	 * @param \PDO $handle
+	 * @param \PDO   $handle
+	 * @param string $database
 	 */
-	public function __construct($handle)
+	public function __construct($handle, $database)
 	{
-		$this->_handle = $handle;
+		$this->handle = $handle;
+		$this->database = $database;
 	}
 
 	/**
@@ -34,7 +37,7 @@ class MySql implements DescribeInterface {
 		$columns = array();
 		$query = 'DESCRIBE ' . $table;
 
-		$tableInformation = $this->_handle->prepare($query);
+		$tableInformation = $this->handle->prepare($query);
 		$tableInformation->execute();
 		$tableInformation->setFetchMode(\PDO::FETCH_OBJ);
 
@@ -74,9 +77,10 @@ class MySql implements DescribeInterface {
 
 			$query = 'SELECT COLUMN_NAME as "column", REFERENCED_COLUMN_NAME as "referenced_column",
 			CONCAT(REFERENCED_TABLE_SCHEMA, ".", REFERENCED_TABLE_NAME) as "referenced_table"
-			FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE TABLE_NAME = "' . $table . '";';
+			FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE CONSTRAINT_SCHEMA = "' . $this->database . '"
+			AND TABLE_NAME = "' . $table . '";';
 
-			$foreignTableInformation = $this->_handle->prepare($query);
+			$foreignTableInformation = $this->handle->prepare($query);
 			$foreignTableInformation->execute();
 			$foreignTableInformation->setFetchMode(\PDO::FETCH_OBJ);
 
@@ -103,7 +107,7 @@ class MySql implements DescribeInterface {
 		$tables = array();
 		$query = 'SHOW TABLES';
 
-		$showTables = $this->_handle->prepare($query);
+		$showTables = $this->handle->prepare($query);
 		$showTables->execute();
 
 		while ($row = $showTables->fetch()) {

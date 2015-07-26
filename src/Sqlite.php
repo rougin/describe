@@ -12,16 +12,18 @@ use Rougin\Describe\Column;
  */
 class Sqlite implements DescribeInterface {
 
-	private $_handle = NULL;
+	private $handle = NULL;
 
 	/**
 	 * Inject the database handle
 	 * 
-	 * @param \PDO $handle
+	 * @param \PDO   $handle
+	 * @param string $database
 	 */
-	public function __construct($handle)
+	public function __construct($handle, $database)
 	{
-		$this->_handle = $handle;
+		$this->handle = $handle;
+		$this->database = $database;
 	}
 
 	/**
@@ -34,7 +36,7 @@ class Sqlite implements DescribeInterface {
 		$columns = array();
 		$query = 'PRAGMA table_info("' . $table . '");';
 
-		$tableInformation = $this->_handle->prepare($query);
+		$tableInformation = $this->handle->prepare($query);
 		$tableInformation->execute();
 		$tableInformation->setFetchMode(\PDO::FETCH_OBJ);
 

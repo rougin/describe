@@ -10,11 +10,10 @@ use Rougin\Describe\Sqlite;
  * @package Describe
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  */
-class Describe {
-
-	private $_columns = array();
-	private $_driver  = NULL;
-	private $_handle  = NULL;
+class Describe
+{
+	private $columns = array();
+	private $driver;
 
 	/**
 	 * Get the properties and attributes of the specified table
@@ -43,6 +42,12 @@ class Describe {
 		$driver = ($driver == 'mysqli') ? 'mysql' : $driver;
 
 		/**
+		 * Set the current database
+		 */
+		
+		$this->database = $database;
+
+		/**
 		 * Parse the given credentials into a string parameter
 		 */
 
@@ -69,42 +74,22 @@ class Describe {
 
 		try {
 			if ($driver == 'mysql') {
-				$this->_handle = new \PDO($parameters, $username, $password);
+				$handle = new \PDO($parameters, $username, $password);
 			} else {
-				$this->_handle = new \PDO($parameters);
+				$handle = new \PDO($parameters);
 			}
 
-			$this->_handle->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+			$handle->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
 			/**
 			 * Set as the currently selected driver
 			 */
 			
-			$this->_driver = $this->_getDatabaseDriver($driver);
+			$this->driver = $this->getDatabaseDriver($driver, $handle, $database);
 		}
 		catch (\PDOException $error) {
 			exit($error->getMessage());
 		}
-	}
-
-	/**
-	 * Return the specified database driver
-	 * 
-	 * @param  string $driver
-	 * @return object
-	 */
-	private function _getDatabaseDriver($driver)
-	{
-		switch ($driver) {
-			case 'mysql':
-				return new MySql($this->_handle);
-			case 'mssql':
-				return new MsSql($this->_handle);
-			case 'sqlite':
-				return new Sqlite($this->_handle);
-		}
-
-		return (object) array();
 	}
 
 	/**
@@ -115,8 +100,10 @@ class Describe {
 	 */
 	public function getInformationFromTable($table)
 	{
-		if ($this->_driver != NULL) {
-			return $this->_driver->getInformationFromTable($table);
+		if ($this->driver != NULL) {
+			$this->columns = $this->driver->getInformationFromTable($table);
+
+			return $this->columns;
 		}
 
 		return array();
@@ -130,7 +117,7 @@ class Describe {
 	 */
 	public function getPrimaryKey($table)
 	{
-		$columns = $this->_columns;
+		$columns = $this->columns;
 
 		if (empty($columns)) {
 			$columns = $this->getInformationFromTable($table);
@@ -172,8 +159,8 @@ class Describe {
 	 */
 	public function showTables()
 	{
-		if ($this->_driver != NULL) {
-			return $this->_driver->showTables($table);
+		if ($this->driver != NULL) {
+			return $this->driver->showTables();
 		}
 
 		return array();
@@ -187,6 +174,28 @@ class Describe {
 	public function show_tables()
 	{
 		return $this->showTables();
+	}
+
+	/**
+	 * Return the specified database driver
+	 * 
+	 * @param  string $driver
+	 * @return object
+	 */
+	private function getDatabaseDriver($driver, $handle, $database)
+	{
+		$selectedDriver = (object) array();
+
+		switch ($driver) {
+			case 'mysql':
+				return new MySql($handle, $database);
+			case 'mssql':
+				return new MsSql($handle, $database);
+			case 'sqlite':
+				return new Sqlite($handle, $database);
+		}
+
+		return $selectedDriver;
 	}
 
 }
