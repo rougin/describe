@@ -17,11 +17,11 @@ require 'vendor/autoload.php';
 
 use Rougin\Describe\Describe;
 
-$database       = 'hello';
-$databaseDriver = 'mysql';
-$hostname       = 'localhost';
-$password       = '';
-$username       = 'root';
+$database = 'hello';
+$driver   = 'mysql';
+$hostname = 'localhost';
+$password = '';
+$username = 'root';
 
 $describe = new Describe($hostname, $database, $username, $password, $driver);
 ```
@@ -33,7 +33,7 @@ require 'vendor/autoload.php';
 
 use Rougin\Describe\Describe;
 
-$databaseCredentials = array(
+$credentials = array(
 	'database' => 'hello',
 	'driver'   => 'mysql',
 	'hostname' => 'localhost',
@@ -41,7 +41,7 @@ $databaseCredentials = array(
 	'username' => 'root'
 );
 
-$describe = new Describe($databaseCredentials);
+$describe = new Describe($credentials);
 ```
 
 Or via one-line:
@@ -52,9 +52,9 @@ require 'vendor/autoload.php';
 use Rougin\Describe\Describe;
 
 # SQLite Database
-$databaseCredentials = "sqlite:my/database/path/database.db";
+$credentials = "sqlite:my/database/path/database.db";
 
-$describe = new Describe($databaseCredentials);
+$describe = new Describe($credentials);
 ```
 
 To get the information of your specified table from the database:
@@ -67,7 +67,7 @@ To get the information of your specified table from the database:
 
 ```php
 $tableName = 'account';
-$tableInformation = $describe->getTableInformation($tableName);
+$tableInformation = $describe->getInformationFromTable($tableName);
 
 foreach ($tableInformation as $column) {
 	echo '<pre>';
@@ -80,7 +80,7 @@ foreach ($tableInformation as $column) {
 
 * ```getPrimaryKey($table)``` - (or ```get_primary_key($table)```) Returns the primary key in the *described* ```$table```
 
-* ```getTableInformation($table)``` - (or ```get_table_information($table)```) Returns the details in the *described* ```$table```
+* ```getInformationFromTable($table)``` - (or ```get_information_from_table($table)```) Returns the details in the *described* ```$table```
 
 	* This method will return the following properties for each row of returned data:
 
@@ -107,6 +107,5 @@ foreach ($tableInformation as $column) {
 		* ```isUnique()``` - (or ```is_unique()```) Check if field is unique
 
 		* ```isUnsigned()``` - (or ```is_unsigned()```) Check if field is unsigned
-
 
 * ```showTables()``` - (or ```show_tables()```) Returns a listing of tables in the specified database
