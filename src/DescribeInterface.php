@@ -1,4 +1,6 @@
-<?php namespace Rougin\Describe;
+<?php
+
+namespace Rougin\Describe;
 
 /**
  * Describe Interface
@@ -7,8 +9,8 @@
  * @category Interface
  * @author   Rougin Royce Gutib <rougingutib@gmail.com>
  */
-interface DescribeInterface {
-
+interface DescribeInterface
+{
 	/**
 	 * Return the result
 	 * 
@@ -22,5 +24,4 @@ interface DescribeInterface {
 	 * @return array
 	 */
 	public function showTables();
-
 }
