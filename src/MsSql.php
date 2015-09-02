@@ -1,6 +1,9 @@
-<?php namespace Rougin\Describe;
+<?php
+
+namespace Rougin\Describe;
 
 use Rougin\Describe\DescribeInterface;
+use Rougin\Describe\Column;
 
 /**
  * MsSql Class
@@ -9,44 +12,44 @@ use Rougin\Describe\DescribeInterface;
  * @category MSSQL
  * @author   Rougin Royce Gutib <rougingutib@gmail.com>
  */
-class MsSql implements DescribeInterface {
+class MsSql implements DescribeInterface
+{
+    protected $database;
+    protected $handle;
 
-	private $handle = NULL;
+    /**
+     * Inject the database handle
+     * 
+     * @param \PDO   $handle
+     * @param string $database
+     */
+    public function __construct($handle, $database)
+    {
+        $this->handle = $handle;
+        $this->database = $database;
+    }
 
-	/**
-	 * Inject the database handle
-	 * 
-	 * @param \PDO   $handle
-	 * @param string $database
-	 */
-	public function __construct($handle, $database)
-	{
-		$this->handle = $handle;
-		$this->database = $database;
-	}
+    /**
+     * Return the result
+     * 
+     * @return array
+     */
+    public function getInformationFromTable($table)
+    {
+        $columns = array();
 
-	/**
-	 * Return the result
-	 * 
-	 * @return array
-	 */
-	public function getInformationFromTable($table)
-	{
-		$columns = array();
+        return $columns;
+    }
 
-		return $columns;
-	}
+    /**
+     * Show the list of tables
+     * 
+     * @return array
+     */
+    public function showTables()
+    {
+        $tables = array();
 
-	/**
-	 * Show the list of tables
-	 * 
-	 * @return array
-	 */
-	public function showTables()
-	{
-		$tables = array();
-
-		return $tables;
-	}
-
+        return $tables;
+    }
 }
