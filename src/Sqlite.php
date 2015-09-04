@@ -1,4 +1,6 @@
-<?php namespace Rougin\Describe;
+<?php
+
+namespace Rougin\Describe;
 
 use Rougin\Describe\DescribeInterface;
 use Rougin\Describe\Column;
@@ -10,9 +12,10 @@ use Rougin\Describe\Column;
  * @category Sqlite
  * @author   Rougin Royce Gutib <rougingutib@gmail.com>
  */
-class Sqlite implements DescribeInterface {
-
-	private $handle = NULL;
+class Sqlite implements DescribeInterface
+{
+	protected $database;
+	protected $handle;
 
 	/**
 	 * Inject the database handle
@@ -33,7 +36,7 @@ class Sqlite implements DescribeInterface {
 	 */
 	public function getInformationFromTable($table)
 	{
-		$columns = array();
+		$columns = [];
 		$query = 'PRAGMA table_info("' . $table . '");';
 
 		$tableInformation = $this->handle->prepare($query);
@@ -73,9 +76,8 @@ class Sqlite implements DescribeInterface {
 	 */
 	public function showTables()
 	{
-		$tables = array();
+		$tables = [];
 
 		return $tables;
 	}
-
 }
