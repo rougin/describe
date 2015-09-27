@@ -1,111 +1,81 @@
-# Describe
+# Transcribe
 
-[![Latest Stable Version](https://poser.pugx.org/rougin/describe/v/stable)](https://packagist.org/packages/rougin/describe) [![Total Downloads](https://poser.pugx.org/rougin/describe/downloads)](https://packagist.org/packages/rougin/describe) [![Latest Unstable Version](https://poser.pugx.org/rougin/describe/v/unstable)](https://packagist.org/packages/rougin/describe) [![License](https://poser.pugx.org/rougin/describe/license)](https://packagist.org/packages/rougin/describe) [![endorse](https://api.coderwall.com/rougin/endorsecount.png)](https://coderwall.com/rougin)
+[![Latest Version on Packagist][ico-version]][link-packagist]
+[![Software License][ico-license]](LICENSE.md)
+[![Build Status][ico-travis]][link-travis]
+[![Coverage Status][ico-scrutinizer]][link-scrutinizer]
+[![Quality Score][ico-code-quality]][link-code-quality]
+[![Total Downloads][ico-downloads]][link-downloads]
 
-Get the information about the database you're working on in PHP. It provides information of the specified database (from its tables down to its respective columns) in any relational database management system (RDMS).
+Gets information of a table schema from a database in PHP
 
-# Installation
+## Install
 
-Install ```Describe``` via [Composer](https://getcomposer.org):
+Via Composer
 
-```$ composer require rougin/describe```
+``` bash
+$ composer require rougin/describe
+```
 
-# Usage
+## Usage
 
-```php
-require 'vendor/autoload.php';
-
+``` php
+use Rougin\Describe\Drivers\MySQLDriver;
 use Rougin\Describe\Describe;
 
-$database = 'hello';
-$driver   = 'mysql';
-$hostname = 'localhost';
-$password = '';
-$username = 'root';
+$pdo = new PDO('mysql:host=localhost;dbname=demo', 'root', '');
+$mysql = new MySQLDriver($pdo, 'demo');
+$describe = new Describe($mysql);
 
-$describe = new Describe($hostname, $database, $username, $password, $driver);
+// Returns an array of columns from the specified table
+var_dump($describe->getTable('table'));
+
+// Gets the primary key of the specified table
+var_dump($describe->getPrimaryKey('table'));
 ```
 
-You can also initialize it via an array:
+#### Adding a new database driver
 
-```php
-require 'vendor/autoload.php';
+You can always add a new database driver if you want. Just implement the database driver of your choice in a [DriverInterface](https://github.com/rougin/describe/blob/master/src/Drivers/DriverInterface.php).
 
-use Rougin\Describe\Describe;
+## Change log
 
-$credentials = array(
-	'database' => 'hello',
-	'driver'   => 'mysql',
-	'hostname' => 'localhost',
-	'password' => '',
-	'username' => 'root'
-);
+Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
 
-$describe = new Describe($credentials);
+## Testing
+
+``` bash
+$ composer test
 ```
 
-Or via one-line:
+## Contributing
 
-```php
-require 'vendor/autoload.php';
+Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
-use Rougin\Describe\Describe;
+## Security
 
-# SQLite Database
-$credentials = "sqlite:my/database/path/database.db";
+If you discover any security related issues, please email rougingutib@gmail.com instead of using the issue tracker.
 
-$describe = new Describe($credentials);
-```
+## Credits
 
-To get the information of your specified table from the database:
+- [Rougin Royce Gutib][link-author]
+- [All Contributors][link-contributors]
 
-**Example**: Let's use a table named ```account``` and it contains 3 columns:
+## License
 
-* ```id```       int(10)
-* ```name```     varchar(100)
-* ```username``` varchar(100)
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 
-```php
-$tableName = 'account';
-$tableInformation = $describe->getInformationFromTable($tableName);
+[ico-version]: https://img.shields.io/packagist/v/rougin/describe.svg?style=flat-square
+[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/rougin/describe/master.svg?style=flat-square
+[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/rougin/describe.svg?style=flat-square
+[ico-code-quality]: https://img.shields.io/scrutinizer/g/rougin/describe.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/rougin/describe.svg?style=flat-square
 
-foreach ($tableInformation as $column) {
-	echo '<pre>';
-	print_r($column);
-	echo '</pre>';
-}
-```
-
-# Methods
-
-* ```getPrimaryKey($table)``` - (or ```get_primary_key($table)```) Returns the primary key in the *described* ```$table```
-
-* ```getInformationFromTable($table)``` - (or ```get_information_from_table($table)```) Returns the details in the *described* ```$table```
-
-	* This method will return the following properties for each row of returned data:
-
-		* ```getDataType()``` - (or ```get_data_type()```) Get the specified data type
-
-		* ```getDefaultValue()``` - (or ```get_default_value()```) Checks if the field has a default value
-
-		* ```getField()``` - (or ```get_field()```) Name of the column
-
-		* ```getLength()``` - (or ```get_length()```) Return the length of its corresponding data type (if any)
-
-		* ```getReferencedField()``` - (or ```get_referenced_field()```) Returns the referenced column if the column is an foreign key
-
-		* ```getReferencedTable()``` - (or ```get_referenced_table()```) Returns the referenced table if the column is an foreign key
-
-		* ```isAutoIncrement()``` - (or ```is_auto_increment()```) Check if the field is an auto incrementing field
-
-		* ```isForeignKey()``` - (or ```is_foreign_key()```) Check if the field is a foreign key
-
-		* ```isNull()``` - (or ```is_null()```) Check if the field accept ```NULL``` values
-
-		* ```isPrimaryKey()``` - (or ```is_primary_key()```) Check if the field is a primary key
-
-		* ```isUnique()``` - (or ```is_unique()```) Check if field is unique
-
-		* ```isUnsigned()``` - (or ```is_unsigned()```) Check if field is unsigned
-
-* ```showTables()``` - (or ```show_tables()```) Returns a listing of tables in the specified database
+[link-packagist]: https://packagist.org/packages/rougin/describe
+[link-travis]: https://travis-ci.org/rougin/describe
+[link-scrutinizer]: https://scrutinizer-ci.com/g/rougin/describe/code-structure
+[link-code-quality]: https://scrutinizer-ci.com/g/rougin/describe
+[link-downloads]: https://packagist.org/packages/rougin/describe
+[link-author]: https://github.com/rougin
+[link-contributors]: ../../contributors

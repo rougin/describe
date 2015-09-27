@@ -5,7 +5,7 @@ namespace Rougin\Describe;
 /**
  * Column Class
  *
- * Used to store information from the results
+ * Stores a column information from the results given.
  *
  * @package Describe
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
@@ -26,7 +26,7 @@ class Column
     protected $unsigned = FALSE;
 
     /**
-     * Get the data type
+     * Gets the data type.
      * 
      * @return string
      */
@@ -36,7 +36,7 @@ class Column
     }
 
     /**
-     * Get the default value
+     * Gets the default value.
      * 
      * @return string
      */
@@ -46,7 +46,7 @@ class Column
     }
 
     /**
-     * Get the column description
+     * Gets the column description.
      * 
      * @return string
      */
@@ -56,7 +56,7 @@ class Column
     }
 
     /**
-     * Get the foreign field
+     * Gets the foreign field.
      * 
      * @return string
      */
@@ -66,7 +66,7 @@ class Column
     }
 
     /**
-     * Get the foreign table
+     * Gets the foreign table.
      * 
      * @return string
      */
@@ -76,7 +76,7 @@ class Column
     }
 
     /**
-     * Get the field's length
+     * Gets the field's length.
      * 
      * @return integer
      */
@@ -86,7 +86,7 @@ class Column
     }
 
     /**
-     * Get the data type
+     * Gets the data type.
      * 
      * @return string
      */
@@ -96,7 +96,7 @@ class Column
     }
 
     /**
-     * Get the default value
+     * Gets the default value.
      * 
      * @return string
      */
@@ -106,7 +106,7 @@ class Column
     }
 
     /**
-     * Get the column description
+     * Gets the column description.
      * 
      * @return string
      */
@@ -116,7 +116,7 @@ class Column
     }
 
     /**
-     * Get the foreign field
+     * Gets the foreign field.
      * 
      * @return string
      */
@@ -126,7 +126,7 @@ class Column
     }
 
     /**
-     * Get the foreign table
+     * Gets the foreign table.
      * 
      * @return string
      */
@@ -136,7 +136,7 @@ class Column
     }
 
     /**
-     * Get the field's length
+     * Gets the field's length.
      * 
      * @return string
      */
@@ -266,7 +266,7 @@ class Column
     }
 
     /**
-     * Set the auto increment
+     * Sets the auto increment.
      * 
      * @param boolean $autoIncrement
      */
@@ -276,7 +276,7 @@ class Column
     }
 
     /**
-     * Set the data type
+     * Sets the data type.
      * 
      * @param string $dataType
      */
@@ -298,7 +298,7 @@ class Column
     }
 
     /**
-     * Set the default value
+     * Sets the default value.
      * 
      * @param boolean $defaultValue
      */
@@ -308,7 +308,7 @@ class Column
     }
 
     /**
-     * Set the column's description
+     * Sets the column's description.
      * 
      * @param string $field
      */
@@ -318,7 +318,7 @@ class Column
     }
 
     /**
-     * Set if field is a foreign key
+     * Sets if field is a foreign key.
      * 
      * @param string $field
      */
@@ -328,7 +328,7 @@ class Column
     }
 
     /**
-     * Set the foreign field
+     * Sets the foreign field.
      * 
      * @param string $referencedField
      */
@@ -338,7 +338,7 @@ class Column
     }
 
     /**
-     * Set the foreign table
+     * Sets the foreign table.
      * 
      * @param string $referencedField
      */
@@ -348,7 +348,7 @@ class Column
     }
 
     /**
-     * Set the field's length
+     * Sets the field's length.
      * 
      * @param string $length
      */
@@ -358,7 +358,7 @@ class Column
     }
 
     /**
-     * Set if field accepts NULL values
+     * Sets if field accepts NULL values.
      * 
      * @param boolean $null
      */
@@ -368,7 +368,7 @@ class Column
     }
 
     /**
-     * Set if field is a primary key
+     * Sets if field is a primary key.
      * 
      * @param boolean $primary
      */
@@ -378,7 +378,7 @@ class Column
     }
 
     /**
-     * Set if field is a unique key
+     * Sets if field is a unique key.
      * 
      * @param boolean $unique
      */
@@ -388,7 +388,7 @@ class Column
     }
 
     /**
-     * Set if field is an unsigned key
+     * Sets if field is an unsigned key.
      * 
      * @param boolean $unsinged
      */
