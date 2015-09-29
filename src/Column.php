@@ -270,9 +270,11 @@ class Column
      * 
      * @param boolean $autoIncrement
      */
-    public function setAutoIncrement($autoIncrement = TRUE)
+    public function setAutoIncrement($autoIncrement)
     {
         $this->autoIncrement = $autoIncrement;
+
+        return $this;
     }
 
     /**
@@ -280,7 +282,7 @@ class Column
      * 
      * @param string $dataType
      */
-    public function setDataType($dataType = TRUE)
+    public function setDataType($dataType)
     {
         $dataTypes = [
             'int' => 'integer',
@@ -302,9 +304,11 @@ class Column
      * 
      * @param boolean $defaultValue
      */
-    public function setDefaultValue($defaultValue = TRUE)
+    public function setDefaultValue($defaultValue)
     {
         $this->defaultValue = $defaultValue;
+
+        return $this;
     }
 
     /**
@@ -312,9 +316,11 @@ class Column
      * 
      * @param string $field
      */
-    public function setField($field = TRUE)
+    public function setField($field)
     {
         $this->field = $field;
+
+        return $this;
     }
 
     /**
@@ -322,9 +328,11 @@ class Column
      * 
      * @param string $foreign
      */
-    public function setForeign($foreign = TRUE)
+    public function setForeign($foreign)
     {
         $this->foreign = $foreign;
+
+        return $this;
     }
 
     /**
@@ -332,9 +340,11 @@ class Column
      * 
      * @param string $referencedField
      */
-    public function setReferencedField($referencedField = TRUE)
+    public function setReferencedField($referencedField)
     {
         $this->referencedField = $referencedField;
+
+        return $this;
     }
 
     /**
@@ -342,9 +352,11 @@ class Column
      * 
      * @param string $foreignTable
      */
-    public function setReferencedTable($foreignTable = TRUE)
+    public function setReferencedTable($foreignTable)
     {
         $this->referencedTable = $foreignTable;
+
+        return $this;
     }
 
     /**
@@ -355,6 +367,8 @@ class Column
     public function setLength($length = TRUE)
     {
         $this->length = $length;
+
+        return $this;
     }
 
     /**
@@ -365,6 +379,8 @@ class Column
     public function setNull($null = TRUE)
     {
         $this->null = $null;
+
+        return $this;
     }
 
     /**
@@ -375,6 +391,8 @@ class Column
     public function setPrimary($primary = TRUE)
     {
         $this->primary = $primary;
+
+        return $this;
     }
 
     /**
@@ -385,6 +403,8 @@ class Column
     public function setUnique($unique = TRUE)
     {
         $this->unique = $unique;
+
+        return $this;
     }
 
     /**
@@ -395,5 +415,7 @@ class Column
     public function setUnsigned($unsigned = TRUE)
     {
         $this->unsigned = $unsigned;
+
+        return $this;
     }
 }
