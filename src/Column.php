@@ -326,7 +326,7 @@ class Column
     /**
      * Sets the field as a foreign key.
      * 
-     * @param string $foreign
+     * @param boolean $foreign
      */
     public function setForeign($foreign)
     {
