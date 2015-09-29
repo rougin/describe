@@ -9,6 +9,8 @@ use Rougin\Describe\Column;
 /**
  * SQLiteDriver Class
  *
+ * A database driver extension for SQLite.
+ * 
  * @package  Describe
  * @category Drivers
  * @author   Rougin Royce Gutib <rougingutib@gmail.com>
@@ -40,10 +42,6 @@ class SQLiteDriver implements DriverInterface
 
         $information->execute();
         $information->setFetchMode(PDO::FETCH_OBJ);
-
-        if ($stripped = strpos($table, '.')) {
-            $table = substr($table, $stripped + 1);
-        }
 
         while ($row = $information->fetch()) {
             $column = new Column;

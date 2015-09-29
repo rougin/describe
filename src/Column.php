@@ -318,9 +318,9 @@ class Column
     }
 
     /**
-     * Sets if field is a foreign key.
+     * Sets the field as a foreign key.
      * 
-     * @param string $field
+     * @param string $foreign
      */
     public function setForeign($foreign = TRUE)
     {

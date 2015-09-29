@@ -9,6 +9,8 @@ use Rougin\Describe\Column;
 /**
  * MySQL Driver Class
  *
+ * A database driver extension for MySQL.
+ * 
  * @package  Describe
  * @category Drivers
  * @author   Rougin Royce Gutib <rougingutib@gmail.com>
