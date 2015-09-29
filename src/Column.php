@@ -14,12 +14,12 @@ class Column
 {
     protected $autoIncrement = FALSE;
     protected $dataType;
-    protected $defaultValue;
+    protected $defaultValue = '';
     protected $field;
     protected $foreign = FALSE;
     protected $referencedField;
     protected $referencedTable;
-    protected $length;
+    protected $length = 0;
     protected $null = FALSE;
     protected $primary = FALSE;
     protected $unique = FALSE;
