@@ -92,7 +92,7 @@ class Column
      */
     public function get_data_type()
     {
-        return $this->fataType;
+        return $this->dataType;
     }
 
     /**
@@ -102,7 +102,7 @@ class Column
      */
     public function get_default_value()
     {
-        return $this->fefaultValue;
+        return $this->defaultValue;
     }
 
     /**
@@ -270,7 +270,7 @@ class Column
      * 
      * @param boolean $autoIncrement
      */
-    public function setAutoIncrement($autoIncrement)
+    public function setAutoIncrement($autoIncrement = TRUE)
     {
         $this->autoIncrement = $autoIncrement;
     }
@@ -280,7 +280,7 @@ class Column
      * 
      * @param string $dataType
      */
-    public function setDataType($dataType)
+    public function setDataType($dataType = TRUE)
     {
         $dataTypes = [
             'int' => 'integer',
@@ -302,7 +302,7 @@ class Column
      * 
      * @param boolean $defaultValue
      */
-    public function setDefaultValue($defaultValue)
+    public function setDefaultValue($defaultValue = TRUE)
     {
         $this->defaultValue = $defaultValue;
     }
@@ -312,7 +312,7 @@ class Column
      * 
      * @param string $field
      */
-    public function setField($field)
+    public function setField($field = TRUE)
     {
         $this->field = $field;
     }
@@ -322,7 +322,7 @@ class Column
      * 
      * @param string $field
      */
-    public function setForeign($foreign)
+    public function setForeign($foreign = TRUE)
     {
         $this->foreign = $foreign;
     }
@@ -332,7 +332,7 @@ class Column
      * 
      * @param string $referencedField
      */
-    public function setReferencedField($referencedField)
+    public function setReferencedField($referencedField = TRUE)
     {
         $this->referencedField = $referencedField;
     }
@@ -340,9 +340,9 @@ class Column
     /**
      * Sets the foreign table.
      * 
-     * @param string $referencedField
+     * @param string $foreignTable
      */
-    public function setReferencedTable($foreignTable)
+    public function setReferencedTable($foreignTable = TRUE)
     {
         $this->referencedTable = $foreignTable;
     }
@@ -352,7 +352,7 @@ class Column
      * 
      * @param string $length
      */
-    public function setLength($length)
+    public function setLength($length = TRUE)
     {
         $this->length = $length;
     }
@@ -362,7 +362,7 @@ class Column
      * 
      * @param boolean $null
      */
-    public function setNull($null)
+    public function setNull($null = TRUE)
     {
         $this->null = $null;
     }
@@ -372,7 +372,7 @@ class Column
      * 
      * @param boolean $primary
      */
-    public function setPrimary($primary)
+    public function setPrimary($primary = TRUE)
     {
         $this->primary = $primary;
     }
@@ -382,7 +382,7 @@ class Column
      * 
      * @param boolean $unique
      */
-    public function setUnique($unique)
+    public function setUnique($unique = TRUE)
     {
         $this->unique = $unique;
     }
@@ -390,9 +390,9 @@ class Column
     /**
      * Sets if field is an unsigned key.
      * 
-     * @param boolean $unsinged
+     * @param boolean $unsigned
      */
-    public function setUnsigned($unsigned)
+    public function setUnsigned($unsigned = TRUE)
     {
         $this->unsigned = $unsigned;
     }

@@ -14,6 +14,7 @@ use Rougin\Describe\Drivers\DriverInterface;
  */
 class Describe
 {
+    protected $columns = [];
     protected $driver;
 
     /**
@@ -25,6 +26,27 @@ class Describe
     }
 
     /**
+     * Gets the primary key in the specified table.
+     * 
+     * @param  string $table
+     * @return string
+     */
+    public function getPrimaryKey($table)
+    {
+        if (empty($this->columns)) {
+            $this->columns = $this->driver->getTable($table);
+        }
+
+        foreach ($this->columns as $column) {
+            if ($column->isPrimaryKey()) {
+                return $column->get_field();
+            }
+        }
+
+        return '';
+    }
+
+    /**
      * Returns the result.
      *
      * @param  string $table
@@ -33,17 +55,6 @@ class Describe
     public function getTable($table)
     {
         return $this->driver->getTable($table);
-    }
-
-    /**
-     * Gets the primary key in the specified table.
-     * 
-     * @param  string $table
-     * @return string
-     */
-    public function getPrimaryKey($table)
-    {
-        return $this->driver->getPrimaryKey($table);
     }
 
     /**
@@ -65,7 +76,7 @@ class Describe
      */
     public function get_primary_key($table)
     {
-        return $this->driver->getPrimaryKey($table);
+        return $this->getPrimaryKey($table);
     }
 
     /**

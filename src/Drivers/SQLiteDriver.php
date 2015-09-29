@@ -41,8 +41,8 @@ class SQLiteDriver implements DriverInterface
         $information->execute();
         $information->setFetchMode(PDO::FETCH_OBJ);
 
-        if (strpos($table, '.')) {
-            $table = substr($table, strpos($table, '.') + 1);
+        if ($stripped = strpos($table, '.')) {
+            $table = substr($table, $stripped + 1);
         }
 
         while ($row = $information->fetch()) {

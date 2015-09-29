@@ -16,6 +16,7 @@ use Rougin\Describe\Column;
 class MySQLDriver implements DriverInterface
 {
     protected $database;
+    protected $columns = [];
     protected $pdo;
 
     /**
@@ -35,14 +36,14 @@ class MySQLDriver implements DriverInterface
      */
     public function getTable($table)
     {
-        $columns = [];
+        $this->columns = [];
 
         $information = $this->pdo->prepare('DESCRIBE ' . $table);
         $information->execute();
         $information->setFetchMode(PDO::FETCH_OBJ);
 
-        if (strpos($table, '.')) {
-            $table = substr($table, strpos($table, '.') + 1);
+        if ($stripped = strpos($table, '.')) {
+            $table = substr($table, $stripped + 1);
         }
 
         while ($row = $information->fetch()) {
@@ -106,10 +107,10 @@ class MySQLDriver implements DriverInterface
                 }
             }
 
-            $columns[] = $column;
+            array_push($this->columns, $column);
         }
 
-        return $columns;
+        return $this->columns;
     }
 
     /**
