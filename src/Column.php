@@ -17,11 +17,11 @@ class Column
     protected $defaultValue = '';
     protected $field;
     protected $foreign = FALSE;
-    protected $referencedField;
-    protected $referencedTable;
     protected $length = 0;
     protected $null = FALSE;
     protected $primary = FALSE;
+    protected $referencedField;
+    protected $referencedTable;
     protected $unique = FALSE;
     protected $unsigned = FALSE;
 
@@ -302,7 +302,7 @@ class Column
     /**
      * Sets the default value.
      * 
-     * @param boolean $defaultValue
+     * @param string $defaultValue
      */
     public function setDefaultValue($defaultValue)
     {
@@ -362,9 +362,9 @@ class Column
     /**
      * Sets the field's length.
      * 
-     * @param string $length
+     * @param integer $length
      */
-    public function setLength($length = TRUE)
+    public function setLength($length)
     {
         $this->length = $length;
 
