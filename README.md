@@ -20,17 +20,14 @@ $ composer require rougin/describe
 ## Usage
 
 ``` php
-use Rougin\Describe\Drivers\MySQLDriver;
-use Rougin\Describe\Describe;
-
 $pdo = new PDO('mysql:host=localhost;dbname=demo', 'root', '');
-$mysql = new MySQLDriver($pdo, 'demo');
-$describe = new Describe($mysql);
+$mysql = new Rougin\Describe\Driver\MySQLDriver($pdo, 'demo');
+$describe = new Rougin\Describe\DescribeDescribe($mysql);
 
 // Returns an array of columns from the specified table
 var_dump($describe->getTable('table'));
 
-// Gets the primary key of the specified table
+// Gets the primary key from the specified table
 var_dump($describe->getPrimaryKey('table'));
 ```
 

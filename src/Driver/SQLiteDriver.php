@@ -1,9 +1,9 @@
 <?php
 
-namespace Rougin\Describe\Drivers;
+namespace Rougin\Describe\Driver;
 
 use PDO;
-use Rougin\Describe\Drivers\DriverInterface;
+use Rougin\Describe\Driver\DriverInterface;
 use Rougin\Describe\Column;
 
 /**
@@ -12,7 +12,7 @@ use Rougin\Describe\Column;
  * A database driver extension for SQLite.
  * 
  * @package  Describe
- * @category Drivers
+ * @category Driver
  * @author   Rougin Royce Gutib <rougingutib@gmail.com>
  */
 class SQLiteDriver implements DriverInterface

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rougin\Describe\Drivers;
+namespace Rougin\Describe\Driver;
 
 /**
  * Database Driver Interface
