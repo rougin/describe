@@ -2,12 +2,25 @@
 
 All Notable changes to `Describe` will be documented in this file
 
-## [1.1.3](https://github.com/rougin/transcribe/compare/v1.1.2...v1.1.3) - 2015-07-26
+## [1.2.0](https://github.com/rougin/describe/compare/v1.1.3...v1.2.0) - 2015-10-21
+
+### Added
+- [`DriverInterface`](https://github.com/rougin/describe/blob/master/src/Driver/DriverInterface.php) for extending database drivers
+- Drivers
+	- [`MySQLDriver`](https://github.com/rougin/describe/blob/master/src/Driver/MySQLDriver.php)
+	- [`SQLiteDriver`](https://github.com/rougin/describe/blob/master/src/Driver/SQLiteDriver.php)
+	- [`CodeIgniterDriver`](https://github.com/rougin/describe/blob/master/src/Driver/CodeIgniterDriver.php)
+
+### Changed
+- `Drivers` folder to `Driver`
+- Documentation
+
+## [1.1.3](https://github.com/rougin/describe/compare/v1.1.2...v1.1.3) - 2015-07-26
 
 ### Fixed
 - Bug in selecting constraints in a `MySQL` database driver
 
-## [1.1.2](https://github.com/rougin/transcribe/compare/v1.1.1...v1.1.2) - 2015-07-03
+## [1.1.2](https://github.com/rougin/describe/compare/v1.1.1...v1.1.2) - 2015-07-03
 
 ### Changed
 - Renamed `get_foreign_*` to `get_referenced_*`
@@ -16,12 +29,12 @@ All Notable changes to `Describe` will be documented in this file
 ### Fixed
 - Missing `setForeign()` method in `Column` class
 
-## [1.1.1](https://github.com/rougin/transcribe/compare/v1.1.0...v1.1.1) - 2015-06-26
+## [1.1.1](https://github.com/rougin/describe/compare/v1.1.0...v1.1.1) - 2015-06-26
 
 ### Changed
 - Rewritten database drivers from scratch
 
-## [1.1.0](https://github.com/rougin/transcribe/compare/v1.0.0...v1.1.0) - 2015-05-30
+## [1.1.0](https://github.com/rougin/describe/compare/v1.0.0...v1.1.0) - 2015-05-30
 
 ### Added
 - Support for foreign keys referenced in other databases
