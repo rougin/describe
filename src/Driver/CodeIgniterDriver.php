@@ -42,8 +42,6 @@ class CodeIgniterDriver implements DriverInterface
      */
     public function getDriver(array $database, $connection)
     {
-        $driver = NULL;
-
         switch ($database[$connection]['dbdriver']) {
             case 'mysql':
             case 'mysqli':
