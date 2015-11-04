@@ -63,7 +63,7 @@ class Describe
      * @param  string $table
      * @return array
      */
-    public function get_information_from_table($table)
+    public function get_table($table)
     {
         return $this->driver->getTable($table);
     }
