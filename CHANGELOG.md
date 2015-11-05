@@ -2,6 +2,11 @@
 
 All Notable changes to `Describe` will be documented in this file
 
+## [1.2.1](https://github.com/rougin/describe/compare/v1.2.0...v1.2.1) - 2015-11-04
+
+### Changed
+- `get_table_information()` to `get_table()` in `Rougin\Describe\Describe`
+
 ## [1.2.0](https://github.com/rougin/describe/compare/v1.1.3...v1.2.0) - 2015-10-21
 
 ### Added
