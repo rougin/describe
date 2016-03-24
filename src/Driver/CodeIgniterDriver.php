@@ -3,10 +3,10 @@
 namespace Rougin\Describe\Driver;
 
 use PDO;
-use Rougin\Describe\Driver\DriverInterface;
 use Rougin\Describe\Column;
 use Rougin\Describe\Driver\MySQLDriver;
 use Rougin\Describe\Driver\SQLiteDriver;
+use Rougin\Describe\Driver\DriverInterface;
 
 /**
  * CodeIgniter Driver Class
@@ -34,30 +34,33 @@ class CodeIgniterDriver implements DriverInterface
     }
 
     /**
-     * Gets the specified driver from the specified database connection
+     * Gets the specified driver from the specified database connection.
      * 
      * @param  array  $database
      * @param  string $connection
-     * @return DriverInterface
+     * @return \Rougin\Describe\Driver\DriverInterface
      */
     public function getDriver(array $database, $connection)
     {
         switch ($database[$connection]['dbdriver']) {
             case 'mysql':
             case 'mysqli':
-                return new MySQLDriver(
-                    new PDO(
-                        'mysql:host=' . $database[$connection]['hostname'] .
-                        ';dbname=' . $database[$connection]['database'],
-                        $database[$connection]['username'],
-                        $database[$connection]['password']
-                    ),
-                    $database[$connection]['database']
+                $database = $database[$connection]['database'];
+
+                $pdo = new PDO(
+                    'mysql:host=' . $database[$connection]['hostname'] .
+                    ';dbname=' . $database[$connection]['database'],
+                    $database[$connection]['username'],
+                    $database[$connection]['password']
                 );
+
+                return new MySQLDriver($database, $pdo);
+            case 'pdo':
             case 'sqlite':
-                return new SQLiteDriver(
-                    new PDO($database[$connection]['hostname'])
-                );
+            case 'sqlite3':
+                $pdo = new PDO($database[$connection]['hostname']);
+
+                return new SQLiteDriver($pdo);
         }
     }
 

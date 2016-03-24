@@ -2,6 +2,11 @@
 
 All Notable changes to `Describe` will be documented in this file
 
+## [1.2.2](https://github.com/rougin/describe/compare/v1.2.1...v1.2.2) - 2016-03-25
+
+### Fixed
+- Issue in instantiating `SQLiteDriver` in `CodeIgniterDriver`
+
 ## [1.2.1](https://github.com/rougin/describe/compare/v1.2.0...v1.2.1) - 2015-11-04
 
 ### Changed
