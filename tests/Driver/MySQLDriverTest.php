@@ -58,7 +58,7 @@ class MySQLDriverTest extends PHPUnit_Framework_TestCase
      */
     public function testGetTableMethod()
     {
-        $table = $this->describe->getTable($this->table . '.demo');
+        $table = $this->describe->getTable('demo.' . $this->table);
         $table = $this->describe->get_table($this->table);
 
         $this->assertEquals($this->expectedColumns, count($table));

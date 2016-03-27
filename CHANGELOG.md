@@ -1,6 +1,11 @@
 # Changelog
 
-All Notable changes to `Describe` will be documented in this file
+All Notable changes to `Describe` will be documented in this file.
+
+## [1.4.2](https://github.com/rougin/describe/compare/v1.4.1...v1.4.2) - 2016-04-28
+
+### Fixed
+- Issue in building `Describe` in HHVM
 
 ## [1.4.1](https://github.com/rougin/describe/compare/v1.4.0...v1.4.1) - 2016-04-27
 
