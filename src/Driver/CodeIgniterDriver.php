@@ -54,7 +54,7 @@ class CodeIgniterDriver implements DriverInterface
                     $database[$connection]['password']
                 );
 
-                return new MySQLDriver($database, $pdo);
+                return new MySQLDriver($pdo, $database);
             case 'pdo':
             case 'sqlite':
             case 'sqlite3':
