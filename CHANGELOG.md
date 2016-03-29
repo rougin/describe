@@ -4,6 +4,9 @@ All Notable changes to `Describe` will be documented in this file
 
 ## [1.3.0](https://github.com/rougin/describe/compare/v1.2.2...v1.3.0) - 2016-03-30
 
+### Added
+- Tests
+
 ### Fixed
 - Wrong inserted parameters in `MySQLDriver` for the `CodeIgniterDriver`
 
