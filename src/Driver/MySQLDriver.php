@@ -7,7 +7,7 @@ use Rougin\Describe\Driver\DriverInterface;
 use Rougin\Describe\Column;
 
 /**
- * MySQL Driver Class
+ * MySQL Driver
  *
  * A database driver extension for MySQL.
  * 

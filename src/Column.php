@@ -12,17 +12,64 @@ namespace Rougin\Describe;
  */
 class Column
 {
+    /**
+     * @var boolean
+     */
     protected $autoIncrement = FALSE;
+
+    /**
+     * @var string
+     */
     protected $dataType;
+
+    /**
+     * @var string
+     */
     protected $defaultValue = '';
+
+    /**
+     * @var string
+     */
     protected $field;
+
+    /**
+     * @var boolean
+     */
     protected $foreign = FALSE;
+
+    /**
+     * @var integer
+     */
     protected $length = 0;
+
+    /**
+     * @var boolean
+     */
     protected $null = FALSE;
+
+    /**
+     * @var boolean
+     */
     protected $primary = FALSE;
+
+    /**
+     * @var string
+     */
     protected $referencedField;
+
+    /**
+     * @var string
+     */
     protected $referencedTable;
+
+    /**
+     * @var boolean
+     */
     protected $unique = FALSE;
+
+    /**
+     * @var boolean
+     */
     protected $unsigned = FALSE;
 
     /**

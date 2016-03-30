@@ -5,7 +5,7 @@ namespace Rougin\Describe;
 use Rougin\Describe\Driver\DriverInterface;
 
 /**
- * Describe Class
+ * Describe
  *
  * Gets information of a table schema from a database.
  * 
@@ -14,11 +14,18 @@ use Rougin\Describe\Driver\DriverInterface;
  */
 class Describe
 {
+    /**
+     * @var array
+     */
     protected $columns = [];
+
+    /**
+     * @var \Rougin\Describe\Driver\DriverInterface
+     */
     protected $driver;
 
     /**
-     * @param DriverInterface $driver
+     * @param \Rougin\Describe\Driver\DriverInterface $driver
      */
     public function __construct(DriverInterface $driver)
     {
@@ -33,17 +40,19 @@ class Describe
      */
     public function getPrimaryKey($table)
     {
+        $result = '';
+
         if (empty($this->columns)) {
             $this->columns = $this->driver->getTable($table);
         }
 
         foreach ($this->columns as $column) {
             if ($column->isPrimaryKey()) {
-                return $column->get_field();
+                $result = $column->get_field();
             }
         }
 
-        return '';
+        return $result;
     }
 
     /**

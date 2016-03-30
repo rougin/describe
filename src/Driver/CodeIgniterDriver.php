@@ -9,7 +9,7 @@ use Rougin\Describe\Driver\SQLiteDriver;
 use Rougin\Describe\Driver\DriverInterface;
 
 /**
- * CodeIgniter Driver Class
+ * CodeIgniter Driver
  *
  * A database driver specifically used for CodeIgniter.
  * 

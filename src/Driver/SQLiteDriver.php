@@ -7,7 +7,7 @@ use Rougin\Describe\Driver\DriverInterface;
 use Rougin\Describe\Column;
 
 /**
- * SQLiteDriver Class
+ * SQLite Driver
  *
  * A database driver extension for SQLite.
  * 
