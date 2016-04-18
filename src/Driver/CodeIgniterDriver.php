@@ -3,10 +3,6 @@
 namespace Rougin\Describe\Driver;
 
 use PDO;
-use Rougin\Describe\Column;
-use Rougin\Describe\Driver\MySQLDriver;
-use Rougin\Describe\Driver\SQLiteDriver;
-use Rougin\Describe\Driver\DriverInterface;
 
 /**
  * CodeIgniter Driver
@@ -19,9 +15,15 @@ use Rougin\Describe\Driver\DriverInterface;
  */
 class CodeIgniterDriver implements DriverInterface
 {
+    /**
+     * @var string
+     */
     protected $connection;
+
+    /**
+     * @var array
+     */
     protected $database;
-    protected $driver;
 
     /**
      * @param array  $database
@@ -38,10 +40,12 @@ class CodeIgniterDriver implements DriverInterface
      * 
      * @param  array  $database
      * @param  string $connection
-     * @return \Rougin\Describe\Driver\DriverInterface
+     * @return \Rougin\Describe\Driver\DriverInterface|null
      */
     public function getDriver(array $database, $connection)
     {
+        $driver = null;
+
         switch ($database[$connection]['dbdriver']) {
             case 'mysql':
             case 'mysqli':
@@ -54,14 +58,20 @@ class CodeIgniterDriver implements DriverInterface
                     $database[$connection]['password']
                 );
 
-                return new MySQLDriver($pdo, $database);
+                $driver = new MySQLDriver($pdo, $database);
+
+                break;
             case 'pdo':
             case 'sqlite':
             case 'sqlite3':
                 $pdo = new PDO($database[$connection]['hostname']);
 
-                return new SQLiteDriver($pdo);
+                $driver = new SQLiteDriver($pdo);
+
+                break;
         }
+
+        return $driver;
     }
 
     /**
@@ -83,6 +93,8 @@ class CodeIgniterDriver implements DriverInterface
      */
     public function showTables()
     {
-        return [];
+        $driver = $this->getDriver($this->database, $this->connection);
+
+        return $driver->showTables();
     }
 }

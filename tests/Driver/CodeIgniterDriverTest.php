@@ -16,6 +16,16 @@ class CodeIgniterDriverTest extends PHPUnit_Framework_TestCase
     protected $describe;
 
     /**
+     * @var string
+     */
+    protected $table = 'post';
+
+    /**
+     * @var integer
+     */
+    protected $expectedColumns = 5;
+
+    /**
      * Sets up the Describe class.
      *
      * @return void
@@ -45,8 +55,8 @@ class CodeIgniterDriverTest extends PHPUnit_Framework_TestCase
     public function testGetPrimaryKeyMethod()
     {
         $expected = 'id';
-        $primaryKey = $this->describe->getPrimaryKey('users');
-        $primaryKey = $this->describe->get_primary_key('users');
+        $primaryKey = $this->describe->getPrimaryKey($this->table);
+        $primaryKey = $this->describe->get_primary_key($this->table);
 
         $this->assertEquals($expected, $primaryKey);
     }
@@ -58,11 +68,10 @@ class CodeIgniterDriverTest extends PHPUnit_Framework_TestCase
      */
     public function testGetTableMethod()
     {
-        $expected = 2;
-        $table = $this->describe->getTable('users');
-        $table = $this->describe->get_table('users');
+        $table = $this->describe->getTable($this->table);
+        $table = $this->describe->get_table($this->table);
 
-        $this->assertEquals($expected, count($table));
+        $this->assertEquals($this->expectedColumns, count($table));
     }
 
     /**
@@ -75,6 +84,6 @@ class CodeIgniterDriverTest extends PHPUnit_Framework_TestCase
         $tables = $this->describe->showTables();
         $tables = $this->describe->show_tables();
 
-        $this->assertEmpty($tables);
+        $this->assertEquals(2, count($tables));
     }
 }

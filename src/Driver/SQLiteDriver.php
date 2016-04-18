@@ -36,9 +36,9 @@ class SQLiteDriver implements DriverInterface
     {
         $columns = [];
 
-        $information = $this->pdo->prepare(
-            'PRAGMA table_info("' . $table . '");'
-        );
+        // Gets list of columns
+        $query = 'PRAGMA table_info("' . $table . '");';
+        $information = $this->pdo->prepare($query);
 
         $information->execute();
         $information->setFetchMode(PDO::FETCH_OBJ);
@@ -47,12 +47,12 @@ class SQLiteDriver implements DriverInterface
             $column = new Column;
 
             if ( ! $row->notnull) {
-                $column->setNull(TRUE);
+                $column->setNull(true);
             }
 
             if ($row->pk) {
-                $column->setPrimary(TRUE);
-                $column->setAutoIncrement(TRUE);
+                $column->setPrimary(true);
+                $column->setAutoIncrement(true);
             }
 
             $column->setDefaultValue($row->dflt_value);
@@ -60,6 +60,24 @@ class SQLiteDriver implements DriverInterface
             $column->setDataType(strtolower($row->type));
 
             array_push($columns, $column);
+        }
+
+        // Gets list of foreign keys
+        $query = 'PRAGMA foreign_key_list("' . $table . '");';
+        $information = $this->pdo->prepare($query);
+
+        $information->execute();
+        $information->setFetchMode(PDO::FETCH_OBJ);
+
+        while ($row = $information->fetch()) {
+            foreach ($columns as $column) {
+                if ($column->getField() == $row->from) {
+                    $column->setForeign(true);
+
+                    $column->setReferencedField($row->to);
+                    $column->setReferencedTable($row->table);
+                }
+            }
         }
 
         return $columns;
@@ -72,6 +90,21 @@ class SQLiteDriver implements DriverInterface
      */
     public function showTables()
     {
-        return [];
+        $tables = [];
+
+        // Gets list of columns
+        $query = 'SELECT name FROM sqlite_master WHERE type = "table";';
+        $information = $this->pdo->prepare($query);
+
+        $information->execute();
+        $information->setFetchMode(PDO::FETCH_OBJ);
+
+        while ($row = $information->fetch()) {
+            if ($row->name != 'sqlite_sequence') {
+                array_push($tables, $row->name);
+            }
+        }
+
+        return $tables;
     }
 }

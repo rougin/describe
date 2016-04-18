@@ -4,11 +4,11 @@ namespace Rougin\Describe\Test;
 
 use PDO;
 use Rougin\Describe\Describe;
-use Rougin\Describe\Driver\SQLiteDriver;
+use Rougin\Describe\Driver\MySQLDriver;
 
 use PHPUnit_Framework_TestCase;
 
-class SQLiteDriverTest extends PHPUnit_Framework_TestCase
+class MySQLDriverTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \Rougin\Describe\Describe
@@ -34,8 +34,8 @@ class SQLiteDriverTest extends PHPUnit_Framework_TestCase
     {
         $databasePath = __DIR__ . '/../Databases/test.db';
 
-        $pdo = new PDO('sqlite:' . $databasePath);
-        $driver = new SQLiteDriver($pdo);
+        $pdo = new PDO('mysql:host=localhost;dbname=demo', 'root', '');
+        $driver = new MySQLDriver($pdo, 'demo');
 
         $this->describe = new Describe($driver);
     }

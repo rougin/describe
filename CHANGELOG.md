@@ -2,6 +2,13 @@
 
 All Notable changes to `Describe` will be documented in this file
 
+## [Unreleased](https://github.com/rougin/describe/compare/v1.3.0...HEAD)
+
+### Added
+- Tests for `MySQLDriver`
+- Getting foreign keys in `SQLiteDriver`
+- `DriverInterface::showTables` in `CodeIgniterDriver` and `SQLiteDriver`
+
 ## [1.3.0](https://github.com/rougin/describe/compare/v1.2.2...v1.3.0) - 2016-03-30
 
 ### Added
