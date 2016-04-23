@@ -3,7 +3,6 @@
 namespace Rougin\Describe\Driver;
 
 use PDO;
-use Rougin\Describe\Driver\DriverInterface;
 use Rougin\Describe\Column;
 
 /**

@@ -2,7 +2,7 @@
 
 All Notable changes to `Describe` will be documented in this file
 
-## [Unreleased](https://github.com/rougin/describe/compare/v1.3.0...HEAD)
+## [1.4.0](https://github.com/rougin/describe/compare/v1.3.0...v1.4.0) - 2016-04-23
 
 ### Added
 - Tests for `MySQLDriver`

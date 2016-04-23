@@ -20,20 +20,21 @@ $ composer require rougin/describe
 ## Usage
 
 ``` php
-$pdo = new PDO('mysql:host=localhost;dbname=demo', 'root', '');
-$mysql = new Rougin\Describe\Driver\MySQLDriver($pdo, 'demo');
-$describe = new Rougin\Describe\DescribeDescribe($mysql);
+$database = 'demo';
+$pdo = new PDO('mysql:host=localhost;dbname=' . $database, 'root', '');
+$driver = new Rougin\Describe\Driver\MySQLDriver($pdo, $database);
+$describe = new Rougin\Describe\DescribeDescribe($driver);
 
 // Returns an array of columns from the specified table
-var_dump($describe->getTable('table'));
+var_dump($describe->getTable('users'));
 
 // Gets the primary key from the specified table
-var_dump($describe->getPrimaryKey('table'));
+var_dump($describe->getPrimaryKey('users'));
 ```
 
 #### Adding a new database driver
 
-You can always add a new database driver if you want. Just implement the database driver of your choice in a [DriverInterface](https://github.com/rougin/describe/blob/master/src/Drivers/DriverInterface.php).
+You can always add a new database driver if you want. Just implement the database driver of your choice in a [DriverInterface](https://github.com/rougin/describe/blob/master/src/Driver/DriverInterface.php).
 
 ## Change log
 
