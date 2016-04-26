@@ -1,6 +1,6 @@
 <?php
 
-namespace Rougin\Describe\Test;
+namespace Rougin\Describe;
 
 use PDO;
 use Rougin\Describe\Describe;
@@ -32,8 +32,6 @@ class MySQLDriverTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $databasePath = __DIR__ . '/../Databases/test.db';
-
         $pdo = new PDO('mysql:host=localhost;dbname=demo', 'root', '');
         $driver = new MySQLDriver($pdo, 'demo');
 
@@ -47,12 +45,10 @@ class MySQLDriverTest extends PHPUnit_Framework_TestCase
      */
     public function testGetPrimaryKeyMethod()
     {
-        $expected = 'id';
-
         $primaryKey = $this->describe->getPrimaryKey($this->table);
         $primaryKey = $this->describe->get_primary_key($this->table);
 
-        $this->assertEquals($expected, $primaryKey);
+        $this->assertEquals('id', $primaryKey);
     }
 
     /**
@@ -62,7 +58,7 @@ class MySQLDriverTest extends PHPUnit_Framework_TestCase
      */
     public function testGetTableMethod()
     {
-        $table = $this->describe->getTable($this->table);
+        $table = $this->describe->getTable($this->table . '.demo');
         $table = $this->describe->get_table($this->table);
 
         $this->assertEquals($this->expectedColumns, count($table));

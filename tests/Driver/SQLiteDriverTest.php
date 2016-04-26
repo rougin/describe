@@ -1,6 +1,6 @@
 <?php
 
-namespace Rougin\Describe\Test;
+namespace Rougin\Describe;
 
 use PDO;
 use Rougin\Describe\Describe;

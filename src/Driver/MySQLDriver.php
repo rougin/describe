@@ -77,14 +77,13 @@ class MySQLDriver implements DriverInterface
                     break;
             }
 
+            $column->setDataType($row->Type);
             $column->setDefaultValue($row->Default);
             $column->setField($row->Field);
 
             if (isset($match[1])) {
                 $column->setDataType($match[1]);
                 $column->setLength($match[2]);
-            } else {
-                $column->setDataType($row->Type);
             }
 
             $query = 'SELECT COLUMN_NAME as "column",' .

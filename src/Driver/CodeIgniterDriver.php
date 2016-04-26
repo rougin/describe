@@ -49,16 +49,16 @@ class CodeIgniterDriver implements DriverInterface
         switch ($database[$connection]['dbdriver']) {
             case 'mysql':
             case 'mysqli':
-                $database = $database[$connection]['database'];
+                $mysql = $database[$connection];
 
                 $pdo = new PDO(
-                    'mysql:host=' . $database[$connection]['hostname'] .
-                    ';dbname=' . $database[$connection]['database'],
-                    $database[$connection]['username'],
-                    $database[$connection]['password']
+                    'mysql:host=' . $mysql['hostname'] .
+                    ';dbname=' . $mysql['database'],
+                    $mysql['username'],
+                    $mysql['password']
                 );
 
-                $driver = new MySQLDriver($pdo, $database);
+                $driver = new MySQLDriver($pdo, $mysql['database']);
 
                 break;
             case 'pdo':

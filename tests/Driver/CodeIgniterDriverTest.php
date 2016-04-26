@@ -1,6 +1,6 @@
 <?php
 
-namespace Rougin\Describe\Test;
+namespace Rougin\Describe;
 
 use PDO;
 use Rougin\Describe\Describe;
@@ -26,11 +26,123 @@ class CodeIgniterDriverTest extends PHPUnit_Framework_TestCase
     protected $expectedColumns = 5;
 
     /**
-     * Sets up the Describe class.
+     * Tests Describe::getPrimaryKey method with SQLite Driver.
+     * 
+     * @return void
+     */
+    public function testGetPrimaryKeyMethodWithSqliteDriver()
+    {
+        $this->setUpSqliteDriver();
+
+        $primaryKey = $this->describe->getPrimaryKey($this->table);
+        $primaryKey = $this->describe->get_primary_key($this->table);
+
+        $this->assertEquals('id', $primaryKey);
+    }
+
+    /**
+     * Tests Describe::getTable method with SQLite Driver.
+     * 
+     * @return void
+     */
+    public function testGetTableMethodWithSqliteDriver()
+    {
+        $this->setUpSqliteDriver();
+
+        $table = $this->describe->getTable($this->table);
+        $table = $this->describe->get_table($this->table);
+
+        $this->assertEquals($this->expectedColumns, count($table));
+    }
+
+    /**
+     * Tests Describe::showTables method with SQLite Driver.
+     * 
+     * @return void
+     */
+    public function testShowTablesMethodWithSqliteDriver()
+    {
+        $this->setUpSqliteDriver();
+
+        $tables = $this->describe->showTables();
+        $tables = $this->describe->show_tables();
+
+        $this->assertEquals(2, count($tables));
+    }
+
+    /**
+     * Tests Describe::getPrimaryKey method with MySQL Driver.
+     * 
+     * @return void
+     */
+    public function testGetPrimaryKeyMethodWithMysqlDriver()
+    {
+        $this->setUpMysqlDriver();
+
+        $primaryKey = $this->describe->getPrimaryKey($this->table);
+        $primaryKey = $this->describe->get_primary_key($this->table);
+
+        $this->assertEquals('id', $primaryKey);
+    }
+
+    /**
+     * Tests Describe::getTable method with MySQL Driver.
+     * 
+     * @return void
+     */
+    public function testGetTableMethodWithMysqlDriver()
+    {
+        $this->setUpMysqlDriver();
+
+        $table = $this->describe->getTable($this->table);
+        $table = $this->describe->get_table($this->table);
+
+        $this->assertEquals($this->expectedColumns, count($table));
+    }
+
+    /**
+     * Tests Describe::showTables method with MySQL Driver.
+     * 
+     * @return void
+     */
+    public function testShowTablesMethodWithMysqlDriver()
+    {
+        $this->setUpMysqlDriver();
+
+        $tables = $this->describe->showTables();
+        $tables = $this->describe->show_tables();
+
+        $this->assertEquals(2, count($tables));
+    }
+
+    /**
+     * Sets up the MySQL Driver.
      *
      * @return void
      */
-    public function setUp()
+    public function setUpMysqlDriver()
+    {
+        $config = [];
+
+        $config['default'] = [
+            'dbdriver' => 'mysqli',
+            'hostname' => 'localhost',
+            'username' => 'root',
+            'password' => '',
+            'database' => 'demo'
+        ];
+
+        $driver = new CodeIgniterDriver($config);
+
+        $this->describe = new Describe($driver);
+    }
+
+    /**
+     * Sets up the SQLite Driver.
+     *
+     * @return void
+     */
+    protected function setUpSqliteDriver()
     {
         $config = [];
 
@@ -45,45 +157,5 @@ class CodeIgniterDriverTest extends PHPUnit_Framework_TestCase
         $driver = new CodeIgniterDriver($config);
 
         $this->describe = new Describe($driver);
-    }
-
-    /**
-     * Tests Describe::getPrimaryKey method.
-     * 
-     * @return void
-     */
-    public function testGetPrimaryKeyMethod()
-    {
-        $expected = 'id';
-        $primaryKey = $this->describe->getPrimaryKey($this->table);
-        $primaryKey = $this->describe->get_primary_key($this->table);
-
-        $this->assertEquals($expected, $primaryKey);
-    }
-
-    /**
-     * Tests Describe::getTable method.
-     * 
-     * @return void
-     */
-    public function testGetTableMethod()
-    {
-        $table = $this->describe->getTable($this->table);
-        $table = $this->describe->get_table($this->table);
-
-        $this->assertEquals($this->expectedColumns, count($table));
-    }
-
-    /**
-     * Tests Describe::showTables method.
-     * 
-     * @return void
-     */
-    public function testShowTablesMethod()
-    {
-        $tables = $this->describe->showTables();
-        $tables = $this->describe->show_tables();
-
-        $this->assertEquals(2, count($tables));
     }
 }

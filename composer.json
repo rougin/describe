@@ -30,7 +30,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Rougin\\Describe\\Test\\": "tests"
+            "Rougin\\Describe\\": "tests"
         }
     },
     "scripts": {

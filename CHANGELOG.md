@@ -2,6 +2,14 @@
 
 All Notable changes to `Describe` will be documented in this file
 
+## [1.4.1](https://github.com/rougin/describe/compare/v1.4.0...v1.4.1) - 2016-04-27
+
+### Added
+- Tests for `Column`
+
+### Fixed
+- Issue in using `MySQLDriver` in `CodeIgniterDriver`
+
 ## [1.4.0](https://github.com/rougin/describe/compare/v1.3.0...v1.4.0) - 2016-04-23
 
 ### Added
