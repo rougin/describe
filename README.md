@@ -21,6 +21,7 @@ $ composer require rougin/describe
 
 ``` php
 $database = 'demo';
+
 $pdo = new PDO('mysql:host=localhost;dbname=' . $database, 'root', '');
 $driver = new Rougin\Describe\Driver\MySQLDriver($pdo, $database);
 $describe = new Rougin\Describe\DescribeDescribe($driver);
