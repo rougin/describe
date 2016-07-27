@@ -24,6 +24,16 @@ $database = 'demo';
 
 $pdo = new PDO('mysql:host=localhost;dbname=' . $database, 'root', '');
 $driver = new Rougin\Describe\Driver\MySQLDriver($pdo, $database);
+
+// or
+
+$driver = new Rougin\Describe\Driver\MySQLDriver('mysql', [
+    'hostname' => 'localhost',
+    'database' => $database,
+    'username' => 'root',
+    'password' => '',
+]);
+
 $describe = new Rougin\Describe\DescribeDescribe($driver);
 
 // Returns an array of columns from the specified table
