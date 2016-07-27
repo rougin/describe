@@ -2,6 +2,8 @@
 
 namespace Rougin\Describe\Driver;
 
+use Rougin\Describe\Drivers\DriverInterface as BaseInterface;
+
 /**
  * Database Driver Interface
  *
@@ -11,19 +13,4 @@ namespace Rougin\Describe\Driver;
  * @category Interface
  * @author   Rougin Royce Gutib <rougingutib@gmail.com>
  */
-interface DriverInterface
-{
-    /**
-     * Returns the result.
-     * 
-     * @return array
-     */
-    public function getTable($table);
-
-    /**
-     * Shows the list of tables.
-     * 
-     * @return array
-     */
-    public function showTables();
-}
+interface DriverInterface extends BaseInterface {}
