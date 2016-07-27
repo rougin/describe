@@ -10,7 +10,7 @@ use Rougin\Describe\Drivers\DriverInterface as BaseInterface;
  * An interface for handling PDO drivers.
  * 
  * @package  Describe
- * @category Interface
+ * @category Driver
  * @author   Rougin Royce Gutib <rougingutib@gmail.com>
  */
 interface DriverInterface extends BaseInterface {}

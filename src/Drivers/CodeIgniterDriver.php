@@ -10,7 +10,7 @@ use PDO;
  * A database driver specifically used for CodeIgniter.
  * 
  * @package  Describe
- * @category Driver
+ * @category Drivers
  * @author   Rougin Royce Gutib <rougingutib@gmail.com>
  */
 class CodeIgniterDriver implements DriverInterface

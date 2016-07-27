@@ -8,7 +8,7 @@ namespace Rougin\Describe\Drivers;
  * An interface for handling PDO drivers.
  * 
  * @package  Describe
- * @category Interface
+ * @category Drivers
  * @author   Rougin Royce Gutib <rougingutib@gmail.com>
  */
 interface DriverInterface

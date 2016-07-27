@@ -11,7 +11,7 @@ use Rougin\Describe\Column;
  * A database driver extension for MySQL.
  * 
  * @package  Describe
- * @category Driver
+ * @category Drivers
  * @author   Rougin Royce Gutib <rougingutib@gmail.com>
  */
 class MySQLDriver implements DriverInterface

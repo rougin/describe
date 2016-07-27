@@ -4,7 +4,7 @@ namespace Rougin\Describe;
 
 use PDO;
 use Rougin\Describe\Describe;
-use Rougin\Describe\Driver\SQLiteDriver;
+use Rougin\Describe\Driver\DatabaseDriver;
 
 use PHPUnit_Framework_TestCase;
 
@@ -34,8 +34,9 @@ class SQLiteDriverTest extends PHPUnit_Framework_TestCase
     {
         $databasePath = __DIR__ . '/../Databases/test.db';
 
-        $pdo = new PDO('sqlite:' . $databasePath);
-        $driver = new SQLiteDriver($pdo);
+        $driver = new DatabaseDriver('sqlite', [
+            'hostname' => 'sqlite:' . $databasePath
+        ]);
 
         $this->describe = new Describe($driver);
     }

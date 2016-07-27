@@ -6,6 +6,7 @@ All Notable changes to `Describe` will be documented in this file.
 
 ### Added
 - `Rougin\Describe\Drivers` namespace
+- `DatabaseDriver` for easy instantiation of database drivers
 
 ## [1.4.2](https://github.com/rougin/describe/compare/v1.4.1...v1.4.2) - 2016-04-28
 
