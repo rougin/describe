@@ -2,7 +2,7 @@
 
 All Notable changes to `Describe` will be documented in this file.
 
-## [Unreleased](https://github.com/rougin/combustor/compare/v1.4.2...HEAD)
+## [1.4.3](https://github.com/rougin/combustor/compare/v1.4.2...v1.4.3) - 2016-07-29
 
 ### Added
 - `Rougin\Describe\Drivers` namespace
