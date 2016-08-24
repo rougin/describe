@@ -44,22 +44,40 @@ class DatabaseDriver implements DriverInterface
      */
     public function getDriver($driverName, $configuration = [])
     {
-        $driver = null;
+        $driver   = null;
+        $database = null;
+        $hostname = null;
+        $password = null;
+        $username = null;
 
-        extract($configuration);
+        if (isset($configuration['database'])) {
+            $database = $configuration['database'];
+        }
+
+        if (isset($configuration['hostname'])) {
+            $hostname = $configuration['hostname'];
+        }
+
+        if (isset($configuration['password'])) {
+            $password = $configuration['password'];
+        }
+
+        if (isset($configuration['username'])) {
+            $username = $configuration['username'];
+        }
 
         switch ($driverName) {
             case 'mysql':
             case 'mysqli':
-                $dsn = 'mysql:host=' . $hostname . ';dbname=' . $database;
-                $pdo = new PDO($dsn, $username, $password);
+                $dsn    = 'mysql:host=' . $hostname . ';dbname=' . $database;
+                $pdo    = new PDO($dsn, $username, $password);
                 $driver = new MySQLDriver($pdo, $database);
 
                 break;
             case 'pdo':
             case 'sqlite':
             case 'sqlite3':
-                $pdo = new PDO($hostname);
+                $pdo    = new PDO($hostname);
                 $driver = new SQLiteDriver($pdo);
 
                 break;
