@@ -15,7 +15,7 @@ class Column
     /**
      * @var boolean
      */
-    protected $autoIncrement = FALSE;
+    protected $autoIncrement = false;
 
     /**
      * @var string
@@ -35,7 +35,7 @@ class Column
     /**
      * @var boolean
      */
-    protected $foreign = FALSE;
+    protected $foreign = false;
 
     /**
      * @var integer
@@ -45,12 +45,12 @@ class Column
     /**
      * @var boolean
      */
-    protected $null = FALSE;
+    protected $null = false;
 
     /**
      * @var boolean
      */
-    protected $primary = FALSE;
+    protected $primary = false;
 
     /**
      * @var string
@@ -65,12 +65,12 @@ class Column
     /**
      * @var boolean
      */
-    protected $unique = FALSE;
+    protected $unique = false;
 
     /**
      * @var boolean
      */
-    protected $unsigned = FALSE;
+    protected $unsigned = false;
 
     /**
      * Gets the data type.
@@ -338,7 +338,7 @@ class Column
         ];
 
         foreach ($dataTypes as $key => $value) {
-            if (strpos($dataType, $key) !== FALSE) {
+            if (strpos($dataType, $key) !== false) {
                 $dataType = $value;
             }
         }
@@ -423,7 +423,7 @@ class Column
      * 
      * @param boolean $null
      */
-    public function setNull($null = TRUE)
+    public function setNull($null = true)
     {
         $this->null = $null;
 
@@ -435,7 +435,7 @@ class Column
      * 
      * @param boolean $primary
      */
-    public function setPrimary($primary = TRUE)
+    public function setPrimary($primary = true)
     {
         $this->primary = $primary;
 
@@ -447,7 +447,7 @@ class Column
      * 
      * @param boolean $unique
      */
-    public function setUnique($unique = TRUE)
+    public function setUnique($unique = true)
     {
         $this->unique = $unique;
 
@@ -459,7 +459,7 @@ class Column
      * 
      * @param boolean $unsigned
      */
-    public function setUnsigned($unsigned = TRUE)
+    public function setUnsigned($unsigned = true)
     {
         $this->unsigned = $unsigned;
 
