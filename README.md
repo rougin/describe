@@ -20,16 +20,14 @@ $ composer require rougin/describe
 ## Usage
 
 ``` php
-$database = 'demo';
-
-$pdo = new PDO('mysql:host=localhost;dbname=' . $database, 'root', '');
-$driver = new Rougin\Describe\Driver\MySQLDriver($pdo, $database);
+$pdo    = new PDO('mysql:host=localhost;dbname=demo', 'root', '');
+$driver = new Rougin\Describe\Driver\MySQLDriver($pdo, 'demo');
 
 // or
 
 $driver = new Rougin\Describe\Driver\MySQLDriver('mysql', [
     'hostname' => 'localhost',
-    'database' => $database,
+    'database' => 'demo',
     'username' => 'root',
     'password' => '',
 ]);

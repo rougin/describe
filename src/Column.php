@@ -74,7 +74,7 @@ class Column
 
     /**
      * Gets the data type.
-     * 
+     *
      * @return string
      */
     public function getDataType()
@@ -84,7 +84,7 @@ class Column
 
     /**
      * Gets the default value.
-     * 
+     *
      * @return string
      */
     public function getDefaultValue()
@@ -94,7 +94,7 @@ class Column
 
     /**
      * Gets the column description.
-     * 
+     *
      * @return string
      */
     public function getField()
@@ -104,7 +104,7 @@ class Column
 
     /**
      * Gets the foreign field.
-     * 
+     *
      * @return string
      */
     public function getReferencedField()
@@ -114,7 +114,7 @@ class Column
 
     /**
      * Gets the foreign table.
-     * 
+     *
      * @return string
      */
     public function getReferencedTable()
@@ -124,7 +124,7 @@ class Column
 
     /**
      * Gets the field's length.
-     * 
+     *
      * @return integer
      */
     public function getLength()
@@ -134,7 +134,7 @@ class Column
 
     /**
      * Gets the data type.
-     * 
+     *
      * @return string
      */
     public function get_data_type()
@@ -144,7 +144,7 @@ class Column
 
     /**
      * Gets the default value.
-     * 
+     *
      * @return string
      */
     public function get_default_value()
@@ -154,7 +154,7 @@ class Column
 
     /**
      * Gets the column description.
-     * 
+     *
      * @return string
      */
     public function get_field()
@@ -164,7 +164,7 @@ class Column
 
     /**
      * Gets the foreign field.
-     * 
+     *
      * @return string
      */
     public function get_referenced_field()
@@ -174,7 +174,7 @@ class Column
 
     /**
      * Gets the foreign table.
-     * 
+     *
      * @return string
      */
     public function get_referenced_table()
@@ -184,7 +184,7 @@ class Column
 
     /**
      * Gets the field's length.
-     * 
+     *
      * @return string
      */
     public function get_length()
@@ -194,7 +194,7 @@ class Column
 
     /**
      * Check if the field is an auto incrementing field
-     * 
+     *
      * @return boolean
      */
     public function isAutoIncrement()
@@ -204,7 +204,7 @@ class Column
 
     /**
      * Check if the field is a foreign key
-     * 
+     *
      * @return boolean
      */
     public function isForeignKey()
@@ -214,7 +214,7 @@ class Column
 
     /**
      * Check if the field accept NULL values
-     * 
+     *
      * @return boolean
      */
     public function isNull()
@@ -224,7 +224,7 @@ class Column
 
     /**
      * Check if the field is a primary key
-     * 
+     *
      * @return boolean
      */
     public function isPrimaryKey()
@@ -234,7 +234,7 @@ class Column
 
     /**
      * Check if field is unique
-     * 
+     *
      * @return boolean
      */
     public function isUnique()
@@ -244,7 +244,7 @@ class Column
 
     /**
      * Check if field is unsigned
-     * 
+     *
      * @return boolean
      */
     public function isUnsigned()
@@ -254,7 +254,7 @@ class Column
 
     /**
      * Check if the field is an auto incrementing field
-     * 
+     *
      * @return boolean
      */
     public function is_auto_increment()
@@ -264,7 +264,7 @@ class Column
 
     /**
      * Check if the field is a foreign key
-     * 
+     *
      * @return boolean
      */
     public function is_foreign_key()
@@ -274,7 +274,7 @@ class Column
 
     /**
      * Check if the field accept NULL values
-     * 
+     *
      * @return boolean
      */
     public function is_null()
@@ -284,7 +284,7 @@ class Column
 
     /**
      * Check if the field is a primary key
-     * 
+     *
      * @return boolean
      */
     public function is_primary_key()
@@ -294,7 +294,7 @@ class Column
 
     /**
      * Check if field is unique
-     * 
+     *
      * @return boolean
      */
     public function is_unique()
@@ -304,7 +304,7 @@ class Column
 
     /**
      * Check if field is unsigned
-     * 
+     *
      * @return boolean
      */
     public function is_unsigned()
@@ -314,7 +314,7 @@ class Column
 
     /**
      * Sets the auto increment.
-     * 
+     *
      * @param boolean $autoIncrement
      */
     public function setAutoIncrement($autoIncrement)
@@ -326,7 +326,7 @@ class Column
 
     /**
      * Sets the data type.
-     * 
+     *
      * @param string $dataType
      */
     public function setDataType($dataType)
@@ -348,7 +348,7 @@ class Column
 
     /**
      * Sets the default value.
-     * 
+     *
      * @param string $defaultValue
      */
     public function setDefaultValue($defaultValue)
@@ -360,7 +360,7 @@ class Column
 
     /**
      * Sets the column's description.
-     * 
+     *
      * @param string $field
      */
     public function setField($field)
@@ -372,7 +372,7 @@ class Column
 
     /**
      * Sets the field as a foreign key.
-     * 
+     *
      * @param boolean $foreign
      */
     public function setForeign($foreign)
@@ -384,7 +384,7 @@ class Column
 
     /**
      * Sets the foreign field.
-     * 
+     *
      * @param string $referencedField
      */
     public function setReferencedField($referencedField)
@@ -396,7 +396,7 @@ class Column
 
     /**
      * Sets the foreign table.
-     * 
+     *
      * @param string $foreignTable
      */
     public function setReferencedTable($foreignTable)
@@ -408,7 +408,7 @@ class Column
 
     /**
      * Sets the field's length.
-     * 
+     *
      * @param integer $length
      */
     public function setLength($length)
@@ -420,7 +420,7 @@ class Column
 
     /**
      * Sets if field accepts NULL values.
-     * 
+     *
      * @param boolean $null
      */
     public function setNull($null = true)
@@ -432,7 +432,7 @@ class Column
 
     /**
      * Sets if field is a primary key.
-     * 
+     *
      * @param boolean $primary
      */
     public function setPrimary($primary = true)
@@ -444,7 +444,7 @@ class Column
 
     /**
      * Sets if field is a unique key.
-     * 
+     *
      * @param boolean $unique
      */
     public function setUnique($unique = true)
@@ -456,7 +456,7 @@ class Column
 
     /**
      * Sets if field is an unsigned key.
-     * 
+     *
      * @param boolean $unsigned
      */
     public function setUnsigned($unsigned = true)

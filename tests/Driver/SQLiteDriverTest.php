@@ -43,7 +43,7 @@ class SQLiteDriverTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests Describe::getPrimaryKey method.
-     * 
+     *
      * @return void
      */
     public function testGetPrimaryKeyMethod()
@@ -58,7 +58,7 @@ class SQLiteDriverTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests Describe::getTable method.
-     * 
+     *
      * @return void
      */
     public function testGetTableMethod()
@@ -71,7 +71,7 @@ class SQLiteDriverTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests Describe::showTables method.
-     * 
+     *
      * @return void
      */
     public function testShowTablesMethod()

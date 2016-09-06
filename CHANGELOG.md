@@ -2,7 +2,12 @@
 
 All Notable changes to `Describe` will be documented in this file.
 
-## [1.5.0](https://github.com/rougin/combustor/compare/v1.4.2...v1.5.0) - 2016-07-29
+## [1.5.1](https://github.com/rougin/describe/compare/v1.5.0...v1.5.1) - 2016-09-05
+
+### Added
+- StyleCI for conforming code to PSR standards
+
+## [1.5.0](https://github.com/rougin/describe/compare/v1.4.2...v1.5.0) - 2016-07-29
 
 ### Added
 - `Rougin\Describe\Drivers` namespace

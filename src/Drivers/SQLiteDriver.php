@@ -9,7 +9,7 @@ use Rougin\Describe\Column;
  * SQLite Driver
  *
  * A database driver extension for SQLite.
- * 
+ *
  * @package  Describe
  * @category Drivers
  * @author   Rougin Royce Gutib <rougingutib@gmail.com>
@@ -28,7 +28,7 @@ class SQLiteDriver implements DriverInterface
 
     /**
      * Returns the result.
-     * 
+     *
      * @return array
      */
     public function getTable($table)
@@ -45,7 +45,7 @@ class SQLiteDriver implements DriverInterface
         while ($row = $information->fetch()) {
             $column = new Column;
 
-            if ( ! $row->notnull) {
+            if (! $row->notnull) {
                 $column->setNull(true);
             }
 
@@ -84,7 +84,7 @@ class SQLiteDriver implements DriverInterface
 
     /**
      * Shows the list of tables.
-     * 
+     *
      * @return array
      */
     public function showTables()

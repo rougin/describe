@@ -8,7 +8,7 @@ use PDO;
  * CodeIgniter Driver
  *
  * A database driver specifically used for CodeIgniter.
- * 
+ *
  * @package  Describe
  * @category Drivers
  * @author   Rougin Royce Gutib <rougingutib@gmail.com>
@@ -37,7 +37,7 @@ class CodeIgniterDriver implements DriverInterface
 
     /**
      * Gets the specified driver from the specified database connection.
-     * 
+     *
      * @param  array  $database
      * @param  string $connection
      * @return \Rougin\Describe\Driver\DriverInterface|null
@@ -76,7 +76,7 @@ class CodeIgniterDriver implements DriverInterface
 
     /**
      * Returns the result.
-     * 
+     *
      * @return array
      */
     public function getTable($table)
@@ -88,7 +88,7 @@ class CodeIgniterDriver implements DriverInterface
 
     /**
      * Shows the list of tables.
-     * 
+     *
      * @return array
      */
     public function showTables()

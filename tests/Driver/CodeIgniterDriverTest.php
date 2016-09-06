@@ -27,7 +27,7 @@ class CodeIgniterDriverTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests Describe::getPrimaryKey method with SQLite Driver.
-     * 
+     *
      * @return void
      */
     public function testGetPrimaryKeyMethodWithSqliteDriver()
@@ -42,7 +42,7 @@ class CodeIgniterDriverTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests Describe::getTable method with SQLite Driver.
-     * 
+     *
      * @return void
      */
     public function testGetTableMethodWithSqliteDriver()
@@ -57,7 +57,7 @@ class CodeIgniterDriverTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests Describe::showTables method with SQLite Driver.
-     * 
+     *
      * @return void
      */
     public function testShowTablesMethodWithSqliteDriver()
@@ -72,7 +72,7 @@ class CodeIgniterDriverTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests Describe::getPrimaryKey method with MySQL Driver.
-     * 
+     *
      * @return void
      */
     public function testGetPrimaryKeyMethodWithMysqlDriver()
@@ -87,7 +87,7 @@ class CodeIgniterDriverTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests Describe::getTable method with MySQL Driver.
-     * 
+     *
      * @return void
      */
     public function testGetTableMethodWithMysqlDriver()
@@ -102,7 +102,7 @@ class CodeIgniterDriverTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests Describe::showTables method with MySQL Driver.
-     * 
+     *
      * @return void
      */
     public function testShowTablesMethodWithMysqlDriver()

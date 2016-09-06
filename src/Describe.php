@@ -8,7 +8,7 @@ use Rougin\Describe\Drivers\DriverInterface;
  * Describe
  *
  * Gets information of a table schema from a database.
- * 
+ *
  * @package Describe
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  */
@@ -34,7 +34,7 @@ class Describe
 
     /**
      * Gets the primary key in the specified table.
-     * 
+     *
      * @param  string $table
      * @return string
      */
@@ -68,7 +68,7 @@ class Describe
 
     /**
      * Returns the result.
-     * 
+     *
      * @param  string $table
      * @return array
      */
@@ -79,7 +79,7 @@ class Describe
 
     /**
      * Gets the primary key in the specified table.
-     * 
+     *
      * @param  string $table
      * @return string
      */
@@ -90,7 +90,7 @@ class Describe
 
     /**
      * Shows the list of tables.
-     * 
+     *
      * @return array
      */
     public function showTables()
@@ -100,7 +100,7 @@ class Describe
 
     /**
      * Shows the list of tables.
-     * 
+     *
      * @return array
      */
     public function show_tables()

@@ -36,7 +36,7 @@ class ColumnTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests Column::getDataType.
-     * 
+     *
      * @return void
      */
     public function testGetDataType()
@@ -50,7 +50,7 @@ class ColumnTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests Column::getDefaultValue.
-     * 
+     *
      * @return void
      */
     public function testGetDefaultValue()
@@ -64,7 +64,7 @@ class ColumnTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests Column::getReferencedField.
-     * 
+     *
      * @return void
      */
     public function testGetReferencedField()
@@ -78,7 +78,7 @@ class ColumnTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests Column::getReferencedTable.
-     * 
+     *
      * @return void
      */
     public function testGetReferencedTable()
@@ -92,7 +92,7 @@ class ColumnTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests Column::getLength.
-     * 
+     *
      * @return void
      */
     public function testGetLength()
@@ -106,7 +106,7 @@ class ColumnTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests Column::isAutoIncrement.
-     * 
+     *
      * @return void
      */
     public function testIsAutoIncrement()
@@ -120,7 +120,7 @@ class ColumnTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests Column::isForeignKey.
-     * 
+     *
      * @return void
      */
     public function testIsForeignKey()
@@ -134,7 +134,7 @@ class ColumnTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests Column::isNull.
-     * 
+     *
      * @return void
      */
     public function testIsNull()
@@ -148,7 +148,7 @@ class ColumnTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests Column::isUnique.
-     * 
+     *
      * @return void
      */
     public function testIsUnique()
@@ -162,7 +162,7 @@ class ColumnTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests Column::isUnsigned.
-     * 
+     *
      * @return void
      */
     public function testIsUnsigned()
@@ -178,7 +178,7 @@ class ColumnTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests Column::isPrimaryKey.
-     * 
+     *
      * @return void
      */
     public function testIsPrimaryKey()

@@ -8,7 +8,7 @@ use PDO;
  * Database Driver
  *
  * A database driver for using available database drivers.
- * 
+ *
  * @package  Describe
  * @category Drivers
  * @author   Rougin Royce Gutib <rougingutib@gmail.com>
@@ -37,7 +37,7 @@ class DatabaseDriver implements DriverInterface
 
     /**
      * Gets the specified driver from the specified database connection.
-     * 
+     *
      * @param string $driverName
      * @param array  $configuration
      * @return \Rougin\Describe\Driver\DriverInterface|null
@@ -88,7 +88,7 @@ class DatabaseDriver implements DriverInterface
 
     /**
      * Returns the result.
-     * 
+     *
      * @return array
      */
     public function getTable($table)
@@ -100,7 +100,7 @@ class DatabaseDriver implements DriverInterface
 
     /**
      * Shows the list of tables.
-     * 
+     *
      * @return array
      */
     public function showTables()

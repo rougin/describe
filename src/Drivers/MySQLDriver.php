@@ -9,7 +9,7 @@ use Rougin\Describe\Column;
  * MySQL Driver
  *
  * A database driver extension for MySQL.
- * 
+ *
  * @package  Describe
  * @category Drivers
  * @author   Rougin Royce Gutib <rougingutib@gmail.com>
@@ -32,7 +32,7 @@ class MySQLDriver implements DriverInterface
 
     /**
      * Returns the result.
-     * 
+     *
      * @return array
      */
     public function getTable($table)
@@ -53,26 +53,26 @@ class MySQLDriver implements DriverInterface
             $column = new Column;
 
             if ($row->Extra == 'auto_increment') {
-                $column->setAutoIncrement(TRUE);
+                $column->setAutoIncrement(true);
             }
 
-            if ($row->Null == 'YES') {
-                $column->setNull(TRUE);
+            if ($row->null == 'YES') {
+                $column->setNull(true);
             }
 
             switch ($row->Key) {
                 case 'PRI':
-                    $column->setPrimary(TRUE);
+                    $column->setPrimary(true);
 
                     break;
                 
                 case 'MUL':
-                    $column->setForeign(TRUE);
+                    $column->setForeign(true);
 
                     break;
 
                 case 'UNI':
-                    $column->setUnique(TRUE);
+                    $column->setUnique(true);
 
                     break;
             }
@@ -115,7 +115,7 @@ class MySQLDriver implements DriverInterface
 
     /**
      * Shows the list of tables.
-     * 
+     *
      * @return array
      */
     public function showTables()
