@@ -2,7 +2,7 @@
 
 All Notable changes to `Describe` will be documented in this file.
 
-## [1.5.1](https://github.com/rougin/describe/compare/v1.5.0...v1.5.1) - 2016-09-05
+## [1.5.1](https://github.com/rougin/describe/compare/v1.5.0...v1.5.1) - 2016-09-06
 
 ### Added
 - StyleCI for conforming code to PSR standards
