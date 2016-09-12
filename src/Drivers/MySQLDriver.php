@@ -56,7 +56,7 @@ class MySQLDriver implements DriverInterface
                 $column->setAutoIncrement(true);
             }
 
-            if ($row->null == 'YES') {
+            if ($row->Null == 'YES') {
                 $column->setNull(true);
             }
 
