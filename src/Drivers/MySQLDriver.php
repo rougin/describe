@@ -51,12 +51,13 @@ class MySQLDriver implements DriverInterface
             preg_match('/(.*?)\((.*?)\)/', $row->Type, $match);
 
             $column = new Column;
+            $null   = 'Null';
 
             if ($row->Extra == 'auto_increment') {
                 $column->setAutoIncrement(true);
             }
 
-            if ($row->Null == 'YES') {
+            if ($row->$null == 'YES') {
                 $column->setNull(true);
             }
 
