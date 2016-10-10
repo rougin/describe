@@ -2,7 +2,7 @@
 
 namespace Rougin\Describe;
 
-use Rougin\Describe\Drivers\DriverInterface;
+use Rougin\Describe\Driver\DriverInterface;
 
 /**
  * Describe
