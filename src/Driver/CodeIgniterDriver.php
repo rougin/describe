@@ -25,6 +25,11 @@ class CodeIgniterDriver implements DriverInterface
      */
     public function __construct(array $database)
     {
+        // NOTE: To be removed in v1.0.0
+        if (isset($database['default'])) {
+            $database = $database['default'];
+        }
+
         switch ($database['dbdriver']) {
             case 'mysql':
             case 'mysqli':
