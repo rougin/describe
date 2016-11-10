@@ -2,7 +2,6 @@
 
 namespace Rougin\Describe\Driver;
 
-use PDO;
 use Rougin\Describe\Column;
 
 /**
@@ -16,12 +15,15 @@ use Rougin\Describe\Column;
  */
 class SQLiteDriver implements DriverInterface
 {
+    /**
+     * @var \PDO
+     */
     protected $pdo;
 
     /**
      * @param PDO $pdo
      */
-    public function __construct(PDO $pdo)
+    public function __construct(\PDO $pdo)
     {
         $this->pdo = $pdo;
     }
@@ -40,19 +42,12 @@ class SQLiteDriver implements DriverInterface
         $information = $this->pdo->prepare($query);
 
         $information->execute();
-        $information->setFetchMode(PDO::FETCH_OBJ);
+        $information->setFetchMode(\PDO::FETCH_OBJ);
 
         while ($row = $information->fetch()) {
             $column = new Column;
 
-            if (! $row->notnull) {
-                $column->setNull(true);
-            }
-
-            if ($row->pk) {
-                $column->setPrimary(true);
-                $column->setAutoIncrement(true);
-            }
+            $this->setProperties($row, $column);
 
             $column->setDefaultValue($row->dflt_value);
             $column->setField($row->name);
@@ -63,21 +58,12 @@ class SQLiteDriver implements DriverInterface
 
         // Gets list of foreign keys
         $query = 'PRAGMA foreign_key_list("' . $table . '");';
-        $information = $this->pdo->prepare($query);
+        $foreignTable = $this->pdo->prepare($query);
 
-        $information->execute();
-        $information->setFetchMode(PDO::FETCH_OBJ);
+        $foreignTable->execute();
+        $foreignTable->setFetchMode(\PDO::FETCH_OBJ);
 
-        while ($row = $information->fetch()) {
-            foreach ($columns as $column) {
-                if ($column->getField() == $row->from) {
-                    $column->setForeign(true);
-
-                    $column->setReferencedField($row->to);
-                    $column->setReferencedTable($row->table);
-                }
-            }
-        }
+        $this->setForeignColumns($foreignTable, $column);
 
         return $columns;
     }
@@ -96,7 +82,7 @@ class SQLiteDriver implements DriverInterface
         $information = $this->pdo->prepare($query);
 
         $information->execute();
-        $information->setFetchMode(PDO::FETCH_OBJ);
+        $information->setFetchMode(\PDO::FETCH_OBJ);
 
         while ($row = $information->fetch()) {
             if ($row->name != 'sqlite_sequence') {
@@ -105,5 +91,45 @@ class SQLiteDriver implements DriverInterface
         }
 
         return $tables;
+    }
+
+    /**
+     * Sets the properties of the specified column.
+     *
+     * @param  \PDOStatement           $foreignTable
+     * @param  \Rougin\Describe\Column &$column
+     * @return void
+     */
+    protected function setForeignColumns($foreignTable, Column &$column)
+    {
+        while ($row = $foreignTable->fetch()) {
+            foreach ($columns as $column) {
+                if ($column->getField() == $row->from) {
+                    $column->setForeign(true);
+
+                    $column->setReferencedField($row->to);
+                    $column->setReferencedTable($row->table);
+                }
+            }
+        }
+    }
+
+    /**
+     * Sets the properties of the specified column.
+     *
+     * @param  mixed                   $row
+     * @param  \Rougin\Describe\Column &$column
+     * @return void
+     */
+    protected function setProperties($row, Column &$column)
+    {
+        if (! $row->notnull) {
+            $column->setNull(true);
+        }
+
+        if ($row->pk) {
+            $column->setPrimary(true);
+            $column->setAutoIncrement(true);
+        }
     }
 }
