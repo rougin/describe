@@ -61,7 +61,6 @@ class MySQLDriver implements DriverInterface
             preg_match('/(.*?)\((.*?)\)/', $row->Type, $match);
 
             $column = new Column;
-            $null   = 'Null';
 
             $this->setProperties($row, $column);
             $this->setKey($row, $column);
@@ -173,6 +172,8 @@ class MySQLDriver implements DriverInterface
      */
     protected function setProperties($row, Column &$column)
     {
+        $null = 'Null';
+
         if ($row->Extra == 'auto_increment') {
             $column->setAutoIncrement(true);
         }
