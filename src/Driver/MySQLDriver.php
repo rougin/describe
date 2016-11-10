@@ -53,10 +53,6 @@ class MySQLDriver implements DriverInterface
         $information->execute();
         $information->setFetchMode(\PDO::FETCH_OBJ);
 
-        // if ($stripped = strpos($table, '.')) {
-        //     $table = substr($table, $stripped + 1);
-        // }
-
         while ($row = $information->fetch()) {
             preg_match('/(.*?)\((.*?)\)/', $row->Type, $match);
 

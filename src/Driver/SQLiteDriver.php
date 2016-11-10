@@ -56,16 +56,14 @@ class SQLiteDriver implements DriverInterface
             array_push($columns, $column);
         }
 
-        // Gets list of foreign keys
+        // Gets list of foreign keys, if any
         $query = 'PRAGMA foreign_key_list("' . $table . '");';
         $foreignTable = $this->pdo->prepare($query);
 
         $foreignTable->execute();
         $foreignTable->setFetchMode(\PDO::FETCH_OBJ);
 
-        $this->setForeignColumns($foreignTable, $columns, $column);
-
-        return $columns;
+        return $this->setForeignColumns($foreignTable, $columns, $column);;
     }
 
     /**
@@ -96,12 +94,11 @@ class SQLiteDriver implements DriverInterface
     /**
      * Sets the properties of the specified column.
      *
-     * @param  \PDOStatement           $foreignTable
-     * @param  array                   $columns
-     * @param  \Rougin\Describe\Column &$column
+     * @param  \PDOStatement $foreignTable
+     * @param  array         $columns
      * @return void
      */
-    protected function setForeignColumns($foreignTable, array $columns, Column &$column)
+    protected function setForeignColumns($foreignTable, array $columns)
     {
         while ($row = $foreignTable->fetch()) {
             foreach ($columns as $column) {
@@ -113,6 +110,8 @@ class SQLiteDriver implements DriverInterface
                 }
             }
         }
+
+        return $columns;
     }
 
     /**
