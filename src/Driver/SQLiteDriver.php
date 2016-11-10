@@ -63,7 +63,7 @@ class SQLiteDriver implements DriverInterface
         $foreignTable->execute();
         $foreignTable->setFetchMode(\PDO::FETCH_OBJ);
 
-        return $this->setForeignColumns($foreignTable, $columns, $column);;
+        return $this->setForeignColumns($foreignTable, $columns);
     }
 
     /**
