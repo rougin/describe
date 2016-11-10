@@ -99,20 +99,10 @@ class DatabaseDriver implements DriverInterface
         $password = null;
         $username = null;
 
-        if (isset($configuration['database'])) {
-            $database = $configuration['database'];
-        }
-
-        if (isset($configuration['hostname'])) {
-            $hostname = $configuration['hostname'];
-        }
-
-        if (isset($configuration['password'])) {
-            $password = $configuration['password'];
-        }
-
-        if (isset($configuration['username'])) {
-            $username = $configuration['username'];
+        foreach ($configuration as $key => $value) {
+            if (isset($configuration[$key])) {
+                $$key = $configuration[$key];
+            }
         }
 
         return [ $database, $hostname, $username, $password ];
