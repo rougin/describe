@@ -42,18 +42,19 @@ class DatabaseDriver implements DriverInterface
      */
     public function getDriver($driverName, $configuration = [])
     {
+        $driver = null;
         $mysql  = [ 'mysql', 'mysqli' ];
         $sqlite = [ 'pdo', 'sqlite', 'sqlite3' ];
 
         list($database, $hostname, $username, $password) = $this->parseConfiguration($configuration);
 
-        if (in_array($database['dbdriver'], $mysql)) {
+        if (in_array($driverName, $mysql)) {
             $dsn    = 'mysql:host=' . $hostname . ';dbname=' . $database;
             $pdo    = new \PDO($dsn, $username, $password);
             $driver = new MySQLDriver($pdo, $database);
         }
 
-        if (in_array($database['dbdriver'], $sqlite)) {
+        if (in_array($driverName, $sqlite)) {
             $pdo    = new \PDO($hostname);
             $driver = new SQLiteDriver($pdo);
         }
@@ -93,7 +94,6 @@ class DatabaseDriver implements DriverInterface
      */
     protected function parseConfiguration(array $configuration)
     {
-        $driver   = null;
         $database = null;
         $hostname = null;
         $password = null;

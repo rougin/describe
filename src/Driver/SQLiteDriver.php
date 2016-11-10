@@ -63,7 +63,7 @@ class SQLiteDriver implements DriverInterface
         $foreignTable->execute();
         $foreignTable->setFetchMode(\PDO::FETCH_OBJ);
 
-        $this->setForeignColumns($foreignTable, $column);
+        $this->setForeignColumns($foreignTable, $columns, $column);
 
         return $columns;
     }
@@ -97,10 +97,11 @@ class SQLiteDriver implements DriverInterface
      * Sets the properties of the specified column.
      *
      * @param  \PDOStatement           $foreignTable
+     * @param  array                   $columns
      * @param  \Rougin\Describe\Column &$column
      * @return void
      */
-    protected function setForeignColumns($foreignTable, Column &$column)
+    protected function setForeignColumns($foreignTable, array $columns, Column &$column)
     {
         while ($row = $foreignTable->fetch()) {
             foreach ($columns as $column) {
