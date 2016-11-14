@@ -2,13 +2,7 @@
 
 namespace Rougin\Describe;
 
-use PDO;
-use Rougin\Describe\Describe;
-use Rougin\Describe\Driver\CodeIgniterDriver;
-
-use PHPUnit_Framework_TestCase;
-
-class CodeIgniterDriverTest extends PHPUnit_Framework_TestCase
+class CodeIgniterDriverTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Rougin\Describe\Describe
@@ -132,9 +126,9 @@ class CodeIgniterDriverTest extends PHPUnit_Framework_TestCase
             'database' => 'demo'
         ];
 
-        $driver = new CodeIgniterDriver($config);
+        $driver = new \Rougin\Describe\Driver\CodeIgniterDriver($config);
 
-        $this->describe = new Describe($driver);
+        $this->describe = new \Rougin\Describe\Describe($driver);
     }
 
     /**
@@ -154,8 +148,8 @@ class CodeIgniterDriverTest extends PHPUnit_Framework_TestCase
             'database' => ''
         ];
 
-        $driver = new CodeIgniterDriver($config);
+        $driver = new \Rougin\Describe\Driver\CodeIgniterDriver($config);
 
-        $this->describe = new Describe($driver);
+        $this->describe = new \Rougin\Describe\Describe($driver);
     }
 }

@@ -2,8 +2,6 @@
 
 namespace Rougin\Describe\Driver;
 
-use PDO;
-
 /**
  * Database Driver
  *
@@ -44,43 +42,21 @@ class DatabaseDriver implements DriverInterface
      */
     public function getDriver($driverName, $configuration = [])
     {
-        $driver   = null;
-        $database = null;
-        $hostname = null;
-        $password = null;
-        $username = null;
+        $driver = null;
+        $mysql  = [ 'mysql', 'mysqli' ];
+        $sqlite = [ 'pdo', 'sqlite', 'sqlite3' ];
 
-        if (isset($configuration['database'])) {
-            $database = $configuration['database'];
+        list($database, $hostname, $username, $password) = $this->parseConfiguration($configuration);
+
+        if (in_array($driverName, $mysql)) {
+            $dsn    = 'mysql:host=' . $hostname . ';dbname=' . $database;
+            $pdo    = new \PDO($dsn, $username, $password);
+            $driver = new MySQLDriver($pdo, $database);
         }
 
-        if (isset($configuration['hostname'])) {
-            $hostname = $configuration['hostname'];
-        }
-
-        if (isset($configuration['password'])) {
-            $password = $configuration['password'];
-        }
-
-        if (isset($configuration['username'])) {
-            $username = $configuration['username'];
-        }
-
-        switch ($driverName) {
-            case 'mysql':
-            case 'mysqli':
-                $dsn    = 'mysql:host=' . $hostname . ';dbname=' . $database;
-                $pdo    = new PDO($dsn, $username, $password);
-                $driver = new MySQLDriver($pdo, $database);
-
-                break;
-            case 'pdo':
-            case 'sqlite':
-            case 'sqlite3':
-                $pdo    = new PDO($hostname);
-                $driver = new SQLiteDriver($pdo);
-
-                break;
+        if (in_array($driverName, $sqlite)) {
+            $pdo    = new \PDO($hostname);
+            $driver = new SQLiteDriver($pdo);
         }
 
         return $driver;
@@ -108,5 +84,27 @@ class DatabaseDriver implements DriverInterface
         $driver = $this->getDriver($this->driver, $this->configuration);
 
         return $driver->showTables();
+    }
+
+    /**
+     * Parses the configuration into separate variables.
+     *
+     * @param  array  $configuration
+     * @return array
+     */
+    protected function parseConfiguration(array $configuration)
+    {
+        $database = null;
+        $hostname = null;
+        $password = null;
+        $username = null;
+
+        foreach ($configuration as $key => $value) {
+            if (isset($configuration[$key])) {
+                $$key = $configuration[$key];
+            }
+        }
+
+        return [ $database, $hostname, $username, $password ];
     }
 }

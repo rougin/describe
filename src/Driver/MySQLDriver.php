@@ -2,7 +2,6 @@
 
 namespace Rougin\Describe\Driver;
 
-use PDO;
 use Rougin\Describe\Column;
 
 /**
@@ -16,15 +15,26 @@ use Rougin\Describe\Column;
  */
 class MySQLDriver implements DriverInterface
 {
-    protected $database;
+    /**
+     * @var array
+     */
     protected $columns = [];
+
+    /**
+     * @var string
+     */
+    protected $database;
+
+    /**
+     * @var \PDO
+     */
     protected $pdo;
 
     /**
      * @param PDO    $pdo
      * @param string $database
      */
-    public function __construct(PDO $pdo, $database)
+    public function __construct(\PDO $pdo, $database)
     {
         $this->database = $database;
         $this->pdo = $pdo;
@@ -41,42 +51,15 @@ class MySQLDriver implements DriverInterface
 
         $information = $this->pdo->prepare('DESCRIBE ' . $table);
         $information->execute();
-        $information->setFetchMode(PDO::FETCH_OBJ);
-
-        if ($stripped = strpos($table, '.')) {
-            $table = substr($table, $stripped + 1);
-        }
+        $information->setFetchMode(\PDO::FETCH_OBJ);
 
         while ($row = $information->fetch()) {
             preg_match('/(.*?)\((.*?)\)/', $row->Type, $match);
 
             $column = new Column;
-            $null   = 'Null';
 
-            if ($row->Extra == 'auto_increment') {
-                $column->setAutoIncrement(true);
-            }
-
-            if ($row->$null == 'YES') {
-                $column->setNull(true);
-            }
-
-            switch ($row->Key) {
-                case 'PRI':
-                    $column->setPrimary(true);
-
-                    break;
-                
-                case 'MUL':
-                    $column->setForeign(true);
-
-                    break;
-
-                case 'UNI':
-                    $column->setUnique(true);
-
-                    break;
-            }
+            $this->setProperties($row, $column);
+            $this->setKey($row, $column);
 
             $column->setDataType($row->Type);
             $column->setDefaultValue($row->Default);
@@ -98,15 +81,11 @@ class MySQLDriver implements DriverInterface
                 'AND TABLE_NAME = "' . $table . '";';
 
             $foreignTable = $this->pdo->prepare($query);
-            $foreignTable->execute();
-            $foreignTable->setFetchMode(PDO::FETCH_OBJ);
 
-            while ($foreignRow = $foreignTable->fetch()) {
-                if ($foreignRow->column == $row->Field) {
-                    $column->setReferencedField($foreignRow->referenced_column);
-                    $column->setReferencedTable($foreignRow->referenced_table);
-                }
-            }
+            $foreignTable->execute();
+            $foreignTable->setFetchMode(\PDO::FETCH_OBJ);
+
+            $this->setForeignColumns($foreignTable, $row, $column);
 
             array_push($this->columns, $column);
         }
@@ -131,5 +110,83 @@ class MySQLDriver implements DriverInterface
         }
 
         return $tables;
+    }
+
+    /**
+     * Sets the key of the specified column.
+     *
+     * @param  mixed                   $row
+     * @param  \Rougin\Describe\Column &$column
+     * @return void
+     */
+    protected function setKey($row, Column &$column)
+    {
+        switch ($row->Key) {
+            case 'PRI':
+                $column->setPrimary(true);
+
+                break;
+            
+            case 'MUL':
+                $column->setForeign(true);
+
+                break;
+
+            case 'UNI':
+                $column->setUnique(true);
+
+                break;
+        }
+    }
+
+    /**
+     * Sets the properties of the specified column.
+     *
+     * @param  \PDOStatement           $foreignTable
+     * @param  mixed                   $row
+     * @param  \Rougin\Describe\Column &$column
+     * @return void
+     */
+    protected function setForeignColumns($foreignTable, $row, Column &$column)
+    {
+        while ($foreignRow = $foreignTable->fetch()) {
+            if ($foreignRow->column == $row->Field) {
+                $referencedTable = $this->stripTableSchema($foreignRow->referenced_table);
+
+                $column->setReferencedField($foreignRow->referenced_column);
+                $column->setReferencedTable($referencedTable);
+            }
+        }
+    }
+
+    /**
+     * Sets the properties of the specified column.
+     *
+     * @param  mixed                   $row
+     * @param  \Rougin\Describe\Column &$column
+     * @return void
+     */
+    protected function setProperties($row, Column &$column)
+    {
+        $null = 'Null';
+
+        if ($row->Extra == 'auto_increment') {
+            $column->setAutoIncrement(true);
+        }
+
+        if ($row->$null == 'YES') {
+            $column->setNull(true);
+        }
+    }
+
+    /**
+     * Strips the table schema from the table name.
+     *
+     * @param  string $table
+     * @return string
+     */
+    protected function stripTableSchema($table)
+    {
+        return (strpos($table, '.') !== false) ? substr($table, strpos($table, '.') + 1) : $table;
     }
 }

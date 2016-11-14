@@ -2,13 +2,7 @@
 
 namespace Rougin\Describe;
 
-use PDO;
-use Rougin\Describe\Describe;
-use Rougin\Describe\Driver\DatabaseDriver;
-
-use PHPUnit_Framework_TestCase;
-
-class MySQLDriverTest extends PHPUnit_Framework_TestCase
+class MySQLDriverTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Rougin\Describe\Describe
@@ -32,14 +26,14 @@ class MySQLDriverTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $driver = new DatabaseDriver('mysql', [
+        $driver = new \Rougin\Describe\Driver\DatabaseDriver('mysql', [
             'hostname' => 'localhost',
             'database' => 'demo',
             'username' => 'root',
             'password' => '',
         ]);
 
-        $this->describe = new Describe($driver);
+        $this->describe = new \Rougin\Describe\Describe($driver);
     }
 
     /**

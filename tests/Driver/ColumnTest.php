@@ -2,13 +2,7 @@
 
 namespace Rougin\Describe;
 
-use PDO;
-use Rougin\Describe\Describe;
-use Rougin\Describe\Driver\MySQLDriver;
-
-use PHPUnit_Framework_TestCase;
-
-class ColumnTest extends PHPUnit_Framework_TestCase
+class ColumnTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var array
@@ -27,10 +21,10 @@ class ColumnTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $pdo = new PDO('mysql:host=localhost;dbname=demo', 'root', '');
-        $driver = new MySQLDriver($pdo, 'demo');
+        $pdo = new \PDO('mysql:host=localhost;dbname=demo', 'root', '');
+        $driver = new \Rougin\Describe\Driver\MySQLDriver($pdo, 'demo');
 
-        $describe = new Describe($driver);
+        $describe = new \Rougin\Describe\Describe($driver);
         $this->columns = $describe->getTable($this->table);
     }
 
@@ -86,8 +80,8 @@ class ColumnTest extends PHPUnit_Framework_TestCase
         // user_id
         $column = $this->columns[3];
 
-        $this->assertEquals('demo.user', $column->getReferencedTable());
-        $this->assertEquals('demo.user', $column->get_referenced_table());
+        $this->assertEquals('user', $column->getReferencedTable());
+        $this->assertEquals('user', $column->get_referenced_table());
     }
 
     /**
