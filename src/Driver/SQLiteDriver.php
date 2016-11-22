@@ -56,7 +56,18 @@ class SQLiteDriver implements DriverInterface
             array_push($columns, $column);
         }
 
-        return $this->prepareForeignColumns($table, $columns);
+        // Gets list of foreign keys, if any
+        $query = 'PRAGMA foreign_key_list("' . $tableName . '");';
+        $table = $this->pdo->prepare($query);
+
+        $table->execute();
+        $table->setFetchMode(\PDO::FETCH_OBJ);
+
+        while ($row = $table->fetch()) {
+            $this->setForeignColumn($columns, $row);
+        }
+
+        return $columns;
     }
 
     /**
@@ -87,27 +98,17 @@ class SQLiteDriver implements DriverInterface
     /**
      * Prepares the columns that have foreign keys.
      *
-     * @param  string $tableName
-     * @param  array  $columns
-     * @return void
+     * @param array  &$columns
+     * @param object $row
      */
-    protected function prepareForeignColumns($tableName, array $columns)
+    protected function setForeignColumn(array &$columns, $row)
     {
-        // Gets list of foreign keys, if any
-        $query = 'PRAGMA foreign_key_list("' . $tableName . '");';
-        $table = $this->pdo->prepare($query);
+        foreach ($columns as $column) {
+            if ($column->getField() == $row->from) {
+                $column->setForeign(true);
 
-        $table->execute();
-        $table->setFetchMode(\PDO::FETCH_OBJ);
-
-        while ($row = $table->fetch()) {
-            foreach ($columns as $column) {
-                if ($column->getField() == $row->from) {
-                    $column->setForeign(true);
-
-                    $column->setReferencedField($row->to);
-                    $column->setReferencedTable($row->table);
-                }
+                $column->setReferencedField($row->to);
+                $column->setReferencedTable($row->table);
             }
         }
 
