@@ -100,30 +100,14 @@ class SQLiteDriver implements DriverInterface
         $table->execute();
         $table->setFetchMode(\PDO::FETCH_OBJ);
 
-        $rows = [];
-
         while ($row = $table->fetch()) {
-            array_push($rows, $row);
-        }
+            foreach ($columns as $column) {
+                if ($column->getField() == $row->from) {
+                    $column->setForeign(true);
 
-        return $this->setForeignColumns($columns, $rows);
-    }
-
-    /**
-     * Sets the properties of the specified column.
-     *
-     * @param  array $columns
-     * @param  array $rows
-     * @return array
-     */
-    protected function setForeignColumns(array $columns, array $rows)
-    {
-        foreach ($columns as $index => $column) {
-            if ($column->isForeignKey() && $column->getField() == $rows[$index]->from) {
-                $column->setForeign(true);
-
-                $column->setReferencedField($rows[$index]->to);
-                $column->setReferencedTable($rows[$index]->table);
+                    $column->setReferencedField($row->to);
+                    $column->setReferencedTable($row->table);
+                }
             }
         }
 
