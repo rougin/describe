@@ -57,10 +57,11 @@ class CodeIgniterDriver implements DriverInterface
      * Returns the driver to be used.
      *
      * @param  array  $database
-     * @return \Rougin\Describe\Driver\DriverInterface
+     * @return \Rougin\Describe\Driver\DriverInterface|null
      */
     protected function getDriver(array $database)
     {
+        $driver = null;
         $mysql  = [ 'mysql', 'mysqli' ];
         $sqlite = [ 'pdo', 'sqlite', 'sqlite3' ];
 
@@ -68,13 +69,15 @@ class CodeIgniterDriver implements DriverInterface
             $dsn = 'mysql:host=' . $database['hostname'] . ';dbname=' . $database['database'];
             $pdo = new \PDO($dsn, $database['username'], $database['password']);
 
-            $this->driver = new MySQLDriver($pdo, $database['database']);
+            $driver = new MySQLDriver($pdo, $database['database']);
         }
 
         if (in_array($database['dbdriver'], $sqlite)) {
             $pdo = new \PDO($database['hostname']);
 
-            $this->driver = new SQLiteDriver($pdo);
+            $driver = new SQLiteDriver($pdo);
         }
+
+        return $driver;
     }
 }
