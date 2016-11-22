@@ -119,7 +119,7 @@ class SQLiteDriver implements DriverInterface
     protected function setForeignColumns(array $columns, array $rows)
     {
         foreach ($columns as $index => $column) {
-            if ($column->getField() == $rows[$index]->from) {
+            if ($column->isForeignKey() && $column->getField() == $rows[$index]->from) {
                 $column->setForeign(true);
 
                 $column->setReferencedField($rows[$index]->to);
