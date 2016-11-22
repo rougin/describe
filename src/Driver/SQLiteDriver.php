@@ -56,7 +56,7 @@ class SQLiteDriver implements DriverInterface
             array_push($columns, $column);
         }
 
-        return $this->setForeignColumns($table, $columns);
+        return $this->prepareForeignColumns($table, $columns);
     }
 
     /**
@@ -85,13 +85,13 @@ class SQLiteDriver implements DriverInterface
     }
 
     /**
-     * Sets the properties of the specified column.
+     * Prepares the columns that have foreign keys.
      *
      * @param  string $tableName
      * @param  array  $columns
      * @return void
      */
-    protected function setForeignColumns($tableName, array $columns)
+    protected function prepareForeignColumns($tableName, array $columns)
     {
         // Gets list of foreign keys, if any
         $query = 'PRAGMA foreign_key_list("' . $tableName . '");';
@@ -100,14 +100,30 @@ class SQLiteDriver implements DriverInterface
         $table->execute();
         $table->setFetchMode(\PDO::FETCH_OBJ);
 
-        while ($row = $table->fetch()) {
-            foreach ($columns as $column) {
-                if ($column->getField() == $row->from) {
-                    $column->setForeign(true);
+        $rows = [];
 
-                    $column->setReferencedField($row->to);
-                    $column->setReferencedTable($row->table);
-                }
+        while ($row = $table->fetch()) {
+            array_push($rows, $row);
+        }
+
+        return $this->setForeignColumns($columns, $rows);
+    }
+
+    /**
+     * Sets the properties of the specified column.
+     *
+     * @param  array $columns
+     * @param  array $rows
+     * @return array
+     */
+    protected function setForeignColumns(array $columns, array $rows)
+    {
+        foreach ($columns as $column) {
+            if ($column->getField() == $row->from) {
+                $column->setForeign(true);
+
+                $column->setReferencedField($row->to);
+                $column->setReferencedTable($row->table);
             }
         }
 
