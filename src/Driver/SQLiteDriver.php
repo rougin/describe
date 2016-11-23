@@ -37,14 +37,11 @@ class SQLiteDriver implements DriverInterface
     {
         $columns = [];
 
-        // Gets list of columns
-        $query = 'PRAGMA table_info("' . $table . '");';
-        $information = $this->pdo->prepare($query);
+        $query = $this->pdo->prepare('PRAGMA table_info("' . $table . '");');
 
-        $information->execute();
-        $information->setFetchMode(\PDO::FETCH_OBJ);
+        $query->setFetchMode(\PDO::FETCH_OBJ)->execute();
 
-        while ($row = $information->fetch()) {
+        while ($row = $query->fetch()) {
             $column = new Column;
 
             $this->setProperties($row, $column);
@@ -56,14 +53,11 @@ class SQLiteDriver implements DriverInterface
             array_push($columns, $column);
         }
 
-        // Gets list of foreign keys, if any
-        $query = 'PRAGMA foreign_key_list("' . $tableName . '");';
-        $table = $this->pdo->prepare($query);
+        $query = $this->pdo->prepare('PRAGMA foreign_key_list("' . $table . '");');
 
-        $table->execute();
-        $table->setFetchMode(\PDO::FETCH_OBJ);
+        $query->setFetchMode(\PDO::FETCH_OBJ)->execute();
 
-        while ($row = $table->fetch()) {
+        while ($row = $query->fetch()) {
             $this->setForeignColumn($columns, $row);
         }
 
@@ -79,14 +73,11 @@ class SQLiteDriver implements DriverInterface
     {
         $tables = [];
 
-        // Gets list of columns
-        $query = 'SELECT name FROM sqlite_master WHERE type = "table";';
-        $information = $this->pdo->prepare($query);
+        $query = $this->pdo->prepare('SELECT name FROM sqlite_master WHERE type = "table";');
 
-        $information->execute();
-        $information->setFetchMode(\PDO::FETCH_OBJ);
+        $query->setFetchMode(\PDO::FETCH_OBJ)->execute();
 
-        while ($row = $information->fetch()) {
+        while ($row = $query->fetch()) {
             if ($row->name != 'sqlite_sequence') {
                 array_push($tables, $row->name);
             }
