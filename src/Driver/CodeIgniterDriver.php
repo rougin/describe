@@ -25,26 +25,12 @@ class CodeIgniterDriver implements DriverInterface
      */
     public function __construct(array $database)
     {
-        $mysql  = [ 'mysql', 'mysqli' ];
-        $sqlite = [ 'pdo', 'sqlite', 'sqlite3' ];
-
         // NOTE: To be removed in v1.0.0
         if (isset($database['default'])) {
             $database = $database['default'];
         }
 
-        if (in_array($database['dbdriver'], $mysql)) {
-            $dsn = 'mysql:host=' . $database['hostname'] . ';dbname=' . $database['database'];
-            $pdo = new \PDO($dsn, $database['username'], $database['password']);
-
-            $this->driver = new MySQLDriver($pdo, $database['database']);
-        }
-
-        if (in_array($database['dbdriver'], $sqlite)) {
-            $pdo = new \PDO($database['hostname']);
-
-            $this->driver = new SQLiteDriver($pdo);
-        }
+        $this->driver = $this->getDriver($database);
     }
 
     /**
@@ -65,5 +51,33 @@ class CodeIgniterDriver implements DriverInterface
     public function showTables()
     {
         return $this->driver->showTables();
+    }
+
+    /**
+     * Returns the driver to be used.
+     *
+     * @param  array  $database
+     * @return \Rougin\Describe\Driver\DriverInterface|null
+     */
+    protected function getDriver(array $database)
+    {
+        $driver = null;
+        $mysql  = [ 'mysql', 'mysqli' ];
+        $sqlite = [ 'pdo', 'sqlite', 'sqlite3' ];
+
+        if (in_array($database['dbdriver'], $mysql)) {
+            $dsn = 'mysql:host=' . $database['hostname'] . ';dbname=' . $database['database'];
+            $pdo = new \PDO($dsn, $database['username'], $database['password']);
+
+            $driver = new MySQLDriver($pdo, $database['database']);
+        }
+
+        if (in_array($database['dbdriver'], $sqlite)) {
+            $pdo = new \PDO($database['hostname']);
+
+            $driver = new SQLiteDriver($pdo);
+        }
+
+        return $driver;
     }
 }
