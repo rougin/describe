@@ -2,8 +2,6 @@
 
 namespace Rougin\Describe;
 
-use Rougin\Describe\Driver\DriverInterface;
-
 /**
  * Describe
  *
@@ -27,7 +25,7 @@ class Describe
     /**
      * @param \Rougin\Describe\Driver\DriverInterface $driver
      */
-    public function __construct(DriverInterface $driver)
+    public function __construct(\Rougin\Describe\Driver\DriverInterface $driver)
     {
         $this->driver = $driver;
     }
@@ -48,7 +46,7 @@ class Describe
 
         foreach ($this->columns as $column) {
             if ($column->isPrimaryKey()) {
-                $result = $column->get_field();
+                $result = $column->getField();
             }
         }
 
@@ -60,32 +58,19 @@ class Describe
      *
      * @param  string $table
      * @return array
+     * @throws \Rougin\Describe\Exceptions\TableNameNotFoundException
      */
-    public function getTable($table)
+    public function getTable($tableName)
     {
-        return $this->driver->getTable($table);
-    }
+        $table = $this->driver->getTable($tableName);
 
-    /**
-     * Returns the result.
-     *
-     * @param  string $table
-     * @return array
-     */
-    public function get_table($table)
-    {
-        return $this->driver->getTable($table);
-    }
+        if (empty($table) || is_null($table)) {
+            $message = '"' . $tableName . '" table not found in database!';
 
-    /**
-     * Gets the primary key in the specified table.
-     *
-     * @param  string $table
-     * @return string
-     */
-    public function get_primary_key($table)
-    {
-        return $this->getPrimaryKey($table);
+            throw new Exceptions\TableNameNotFoundException($message);
+        }
+
+        return $table;
     }
 
     /**
@@ -99,12 +84,14 @@ class Describe
     }
 
     /**
-     * Shows the list of tables.
+     * Calls methods from this class in underscore case.
      *
-     * @return array
+     * @param  string $method
+     * @param  mixed  $parameters
+     * @return mixed
      */
-    public function show_tables()
+    public function __call($method, $parameters)
     {
-        return $this->driver->showTables();
+        return MagicMethodHelper::call($this, $method, $parameters);
     }
 }

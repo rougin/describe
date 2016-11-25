@@ -36,30 +36,34 @@ class DatabaseDriver implements DriverInterface
     /**
      * Gets the specified driver from the specified database connection.
      *
-     * @param string $driverName
-     * @param array  $configuration
-     * @return \Rougin\Describe\Driver\DriverInterface|null
+     * @param  string $driverName
+     * @param  array  $configuration
+     * @return \Rougin\Describe\Driver\DriverInterface
+     * @throws \Rougin\Describe\Exceptions\DatabaseDriverNotFoundException
      */
     public function getDriver($driverName, $configuration = [])
     {
-        $driver = null;
         $mysql  = [ 'mysql', 'mysqli' ];
         $sqlite = [ 'pdo', 'sqlite', 'sqlite3' ];
 
         list($database, $hostname, $username, $password) = $this->parseConfiguration($configuration);
 
         if (in_array($driverName, $mysql)) {
-            $dsn    = 'mysql:host=' . $hostname . ';dbname=' . $database;
-            $pdo    = new \PDO($dsn, $username, $password);
-            $driver = new MySQLDriver($pdo, $database);
+            $dsn = 'mysql:host=' . $hostname . ';dbname=' . $database;
+            $pdo = new \PDO($dsn, $username, $password);
+
+            return new MySQLDriver($pdo, $database);
         }
 
         if (in_array($driverName, $sqlite)) {
-            $pdo    = new \PDO($hostname);
-            $driver = new SQLiteDriver($pdo);
+            $pdo = new \PDO($hostname);
+
+            return new SQLiteDriver($pdo);
         }
 
-        return $driver;
+        $message = 'Specified database driver not found!';
+
+        throw new \Rougin\Describe\Exceptions\DatabaseDriverNotFoundException($message);
     }
 
     /**

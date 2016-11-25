@@ -2,6 +2,14 @@
 
 All Notable changes to `Describe` will be documented in this file.
 
+## [1.6.0](https://github.com/rougin/describe/compare/v1.5.1...v1.6.0) - CURRENT_DATE
+
+### Added
+- Exceptions
+
+### Changed
+- Code quality
+
 ## [1.5.1](https://github.com/rougin/describe/compare/v1.5.0...v1.5.1) - 2016-09-06
 
 ### Added

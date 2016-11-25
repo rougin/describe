@@ -25,7 +25,7 @@ class CodeIgniterDriver implements DriverInterface
      */
     public function __construct(array $database)
     {
-        // NOTE: To be removed in v1.0.0
+        // NOTE: To be removed in v2.0.0
         if (isset($database['default'])) {
             $database = $database['default'];
         }
@@ -58,10 +58,10 @@ class CodeIgniterDriver implements DriverInterface
      *
      * @param  array  $database
      * @return \Rougin\Describe\Driver\DriverInterface|null
+     * @throws \Rougin\Describe\Exceptions\DatabaseDriverNotFoundException
      */
     protected function getDriver(array $database)
     {
-        $driver = null;
         $mysql  = [ 'mysql', 'mysqli' ];
         $sqlite = [ 'pdo', 'sqlite', 'sqlite3' ];
 
@@ -69,15 +69,17 @@ class CodeIgniterDriver implements DriverInterface
             $dsn = 'mysql:host=' . $database['hostname'] . ';dbname=' . $database['database'];
             $pdo = new \PDO($dsn, $database['username'], $database['password']);
 
-            $driver = new MySQLDriver($pdo, $database['database']);
+            return new MySQLDriver($pdo, $database['database']);
         }
 
         if (in_array($database['dbdriver'], $sqlite)) {
             $pdo = new \PDO($database['hostname']);
 
-            $driver = new SQLiteDriver($pdo);
+            return new SQLiteDriver($pdo);
         }
 
-        return $driver;
+        $message = 'Specified database driver not found!';
+
+        throw new \Rougin\Describe\Exceptions\DatabaseDriverNotFoundException($message);
     }
 }
