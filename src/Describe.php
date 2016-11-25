@@ -33,15 +33,15 @@ class Describe
     /**
      * Gets the primary key in the specified table.
      *
-     * @param  string $table
+     * @param  string $tableName
      * @return string
      */
-    public function getPrimaryKey($table)
+    public function getPrimaryKey($tableName)
     {
         $result = '';
 
         if (empty($this->columns)) {
-            $this->columns = $this->driver->getTable($table);
+            $this->columns = $this->driver->getTable($tableName);
         }
 
         foreach ($this->columns as $column) {
@@ -56,7 +56,7 @@ class Describe
     /**
      * Returns the result.
      *
-     * @param  string $table
+     * @param  string $tableName
      * @return array
      * @throws \Rougin\Describe\Exceptions\TableNameNotFoundException
      */
