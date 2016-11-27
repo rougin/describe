@@ -54,9 +54,7 @@ class MySQLDriver implements DriverInterface
 
             $information->execute();
             $information->setFetchMode(\PDO::FETCH_OBJ);
-        } catch (\PDOException $e) {
-            return [];
-        }
+        } catch (\PDOException $e) {}
 
         while ($row = $information->fetch()) {
             preg_match('/(.*?)\((.*?)\)/', $row->Type, $match);

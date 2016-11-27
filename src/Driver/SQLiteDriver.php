@@ -42,9 +42,7 @@ class SQLiteDriver implements DriverInterface
 
             $query->execute();
             $query->setFetchMode(\PDO::FETCH_OBJ);
-        } catch (\PDOException $e) {
-            return [];
-        }
+        } catch (\PDOException $e) {}
 
         while ($row = $query->fetch()) {
             $column = new Column;

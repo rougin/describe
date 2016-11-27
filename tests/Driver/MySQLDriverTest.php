@@ -83,4 +83,16 @@ class MySQLDriverTest extends \PHPUnit_Framework_TestCase
 
         $this->describe->getTable('temp');
     }
+
+    /**
+     * Tests methods in underscore case.
+     *
+     * @return void
+     */
+    public function testUnderscoreCase()
+    {
+        $tables = $this->describe->show_tables();
+
+        $this->assertEquals(2, count($tables));
+    }
 }

@@ -146,4 +146,24 @@ class CodeIgniterDriverTest extends \PHPUnit_Framework_TestCase
 
         $this->describe = new \Rougin\Describe\Describe($driver);
     }
+
+    /**
+     * Tests \Rougin\Describe\Exceptions\DatabaseDriverNotFoundException.
+     *
+     * @return void
+     */
+    public function testDatabaseDriverNotFoundException()
+    {
+        $this->setExpectedException('Rougin\Describe\Exceptions\DatabaseDriverNotFoundException');
+
+        $config['default'] = [
+            'dbdriver' => 'mssql',
+            'hostname' => 'localhost',
+            'username' => 'root',
+            'password' => '',
+            'database' => 'demo'
+        ];
+
+        $driver = new \Rougin\Describe\Driver\CodeIgniterDriver($config);
+    }
 }
