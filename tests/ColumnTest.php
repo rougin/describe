@@ -39,7 +39,6 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
         $column = $this->columns[0];
 
         $this->assertEquals('integer', $column->getDataType());
-        $this->assertEquals('integer', $column->get_data_type());
     }
 
     /**
@@ -53,7 +52,6 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
         $column = $this->columns[0];
 
         $this->assertEmpty($column->getDefaultValue());
-        $this->assertEmpty($column->get_default_value());
     }
 
     /**
@@ -67,7 +65,6 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
         $column = $this->columns[3];
 
         $this->assertEquals('id', $column->getReferencedField());
-        $this->assertEquals('id', $column->get_referenced_field());
     }
 
     /**
@@ -81,7 +78,6 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
         $column = $this->columns[3];
 
         $this->assertEquals('user', $column->getReferencedTable());
-        $this->assertEquals('user', $column->get_referenced_table());
     }
 
     /**
@@ -95,7 +91,6 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
         $column = $this->columns[3];
 
         $this->assertEquals(10, $column->getLength());
-        $this->assertEquals(10, $column->get_length());
     }
 
     /**
@@ -109,7 +104,6 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
         $column = $this->columns[0];
 
         $this->assertTrue($column->isAutoIncrement());
-        $this->assertTrue($column->is_auto_increment());
     }
 
     /**
@@ -123,7 +117,6 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
         $column = $this->columns[3];
 
         $this->assertTrue($column->isForeignKey());
-        $this->assertTrue($column->is_foreign_key());
     }
 
     /**
@@ -137,7 +130,6 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
         $column = $this->columns[3];
 
         $this->assertFalse($column->isNull());
-        $this->assertFalse($column->is_null());
     }
 
     /**
@@ -151,7 +143,6 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
         $column = $this->columns[3];
 
         $this->assertFalse($column->isUnique());
-        $this->assertFalse($column->is_unique());
     }
 
     /**
@@ -167,7 +158,6 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
         $column->setUnsigned(false);
 
         $this->assertFalse($column->isUnsigned());
-        $this->assertFalse($column->is_unsigned());
     }
 
     /**
@@ -181,6 +171,18 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
         $column = $this->columns[0];
 
         $this->assertTrue($column->isPrimaryKey());
-        $this->assertTrue($column->is_primary_key());
+    }
+
+    /**
+     * Tests methods in underscore case.
+     *
+     * @return void
+     */
+    public function testUnderscoreCase()
+    {
+        // id
+        $column = $this->columns[0];
+
+        $this->assertTrue($column->is_primary_key());   
     }
 }

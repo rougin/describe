@@ -1,6 +1,6 @@
 <?php
 
-namespace Rougin\Describe;
+namespace Rougin\Describe\Driver;
 
 class MySQLDriverTest extends \PHPUnit_Framework_TestCase
 {
@@ -44,7 +44,6 @@ class MySQLDriverTest extends \PHPUnit_Framework_TestCase
     public function testGetPrimaryKeyMethod()
     {
         $primaryKey = $this->describe->getPrimaryKey($this->table);
-        $primaryKey = $this->describe->get_primary_key($this->table);
 
         $this->assertEquals('id', $primaryKey);
     }
@@ -57,7 +56,6 @@ class MySQLDriverTest extends \PHPUnit_Framework_TestCase
     public function testGetTableMethod()
     {
         $table = $this->describe->getTable('demo.' . $this->table);
-        $table = $this->describe->get_table($this->table);
 
         $this->assertEquals($this->expectedColumns, count($table));
     }
@@ -70,8 +68,19 @@ class MySQLDriverTest extends \PHPUnit_Framework_TestCase
     public function testShowTablesMethod()
     {
         $tables = $this->describe->showTables();
-        $tables = $this->describe->show_tables();
 
         $this->assertEquals(2, count($tables));
+    }
+
+    /**
+     * Tests \Rougin\Describe\Exceptions\TableNameNotFoundException.
+     *
+     * @return void
+     */
+    public function testTableNameNotFoundException()
+    {
+        $this->setExpectedException('Rougin\Describe\Exceptions\TableNameNotFoundException');
+
+        $this->describe->getTable('temp');
     }
 }

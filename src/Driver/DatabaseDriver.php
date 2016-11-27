@@ -19,18 +19,18 @@ class DatabaseDriver implements DriverInterface
     protected $configuration = [];
 
     /**
-     * @var string
+     * @var \Rougin\Describe\Driver\DriverInterface
      */
-    protected $driver = '';
+    protected $driver;
 
     /**
-     * @param string $driver
+     * @param string $driverName
      * @param array  $configuration
      */
-    public function __construct($driver, $configuration = [])
+    public function __construct($driverName, $configuration = [])
     {
-        $this->driver = $driver;
         $this->configuration = $configuration;
+        $this->driver        = $this->getDriver($driverName, $configuration);
     }
 
     /**
@@ -41,7 +41,7 @@ class DatabaseDriver implements DriverInterface
      * @return \Rougin\Describe\Driver\DriverInterface
      * @throws \Rougin\Describe\Exceptions\DatabaseDriverNotFoundException
      */
-    public function getDriver($driverName, $configuration = [])
+    protected function getDriver($driverName, $configuration = [])
     {
         $mysql  = [ 'mysql', 'mysqli' ];
         $sqlite = [ 'pdo', 'sqlite', 'sqlite3' ];
@@ -73,9 +73,7 @@ class DatabaseDriver implements DriverInterface
      */
     public function getTable($table)
     {
-        $driver = $this->getDriver($this->driver, $this->configuration);
-
-        return $driver->getTable($table);
+        return $this->driver->getTable($table);
     }
 
     /**
@@ -85,9 +83,7 @@ class DatabaseDriver implements DriverInterface
      */
     public function showTables()
     {
-        $driver = $this->getDriver($this->driver, $this->configuration);
-
-        return $driver->showTables();
+        return $this->driver->showTables();
     }
 
     /**
