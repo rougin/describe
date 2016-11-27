@@ -37,10 +37,14 @@ class SQLiteDriver implements DriverInterface
     {
         $columns = [];
 
-        $query = $this->pdo->prepare('PRAGMA table_info("' . $table . '");');
+        try {
+            $query = $this->pdo->prepare('PRAGMA table_info("' . $table . '");');
 
-        $query->execute();
-        $query->setFetchMode(\PDO::FETCH_OBJ);
+            $query->execute();
+            $query->setFetchMode(\PDO::FETCH_OBJ);
+        } catch (\PDOException $e) {
+            return [];
+        }
 
         while ($row = $query->fetch()) {
             $column = new Column;

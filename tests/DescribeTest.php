@@ -12,6 +12,11 @@ class DescribeTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
+    protected $exception = 'Rougin\Describe\Exceptions\TableNameNotFoundException';
+
+    /**
+     * @var string
+     */
     protected $table = 'temp';
 
     /**
@@ -21,8 +26,8 @@ class DescribeTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $pdo = new \PDO('mysql:host=localhost;dbname=demo', 'root', '');
-        $driver = new \Rougin\Describe\Driver\MySQLDriver($pdo, 'demo');
+        $object = new \PDO('mysql:host=localhost;dbname=demo', 'root', '');
+        $driver = new \Rougin\Describe\Driver\MySQLDriver($object, 'demo');
 
         $this->describe = new \Rougin\Describe\Describe($driver);
     }
@@ -34,7 +39,7 @@ class DescribeTest extends \PHPUnit_Framework_TestCase
      */
     public function testTableNameNotFoundException()
     {
-        $this->setExpectedException('Rougin\Describe\Exceptions\TableNameNotFoundException');
+        $this->setExpectedException($this->exception);
 
         $this->describe->getTable($this->table);
     }

@@ -49,9 +49,14 @@ class MySQLDriver implements DriverInterface
     {
         $this->columns = [];
 
-        $information = $this->pdo->prepare('DESCRIBE ' . $table);
-        $information->execute();
-        $information->setFetchMode(\PDO::FETCH_OBJ);
+        try {
+            $information = $this->pdo->prepare('DESCRIBE ' . $table);
+
+            $information->execute();
+            $information->setFetchMode(\PDO::FETCH_OBJ);
+        } catch (\PDOException $e) {
+            return [];
+        }
 
         while ($row = $information->fetch()) {
             preg_match('/(.*?)\((.*?)\)/', $row->Type, $match);
