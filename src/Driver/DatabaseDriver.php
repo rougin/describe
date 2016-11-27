@@ -59,11 +59,11 @@ class DatabaseDriver implements DriverInterface
             $pdo = new \PDO($hostname);
 
             return new SQLiteDriver($pdo);
+        } else {
+            $message = 'Specified database driver not found!';
+
+            throw new \Rougin\Describe\Exceptions\DatabaseDriverNotFoundException($message);
         }
-
-        $message = 'Specified database driver not found!';
-
-        throw new \Rougin\Describe\Exceptions\DatabaseDriverNotFoundException($message);
     }
 
     /**

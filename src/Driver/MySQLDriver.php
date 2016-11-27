@@ -43,54 +43,24 @@ class MySQLDriver implements DriverInterface
     /**
      * Returns the result.
      *
+     * @param  string $tableName
      * @return array
      */
-    public function getTable($table)
+    public function getTable($tableName)
     {
         $this->columns = [];
 
         try {
-            $information = $this->pdo->prepare('DESCRIBE ' . $table);
+            $information = $this->pdo->prepare('DESCRIBE ' . $tableName);
 
             $information->execute();
             $information->setFetchMode(\PDO::FETCH_OBJ);
-        } catch (\PDOException $e) {}
+        } catch (\PDOException $e) {
+            // Table not found
+        }
 
         while ($row = $information->fetch()) {
-            preg_match('/(.*?)\((.*?)\)/', $row->Type, $match);
-
-            $column = new Column;
-
-            $this->setProperties($row, $column);
-            $this->setKey($row, $column);
-
-            $column->setDataType($row->Type);
-            $column->setDefaultValue($row->Default);
-            $column->setField($row->Field);
-
-            if (isset($match[1])) {
-                $column->setDataType($match[1]);
-                $column->setLength($match[2]);
-            }
-
-            $query = 'SELECT COLUMN_NAME as "column",' .
-                'REFERENCED_COLUMN_NAME as "referenced_column",' .
-                'CONCAT(' .
-                    'REFERENCED_TABLE_SCHEMA, ".",' .
-                    'REFERENCED_TABLE_NAME' .
-                ') as "referenced_table"' .
-                'FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE ' .
-                'WHERE CONSTRAINT_SCHEMA = "' . $this->database . '" ' .
-                'AND TABLE_NAME = "' . $table . '";';
-
-            $foreignTable = $this->pdo->prepare($query);
-
-            $foreignTable->execute();
-            $foreignTable->setFetchMode(\PDO::FETCH_OBJ);
-
-            $this->setForeignColumns($foreignTable, $row, $column);
-
-            array_push($this->columns, $column);
+            $this->setColumns($tableName, $row);
         }
 
         return $this->columns;
@@ -113,6 +83,51 @@ class MySQLDriver implements DriverInterface
         }
 
         return $tables;
+    }
+
+    /**
+     * Prepares the defined columns.
+     *
+     * @param  string $tableName
+     * @param  mixed  $row
+     * @return void
+     */
+    protected function setColumns($tableName, $row)
+    {
+        preg_match('/(.*?)\((.*?)\)/', $row->Type, $match);
+
+        $column = new Column;
+
+        $this->setProperties($row, $column);
+        $this->setKey($row, $column);
+
+        $column->setDataType($row->Type);
+        $column->setDefaultValue($row->Default);
+        $column->setField($row->Field);
+
+        if (isset($match[1])) {
+            $column->setDataType($match[1]);
+            $column->setLength($match[2]);
+        }
+
+        $query = 'SELECT COLUMN_NAME as "column",' .
+            'REFERENCED_COLUMN_NAME as "referenced_column",' .
+            'CONCAT(' .
+                'REFERENCED_TABLE_SCHEMA, ".",' .
+                'REFERENCED_TABLE_NAME' .
+            ') as "referenced_table"' .
+            'FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE ' .
+            'WHERE CONSTRAINT_SCHEMA = "' . $this->database . '" ' .
+            'AND TABLE_NAME = "' . $tableName . '";';
+
+        $foreignTable = $this->pdo->prepare($query);
+
+        $foreignTable->execute();
+        $foreignTable->setFetchMode(\PDO::FETCH_OBJ);
+
+        $this->setForeignColumns($foreignTable, $row, $column);
+
+        array_push($this->columns, $column);
     }
 
     /**
