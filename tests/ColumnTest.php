@@ -183,6 +183,6 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
         // id
         $column = $this->columns[0];
 
-        $this->assertTrue($column->is_primary_key());   
+        $this->assertTrue($column->is_primary_key());
     }
 }

@@ -4,7 +4,7 @@ namespace Rougin\Describe\Driver;
 
 class DatabaseDriverTest extends \PHPUnit_Framework_TestCase
 {
-	/**
+    /**
      * Tests \Rougin\Describe\Exceptions\DatabaseDriverNotFoundException.
      *
      * @return void
