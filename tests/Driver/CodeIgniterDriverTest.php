@@ -1,6 +1,6 @@
 <?php
 
-namespace Rougin\Describe;
+namespace Rougin\Describe\Driver;
 
 class CodeIgniterDriverTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,7 +29,6 @@ class CodeIgniterDriverTest extends \PHPUnit_Framework_TestCase
         $this->setUpSqliteDriver();
 
         $primaryKey = $this->describe->getPrimaryKey($this->table);
-        $primaryKey = $this->describe->get_primary_key($this->table);
 
         $this->assertEquals('id', $primaryKey);
     }
@@ -44,7 +43,6 @@ class CodeIgniterDriverTest extends \PHPUnit_Framework_TestCase
         $this->setUpSqliteDriver();
 
         $table = $this->describe->getTable($this->table);
-        $table = $this->describe->get_table($this->table);
 
         $this->assertEquals($this->expectedColumns, count($table));
     }
@@ -59,7 +57,6 @@ class CodeIgniterDriverTest extends \PHPUnit_Framework_TestCase
         $this->setUpSqliteDriver();
 
         $tables = $this->describe->showTables();
-        $tables = $this->describe->show_tables();
 
         $this->assertEquals(2, count($tables));
     }
@@ -74,7 +71,6 @@ class CodeIgniterDriverTest extends \PHPUnit_Framework_TestCase
         $this->setUpMysqlDriver();
 
         $primaryKey = $this->describe->getPrimaryKey($this->table);
-        $primaryKey = $this->describe->get_primary_key($this->table);
 
         $this->assertEquals('id', $primaryKey);
     }
@@ -89,7 +85,6 @@ class CodeIgniterDriverTest extends \PHPUnit_Framework_TestCase
         $this->setUpMysqlDriver();
 
         $table = $this->describe->getTable($this->table);
-        $table = $this->describe->get_table($this->table);
 
         $this->assertEquals($this->expectedColumns, count($table));
     }
@@ -104,7 +99,6 @@ class CodeIgniterDriverTest extends \PHPUnit_Framework_TestCase
         $this->setUpMysqlDriver();
 
         $tables = $this->describe->showTables();
-        $tables = $this->describe->show_tables();
 
         $this->assertEquals(2, count($tables));
     }
@@ -151,5 +145,25 @@ class CodeIgniterDriverTest extends \PHPUnit_Framework_TestCase
         $driver = new \Rougin\Describe\Driver\CodeIgniterDriver($config);
 
         $this->describe = new \Rougin\Describe\Describe($driver);
+    }
+
+    /**
+     * Tests \Rougin\Describe\Exceptions\DatabaseDriverNotFoundException.
+     *
+     * @return void
+     */
+    public function testDatabaseDriverNotFoundException()
+    {
+        $this->setExpectedException('Rougin\Describe\Exceptions\DatabaseDriverNotFoundException');
+
+        $config['default'] = [
+            'dbdriver' => 'mssql',
+            'hostname' => 'localhost',
+            'username' => 'root',
+            'password' => '',
+            'database' => 'demo'
+        ];
+
+        $driver = new \Rougin\Describe\Driver\CodeIgniterDriver($config);
     }
 }

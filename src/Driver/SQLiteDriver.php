@@ -16,6 +16,11 @@ use Rougin\Describe\Column;
 class SQLiteDriver implements DriverInterface
 {
     /**
+     * @var array
+     */
+    protected $columns = [];
+
+    /**
      * @var \PDO
      */
     protected $pdo;
@@ -31,16 +36,21 @@ class SQLiteDriver implements DriverInterface
     /**
      * Returns the result.
      *
+     * @param  string $tableName
      * @return array
      */
-    public function getTable($table)
+    public function getTable($tableName)
     {
-        $columns = [];
+        $this->columns = [];
 
-        $query = $this->pdo->prepare('PRAGMA table_info("' . $table . '");');
+        try {
+            $query = $this->pdo->prepare('PRAGMA table_info("' . $tableName . '");');
 
-        $query->execute();
-        $query->setFetchMode(\PDO::FETCH_OBJ);
+            $query->execute();
+            $query->setFetchMode(\PDO::FETCH_OBJ);
+        } catch (\PDOException $e) {
+            // Table not found
+        }
 
         while ($row = $query->fetch()) {
             $column = new Column;
@@ -51,19 +61,10 @@ class SQLiteDriver implements DriverInterface
             $column->setField($row->name);
             $column->setDataType(strtolower($row->type));
 
-            array_push($columns, $column);
+            array_push($this->columns, $column);
         }
 
-        $query = $this->pdo->prepare('PRAGMA foreign_key_list("' . $table . '");');
-
-        $query->execute();
-        $query->setFetchMode(\PDO::FETCH_OBJ);
-
-        while ($row = $query->fetch()) {
-            $this->setForeignColumn($columns, $row);
-        }
-
-        return $columns;
+        return $this->prepareForeignColumns($this->columns, $tableName);
     }
 
     /**
@@ -104,6 +105,27 @@ class SQLiteDriver implements DriverInterface
                 $column->setReferencedField($row->to);
                 $column->setReferencedTable($row->table);
             }
+        }
+
+        return $columns;
+    }
+
+    /**
+     * Prepares the query for getting the foreign columns.
+     *
+     * @param  array  $columns
+     * @param  string $tableName
+     * @return array
+     */
+    protected function prepareForeignColumns(array $columns, $tableName)
+    {
+        $query = $this->pdo->prepare('PRAGMA foreign_key_list("' . $tableName . '");');
+
+        $query->execute();
+        $query->setFetchMode(\PDO::FETCH_OBJ);
+
+        while ($row = $query->fetch()) {
+            $this->setForeignColumn($columns, $row);
         }
 
         return $columns;

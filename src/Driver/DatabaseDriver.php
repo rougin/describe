@@ -19,47 +19,49 @@ class DatabaseDriver implements DriverInterface
     protected $configuration = [];
 
     /**
-     * @var string
+     * @var \Rougin\Describe\Driver\DriverInterface
      */
-    protected $driver = '';
+    protected $driver;
 
     /**
-     * @param string $driver
+     * @param string $driverName
      * @param array  $configuration
      */
-    public function __construct($driver, $configuration = [])
+    public function __construct($driverName, $configuration = [])
     {
-        $this->driver = $driver;
         $this->configuration = $configuration;
+        $this->driver        = $this->getDriver($driverName, $configuration);
     }
 
     /**
      * Gets the specified driver from the specified database connection.
      *
-     * @param string $driverName
-     * @param array  $configuration
-     * @return \Rougin\Describe\Driver\DriverInterface|null
+     * @param  string $driverName
+     * @param  array  $configuration
+     * @return \Rougin\Describe\Driver\DriverInterface
+     * @throws \Rougin\Describe\Exceptions\DatabaseDriverNotFoundException
      */
-    public function getDriver($driverName, $configuration = [])
+    protected function getDriver($driverName, $configuration = [])
     {
-        $driver = null;
         $mysql  = [ 'mysql', 'mysqli' ];
         $sqlite = [ 'pdo', 'sqlite', 'sqlite3' ];
 
         list($database, $hostname, $username, $password) = $this->parseConfiguration($configuration);
 
         if (in_array($driverName, $mysql)) {
-            $dsn    = 'mysql:host=' . $hostname . ';dbname=' . $database;
-            $pdo    = new \PDO($dsn, $username, $password);
-            $driver = new MySQLDriver($pdo, $database);
+            $dsn = 'mysql:host=' . $hostname . ';dbname=' . $database;
+            $pdo = new \PDO($dsn, $username, $password);
+
+            return new MySQLDriver($pdo, $database);
+        } elseif (in_array($driverName, $sqlite)) {
+            $pdo = new \PDO($hostname);
+
+            return new SQLiteDriver($pdo);
         }
 
-        if (in_array($driverName, $sqlite)) {
-            $pdo    = new \PDO($hostname);
-            $driver = new SQLiteDriver($pdo);
-        }
+        $message = 'Specified database driver not found!';
 
-        return $driver;
+        throw new \Rougin\Describe\Exceptions\DatabaseDriverNotFoundException($message);
     }
 
     /**
@@ -69,9 +71,7 @@ class DatabaseDriver implements DriverInterface
      */
     public function getTable($table)
     {
-        $driver = $this->getDriver($this->driver, $this->configuration);
-
-        return $driver->getTable($table);
+        return $this->driver->getTable($table);
     }
 
     /**
@@ -81,9 +81,7 @@ class DatabaseDriver implements DriverInterface
      */
     public function showTables()
     {
-        $driver = $this->getDriver($this->driver, $this->configuration);
-
-        return $driver->showTables();
+        return $this->driver->showTables();
     }
 
     /**

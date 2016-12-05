@@ -16,9 +16,10 @@ interface DriverInterface
     /**
      * Returns the result.
      *
+     * @param  string $tableName
      * @return array
      */
-    public function getTable($table);
+    public function getTable($tableName);
 
     /**
      * Shows the list of tables.

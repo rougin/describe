@@ -2,8 +2,6 @@
 
 namespace Rougin\Describe\Drivers;
 
-use Rougin\Describe\Driver\DriverInterface as BaseInterface;
-
 /**
  * Database Driver Interface
  *
@@ -14,6 +12,6 @@ use Rougin\Describe\Driver\DriverInterface as BaseInterface;
  * @category Drivers
  * @author   Rougin Royce Gutib <rougingutib@gmail.com>
  */
-interface DriverInterface extends BaseInterface
+interface DriverInterface extends \Rougin\Describe\Driver\DriverInterface
 {
 }

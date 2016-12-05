@@ -20,7 +20,7 @@ class Column
     /**
      * @var string
      */
-    protected $dataType;
+    protected $dataType = '';
 
     /**
      * @var string
@@ -30,7 +30,7 @@ class Column
     /**
      * @var string
      */
-    protected $field;
+    protected $field = '';
 
     /**
      * @var boolean
@@ -55,12 +55,12 @@ class Column
     /**
      * @var string
      */
-    protected $referencedField;
+    protected $referencedField = '';
 
     /**
      * @var string
      */
-    protected $referencedTable;
+    protected $referencedTable = '';
 
     /**
      * @var boolean
@@ -133,67 +133,7 @@ class Column
     }
 
     /**
-     * Gets the data type.
-     *
-     * @return string
-     */
-    public function get_data_type()
-    {
-        return $this->dataType;
-    }
-
-    /**
-     * Gets the default value.
-     *
-     * @return string
-     */
-    public function get_default_value()
-    {
-        return $this->defaultValue;
-    }
-
-    /**
-     * Gets the column description.
-     *
-     * @return string
-     */
-    public function get_field()
-    {
-        return $this->field;
-    }
-
-    /**
-     * Gets the foreign field.
-     *
-     * @return string
-     */
-    public function get_referenced_field()
-    {
-        return $this->referencedField;
-    }
-
-    /**
-     * Gets the foreign table.
-     *
-     * @return string
-     */
-    public function get_referenced_table()
-    {
-        return $this->referencedTable;
-    }
-
-    /**
-     * Gets the field's length.
-     *
-     * @return string
-     */
-    public function get_length()
-    {
-        return $this->length;
-    }
-
-    /**
-     * Check if the field is an auto incrementing field
+     * Check if the field is an auto incrementing field.
      *
      * @return boolean
      */
@@ -203,7 +143,7 @@ class Column
     }
 
     /**
-     * Check if the field is a foreign key
+     * Check if the field is a foreign key.
      *
      * @return boolean
      */
@@ -213,7 +153,7 @@ class Column
     }
 
     /**
-     * Check if the field accept NULL values
+     * Check if the field accept NULL values.
      *
      * @return boolean
      */
@@ -223,7 +163,7 @@ class Column
     }
 
     /**
-     * Check if the field is a primary key
+     * Check if the field is a primary key.
      *
      * @return boolean
      */
@@ -233,7 +173,7 @@ class Column
     }
 
     /**
-     * Check if field is unique
+     * Check if field is unique.
      *
      * @return boolean
      */
@@ -243,71 +183,11 @@ class Column
     }
 
     /**
-     * Check if field is unsigned
+     * Check if field is unsigned.
      *
      * @return boolean
      */
     public function isUnsigned()
-    {
-        return $this->unsigned;
-    }
-
-    /**
-     * Check if the field is an auto incrementing field
-     *
-     * @return boolean
-     */
-    public function is_auto_increment()
-    {
-        return $this->autoIncrement;
-    }
-
-    /**
-     * Check if the field is a foreign key
-     *
-     * @return boolean
-     */
-    public function is_foreign_key()
-    {
-        return $this->foreign;
-    }
-
-    /**
-     * Check if the field accept NULL values
-     *
-     * @return boolean
-     */
-    public function is_null()
-    {
-        return $this->null;
-    }
-
-    /**
-     * Check if the field is a primary key
-     *
-     * @return boolean
-     */
-    public function is_primary_key()
-    {
-        return $this->primary;
-    }
-
-    /**
-     * Check if field is unique
-     *
-     * @return boolean
-     */
-    public function is_unique()
-    {
-        return $this->unique;
-    }
-
-    /**
-     * Check if field is unsigned
-     *
-     * @return boolean
-     */
-    public function is_unsigned()
     {
         return $this->unsigned;
     }
@@ -331,19 +211,12 @@ class Column
      */
     public function setDataType($dataType)
     {
-        $dataTypes = [
-            'int' => 'integer',
-            'varchar' => 'string',
-            'text' => 'string'
-        ];
+        $dataTypes = [ 'integer', 'string', 'string' ];
+        $shortHand = [ 'int', 'varchar', 'text' ];
 
-        foreach ($dataTypes as $key => $value) {
-            if (strpos($dataType, $key) !== false) {
-                $dataType = $value;
-            }
-        }
+        $index = array_search($dataType, $shortHand);
 
-        $this->dataType = $dataType;
+        $this->dataType = ($index === false) ? $dataType : $dataTypes[$index];
     }
 
     /**
@@ -464,5 +337,17 @@ class Column
         $this->unsigned = $unsigned;
 
         return $this;
+    }
+
+    /**
+     * Calls methods from this class in underscore case.
+     *
+     * @param  string $method
+     * @param  mixed  $parameters
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        return MagicMethodHelper::call($this, $method, $parameters);
     }
 }
