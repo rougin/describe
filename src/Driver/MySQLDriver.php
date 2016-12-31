@@ -13,7 +13,7 @@ use Rougin\Describe\Column;
  * @category Driver
  * @author   Rougin Royce Gutib <rougingutib@gmail.com>
  */
-class MySQLDriver implements DriverInterface
+class MySQLDriver extends AbstractDriver implements DriverInterface
 {
     /**
      * @var array
@@ -50,18 +50,7 @@ class MySQLDriver implements DriverInterface
     {
         $this->columns = [];
 
-        try {
-            $information = $this->pdo->prepare('DESCRIBE ' . $tableName);
-
-            $information->execute();
-            $information->setFetchMode(\PDO::FETCH_OBJ);
-        } catch (\PDOException $e) {
-            // Table not found
-        }
-
-        while ($row = $information->fetch()) {
-            $this->setColumn($tableName, $row);
-        }
+        $this->getQuery($tableName, 'DESCRIBE ' . $tableName);
 
         return $this->columns;
     }

@@ -13,7 +13,7 @@ use Rougin\Describe\Column;
  * @category Driver
  * @author   Rougin Royce Gutib <rougingutib@gmail.com>
  */
-class SQLiteDriver implements DriverInterface
+class SQLiteDriver extends AbstractDriver implements DriverInterface
 {
     /**
      * @var array
@@ -43,18 +43,7 @@ class SQLiteDriver implements DriverInterface
     {
         $this->columns = [];
 
-        try {
-            $query = $this->pdo->prepare('PRAGMA table_info("' . $tableName . '");');
-
-            $query->execute();
-            $query->setFetchMode(\PDO::FETCH_OBJ);
-        } catch (\PDOException $e) {
-            // Table not found
-        }
-
-        while ($row = $query->fetch()) {
-            $this->setColumn($tableName, $row);
-        }
+        $this->getQuery($tableName, 'PRAGMA table_info("' . $tableName . '");');
 
         return $this->columns;
     }
