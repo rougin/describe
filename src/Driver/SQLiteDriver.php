@@ -65,7 +65,7 @@ class SQLiteDriver extends AbstractDriver implements DriverInterface
         $column->setField($row->name);
         $column->setDataType(strtolower($row->type));
 
-        $this->setForeignColumn($tableName, $row, $column);
+        $this->setForeignColumn($tableName, $column);
 
         array_push($this->columns, $column);
     }
@@ -97,11 +97,10 @@ class SQLiteDriver extends AbstractDriver implements DriverInterface
      * Sets the properties of the specified column if it does exists.
      *
      * @param  string                  $tableName
-     * @param  mixed                   $row
      * @param  \Rougin\Describe\Column &$column
      * @return void
      */
-    protected function setForeignColumn($tableName, $row, Column &$column)
+    protected function setForeignColumn($tableName, Column &$column)
     {
         $query = $this->pdo->prepare('PRAGMA foreign_key_list("' . $tableName . '");');
 
