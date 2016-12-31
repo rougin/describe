@@ -130,27 +130,6 @@ class SQLiteDriver implements DriverInterface
     }
 
     /**
-     * Prepares the query for getting the foreign columns.
-     *
-     * @param  array  $columns
-     * @param  string $tableName
-     * @return array
-     */
-    protected function prepareForeignColumns(array $columns, $tableName)
-    {
-        $query = $this->pdo->prepare('PRAGMA foreign_key_list("' . $tableName . '");');
-
-        $query->execute();
-        $query->setFetchMode(\PDO::FETCH_OBJ);
-
-        while ($row = $query->fetch()) {
-            $this->setForeignColumn($columns, $row);
-        }
-
-        return $columns;
-    }
-
-    /**
      * Sets the properties of the specified column.
      *
      * @param  mixed                   $row
