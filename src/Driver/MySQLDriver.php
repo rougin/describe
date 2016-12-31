@@ -60,7 +60,7 @@ class MySQLDriver implements DriverInterface
         }
 
         while ($row = $information->fetch()) {
-            $this->setColumns($tableName, $row);
+            $this->setColumn($tableName, $row);
         }
 
         return $this->columns;
@@ -92,7 +92,7 @@ class MySQLDriver implements DriverInterface
      * @param  mixed  $row
      * @return void
      */
-    protected function setColumns($tableName, $row)
+    protected function setColumn($tableName, $row)
     {
         preg_match('/(.*?)\((.*?)\)/', $row->Type, $match);
 

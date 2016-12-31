@@ -53,18 +53,32 @@ class SQLiteDriver implements DriverInterface
         }
 
         while ($row = $query->fetch()) {
-            $column = new Column;
-
-            $this->setProperties($row, $column);
-
-            $column->setDefaultValue($row->dflt_value);
-            $column->setField($row->name);
-            $column->setDataType(strtolower($row->type));
-
-            array_push($this->columns, $column);
+            $this->setColumn($tableName, $row);
         }
 
-        return $this->prepareForeignColumns($this->columns, $tableName);
+        return $this->columns;
+    }
+
+    /**
+     * Prepares the defined columns.
+     *
+     * @param  string $tableName
+     * @param  mixed  $row
+     * @return void
+     */
+    protected function setColumn($tableName, $row)
+    {
+        $column = new Column;
+
+        $this->setProperties($row, $column);
+
+        $column->setDefaultValue($row->dflt_value);
+        $column->setField($row->name);
+        $column->setDataType(strtolower($row->type));
+
+        $this->setForeignColumn($tableName, $row, $column);
+
+        array_push($this->columns, $column);
     }
 
     /**
@@ -91,14 +105,21 @@ class SQLiteDriver implements DriverInterface
     }
 
     /**
-     * Prepares the columns that have foreign keys.
+     * Sets the properties of the specified column if it does exists.
      *
-     * @param array  &$columns
-     * @param object $row
+     * @param  string                  $tableName
+     * @param  mixed                   $row
+     * @param  \Rougin\Describe\Column &$column
+     * @return void
      */
-    protected function setForeignColumn(array &$columns, $row)
+    protected function setForeignColumn($tableName, $row, Column &$column)
     {
-        foreach ($columns as $column) {
+        $query = $this->pdo->prepare('PRAGMA foreign_key_list("' . $tableName . '");');
+
+        $query->execute();
+        $query->setFetchMode(\PDO::FETCH_OBJ);
+
+        while ($row = $query->fetch()) {
             if ($column->getField() == $row->from) {
                 $column->setForeign(true);
 
@@ -106,8 +127,6 @@ class SQLiteDriver implements DriverInterface
                 $column->setReferencedTable($row->table);
             }
         }
-
-        return $columns;
     }
 
     /**
