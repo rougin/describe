@@ -49,28 +49,6 @@ class SQLiteDriver extends AbstractDriver implements DriverInterface
     }
 
     /**
-     * Prepares the defined columns.
-     *
-     * @param  string $tableName
-     * @param  mixed  $row
-     * @return void
-     */
-    protected function setColumn($tableName, $row)
-    {
-        $column = new Column;
-
-        $this->setProperties($row, $column);
-
-        $column->setDefaultValue($row->dflt_value);
-        $column->setField($row->name);
-        $column->setDataType(strtolower($row->type));
-
-        $this->setForeignColumn($tableName, $column);
-
-        array_push($this->columns, $column);
-    }
-
-    /**
      * Shows the list of tables.
      *
      * @return array
@@ -91,6 +69,28 @@ class SQLiteDriver extends AbstractDriver implements DriverInterface
         }
 
         return $tables;
+    }
+
+    /**
+     * Prepares the defined columns.
+     *
+     * @param  string $tableName
+     * @param  mixed  $row
+     * @return void
+     */
+    protected function setColumn($tableName, $row)
+    {
+        $column = new Column;
+
+        $this->setProperties($row, $column);
+
+        $column->setDefaultValue($row->dflt_value);
+        $column->setField($row->name);
+        $column->setDataType(strtolower($row->type));
+
+        $this->setForeignColumn($tableName, $column);
+
+        array_push($this->columns, $column);
     }
 
     /**
