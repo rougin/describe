@@ -13,7 +13,7 @@ use Rougin\Describe\Column;
  * @category Driver
  * @author   Rougin Royce Gutib <rougingutib@gmail.com>
  */
-class SQLiteDriver implements DriverInterface
+class SQLiteDriver extends AbstractDriver implements DriverInterface
 {
     /**
      * @var array
@@ -43,28 +43,9 @@ class SQLiteDriver implements DriverInterface
     {
         $this->columns = [];
 
-        try {
-            $query = $this->pdo->prepare('PRAGMA table_info("' . $tableName . '");');
+        $this->getQuery($tableName, 'PRAGMA table_info("' . $tableName . '");');
 
-            $query->execute();
-            $query->setFetchMode(\PDO::FETCH_OBJ);
-        } catch (\PDOException $e) {
-            // Table not found
-        }
-
-        while ($row = $query->fetch()) {
-            $column = new Column;
-
-            $this->setProperties($row, $column);
-
-            $column->setDefaultValue($row->dflt_value);
-            $column->setField($row->name);
-            $column->setDataType(strtolower($row->type));
-
-            array_push($this->columns, $column);
-        }
-
-        return $this->prepareForeignColumns($this->columns, $tableName);
+        return $this->columns;
     }
 
     /**
@@ -91,33 +72,35 @@ class SQLiteDriver implements DriverInterface
     }
 
     /**
-     * Prepares the columns that have foreign keys.
+     * Prepares the defined columns.
      *
-     * @param array  &$columns
-     * @param object $row
+     * @param  string $tableName
+     * @param  mixed  $row
+     * @return void
      */
-    protected function setForeignColumn(array &$columns, $row)
+    protected function setColumn($tableName, $row)
     {
-        foreach ($columns as $column) {
-            if ($column->getField() == $row->from) {
-                $column->setForeign(true);
+        $column = new Column;
 
-                $column->setReferencedField($row->to);
-                $column->setReferencedTable($row->table);
-            }
-        }
+        $this->setProperties($row, $column);
 
-        return $columns;
+        $column->setDefaultValue($row->dflt_value);
+        $column->setField($row->name);
+        $column->setDataType(strtolower($row->type));
+
+        $this->setForeignColumn($tableName, $column);
+
+        array_push($this->columns, $column);
     }
 
     /**
-     * Prepares the query for getting the foreign columns.
+     * Sets the properties of the specified column if it does exists.
      *
-     * @param  array  $columns
-     * @param  string $tableName
-     * @return array
+     * @param  string                  $tableName
+     * @param  \Rougin\Describe\Column &$column
+     * @return void
      */
-    protected function prepareForeignColumns(array $columns, $tableName)
+    protected function setForeignColumn($tableName, Column &$column)
     {
         $query = $this->pdo->prepare('PRAGMA foreign_key_list("' . $tableName . '");');
 
@@ -125,10 +108,13 @@ class SQLiteDriver implements DriverInterface
         $query->setFetchMode(\PDO::FETCH_OBJ);
 
         while ($row = $query->fetch()) {
-            $this->setForeignColumn($columns, $row);
-        }
+            if ($column->getField() == $row->from) {
+                $column->setForeign(true);
 
-        return $columns;
+                $column->setReferencedField($row->to);
+                $column->setReferencedTable($row->table);
+            }
+        }
     }
 
     /**

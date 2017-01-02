@@ -25,7 +25,7 @@ class Describe
     /**
      * @param \Rougin\Describe\Driver\DriverInterface $driver
      */
-    public function __construct(\Rougin\Describe\Driver\DriverInterface $driver)
+    public function __construct(Driver\DriverInterface $driver)
     {
         $this->driver = $driver;
     }
