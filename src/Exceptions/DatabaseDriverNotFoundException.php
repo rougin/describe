@@ -8,6 +8,10 @@ namespace Rougin\Describe\Exceptions;
  * @package Describe
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  */
-class DatabaseDriverNotFoundException extends \Exception
+class DatabaseDriverNotFoundException extends \UnexpectedValueException
 {
+    /**
+     * @var string
+     */
+    protected $message = 'Database driver not found!';
 }

@@ -16,11 +16,6 @@ use Rougin\Describe\Column;
 class MySQLDriver extends AbstractDriver implements DriverInterface
 {
     /**
-     * @var array
-     */
-    protected $columns = [];
-
-    /**
      * @var string
      */
     protected $database;
@@ -41,22 +36,43 @@ class MySQLDriver extends AbstractDriver implements DriverInterface
     }
 
     /**
-     * Returns the result.
+     * Returns a listing of columns from the specified table.
      *
      * @param  string $tableName
      * @return array
+     * @throws \Rougin\Describe\Exceptions\TableNameNotFoundException
+     */
+    public function getColumns($tableName)
+    {
+        return $this->getColumnsFromQuery($tableName, 'DESCRIBE ' . $tableName);
+    }
+
+    /**
+     * Returns a listing of columns from the specified table.
+     * NOTE: To be removed in v2.0.0.
+     *
+     * @param  string $tableName
+     * @return array
+     * @throws \Rougin\Describe\Exceptions\TableNameNotFoundException
      */
     public function getTable($tableName)
     {
-        $this->columns = [];
+        return $this->getColumns($tableName);
+    }
 
-        $this->getQuery($tableName, 'DESCRIBE ' . $tableName);
-
-        return $this->columns;
+    /**
+     * Returns a listing of tables from the specified database.
+     *
+     * @return array
+     */
+    public function getTableNames()
+    {
+        return $this->showTables();
     }
 
     /**
      * Shows the list of tables.
+     * NOTE: To be removed in v2.0.0.
      *
      * @return array
      */
@@ -79,7 +95,7 @@ class MySQLDriver extends AbstractDriver implements DriverInterface
      *
      * @param  string $tableName
      * @param  mixed  $row
-     * @return void
+     * @return \Rougin\Describe\Column
      */
     protected function setColumn($tableName, $row)
     {
@@ -87,8 +103,6 @@ class MySQLDriver extends AbstractDriver implements DriverInterface
 
         $column = new Column;
 
-        $this->setProperties($row, $column);
-        $this->setKey($row, $column);
 
         $column->setDataType($row->Type);
         $column->setDefaultValue($row->Default);
@@ -99,19 +113,21 @@ class MySQLDriver extends AbstractDriver implements DriverInterface
             $column->setLength($match[2]);
         }
 
-        $this->setForeignColumn($tableName, $row, $column);
+        $column = $this->setProperties($row, $column);
+        $column = $this->setKey($row, $column);
+        $column = $this->setForeignColumn($tableName, $row, $column);
 
-        array_push($this->columns, $column);
+        return $column;
     }
 
     /**
      * Sets the key of the specified column.
      *
      * @param  mixed                   $row
-     * @param  \Rougin\Describe\Column &$column
-     * @return void
+     * @param  \Rougin\Describe\Column $column
+     * @return \Rougin\Describe\Column
      */
-    protected function setKey($row, Column &$column)
+    protected function setKey($row, Column $column)
     {
         switch ($row->Key) {
             case 'PRI':
@@ -129,6 +145,8 @@ class MySQLDriver extends AbstractDriver implements DriverInterface
 
                 break;
         }
+
+        return $column;
     }
 
     /**
@@ -136,10 +154,10 @@ class MySQLDriver extends AbstractDriver implements DriverInterface
      *
      * @param  string                  $tableName
      * @param  mixed                   $row
-     * @param  \Rougin\Describe\Column &$column
-     * @return void
+     * @param  \Rougin\Describe\Column $column
+     * @return \Rougin\Describe\Column
      */
-    protected function setForeignColumn($tableName, $row, Column &$column)
+    protected function setForeignColumn($tableName, $row, Column $column)
     {
         $query = 'SELECT COLUMN_NAME as "column",' .
             'REFERENCED_COLUMN_NAME as "referenced_column",' .
@@ -161,16 +179,18 @@ class MySQLDriver extends AbstractDriver implements DriverInterface
                 $column->setReferencedTable($referencedTable);
             }
         }
+
+        return $column;
     }
 
     /**
      * Sets the properties of the specified column.
      *
      * @param  mixed                   $row
-     * @param  \Rougin\Describe\Column &$column
-     * @return void
+     * @param  \Rougin\Describe\Column $column
+     * @return \Rougin\Describe\Column
      */
-    protected function setProperties($row, Column &$column)
+    protected function setProperties($row, Column $column)
     {
         $null = 'Null';
 
@@ -181,6 +201,8 @@ class MySQLDriver extends AbstractDriver implements DriverInterface
         if ($row->$null == 'YES') {
             $column->setNull(true);
         }
+
+        return $column;
     }
 
     /**

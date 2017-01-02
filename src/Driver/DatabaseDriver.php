@@ -59,29 +59,53 @@ class DatabaseDriver implements DriverInterface
             return new SQLiteDriver($pdo);
         }
 
-        $message = 'Specified database driver not found!';
-
-        throw new \Rougin\Describe\Exceptions\DatabaseDriverNotFoundException($message);
+        throw new \Rougin\Describe\Exceptions\DatabaseDriverNotFoundException;
     }
 
     /**
-     * Returns the result.
+     * Returns a listing of columns from the specified table.
+     *
+     * @param  string $tableName
+     * @return array
+     * @throws \Rougin\Describe\Exceptions\TableNameNotFoundException
+     */
+    public function getColumns($tableName)
+    {
+        return $this->driver->getTable($tableName);
+    }
+
+    /**
+     * Returns a listing of columns from the specified table.
+     * NOTE: To be removed in v2.0.0.
+     *
+     * @param  string $tableName
+     * @return array
+     * @throws \Rougin\Describe\Exceptions\TableNameNotFoundException
+     */
+    public function getTable($tableName)
+    {
+        return $this->getColumns($tableName);
+    }
+
+    /**
+     * Returns a listing of tables from the specified database.
      *
      * @return array
      */
-    public function getTable($table)
+    public function getTableNames()
     {
-        return $this->driver->getTable($table);
+        return $this->driver->getTableNames();
     }
 
     /**
      * Shows the list of tables.
+     * NOTE: To be removed in v2.0.0.
      *
      * @return array
      */
     public function showTables()
     {
-        return $this->driver->showTables();
+        return $this->getTableNames();
     }
 
     /**

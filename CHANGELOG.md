@@ -2,10 +2,12 @@
 
 All Notable changes to `Describe` will be documented in this file.
 
-## [1.6.0](https://github.com/rougin/describe/compare/v1.5.1...v1.6.0) - CURRENT_DATE
+## [1.6.0](https://github.com/rougin/describe/compare/v1.5.1...v1.6.0) - 2017-01-04
 
 ### Added
 - Exceptions
+- Parameter `$object` in `Describe::getPrimaryKey` for returning a `Column` instead of column's name
+- `Describe::getColumns` and `Describe::getTableNames`
 
 ### Changed
 - Code quality

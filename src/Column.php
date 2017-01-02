@@ -348,6 +348,13 @@ class Column
      */
     public function __call($method, $parameters)
     {
-        return MagicMethodHelper::call($this, $method, $parameters);
+        $method = \Doctrine\Common\Inflector\Inflector::camelize($method);
+        $result = null;
+
+        if (method_exists($this, $method)) {
+            $result = call_user_func_array([ $this, $method ], $parameters);
+        }
+
+        return (is_null($result)) ? $this : $result;
     }
 }
