@@ -162,25 +162,20 @@ class MySQLDriver extends AbstractDriver implements DriverInterface
         $query = 'SELECT COLUMN_NAME as "column", REFERENCED_COLUMN_NAME as "referenced_column",' .
             'CONCAT(REFERENCED_TABLE_SCHEMA, ".", REFERENCED_TABLE_NAME) as "referenced_table"' .
             'FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE ' .
-            'WHERE CONSTRAINT_SCHEMA = "' . $this->database . '" ' .
-            'AND TABLE_NAME = "' . $tableName . '";';
+            'WHERE CONSTRAINT_SCHEMA = "' . $this->database . '" AND TABLE_NAME = "' . $tableName . '";';
 
-        $statement = $this->pdo->prepare($query);
+        $foreignTable = $this->pdo->prepare($query);
 
-        $statement->execute();
-        $statement->setFetchMode(\PDO::FETCH_OBJ);
+        $foreignTable->execute();
+        $foreignTable->setFetchMode(\PDO::FETCH_OBJ);
 
-        $callback = function ($item) use ($row) {
-            return $item->column == $row->Field;
-        };
+        while ($foreignRow = $foreignTable->fetch()) {
+            if ($foreignRow->column == $row->Field) {
+                $referencedTable = $this->stripTableSchema($foreignRow->referenced_table);
 
-        $columns = array_filter($statement->fetchAll(), $callback);
-
-        foreach ($columns as $row) {
-            $referencedTable = $this->stripTableSchema($row->referenced_table);
-
-            $column->setReferencedField($row->referenced_column);
-            $column->setReferencedTable($referencedTable);
+                $column->setReferencedField($foreignRow->referenced_column);
+                $column->setReferencedTable($referencedTable);
+            }
         }
 
         return $column;
