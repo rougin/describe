@@ -10,7 +10,7 @@ namespace Rougin\Describe\Exceptions;
  */
 class TableNameNotFoundException extends \PDOException
 {
-	/**
+    /**
      * @var string
      */
     protected $message = 'Table name not found on database!';

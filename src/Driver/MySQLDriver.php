@@ -171,13 +171,17 @@ class MySQLDriver extends AbstractDriver implements DriverInterface
         $foreignTable->execute();
         $foreignTable->setFetchMode(\PDO::FETCH_OBJ);
 
-        while ($foreignRow = $foreignTable->fetch()) {
-            if ($foreignRow->column == $row->Field) {
-                $referencedTable = $this->stripTableSchema($foreignRow->referenced_table);
+        $callback = function ($item) use ($row) {
+            return $item->column == $row->Field;
+        };
 
-                $column->setReferencedField($foreignRow->referenced_column);
-                $column->setReferencedTable($referencedTable);
-            }
+        $columns = array_filter($foreignTable->fetchAll(), $callback);
+
+        foreach ($columns as $row) {
+            $referencedTable = $this->stripTableSchema($row->referenced_table);
+
+            $column->setReferencedField($row->referenced_column);
+            $column->setReferencedTable($referencedTable);
         }
 
         return $column;
