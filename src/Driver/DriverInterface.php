@@ -14,7 +14,16 @@ namespace Rougin\Describe\Driver;
 interface DriverInterface
 {
     /**
-     * Returns the result.
+     * Returns a listing of columns from the specified table.
+     *
+     * @param  string $tableName
+     * @return array
+     */
+    public function getColumns($tableName);
+
+    /**
+     * Returns a listing of columns from the specified table.
+     * NOTE: To be removed in v2.0.0.
      *
      * @param  string $tableName
      * @return array
@@ -22,7 +31,15 @@ interface DriverInterface
     public function getTable($tableName);
 
     /**
+     * Returns a listing of tables from the specified database.
+     *
+     * @return array
+     */
+    public function getTableNames();
+
+    /**
      * Shows the list of tables.
+     * NOTE: To be removed in v2.0.0.
      *
      * @return array
      */

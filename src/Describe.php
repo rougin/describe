@@ -13,11 +13,6 @@ namespace Rougin\Describe;
 class Describe
 {
     /**
-     * @var array
-     */
-    protected $columns = [];
-
-    /**
      * @var \Rougin\Describe\Driver\DriverInterface
      */
     protected $driver;
@@ -31,30 +26,47 @@ class Describe
     }
 
     /**
-     * Gets the primary key in the specified table.
+     * Returns a listing of columns from the specified table.
      *
      * @param  string $tableName
-     * @return string
+     * @return array
+     * @throws \Rougin\Describe\Exceptions\TableNameNotFoundException
      */
-    public function getPrimaryKey($tableName)
+    public function getColumns($tableName)
     {
-        $result = '';
+        $table = $this->driver->getTable($tableName);
 
-        if (empty($this->columns)) {
-            $this->columns = $this->driver->getTable($tableName);
+        if (empty($table) || is_null($table)) {
+            throw new Exceptions\TableNameNotFoundException;
         }
 
-        foreach ($this->columns as $column) {
-            if ($column->isPrimaryKey()) {
-                $result = $column->getField();
-            }
-        }
-
-        return $result;
+        return $table;
     }
 
     /**
-     * Returns the result.
+     * Gets the primary key in the specified table.
+     *
+     * @param  string  $tableName
+     * @param  boolean $object
+     * @return string
+     */
+    public function getPrimaryKey($tableName, $object = false)
+    {
+        $columns = $this->getColumns($tableName);
+        $result  = '';
+
+        foreach ($columns as $column) {
+            if ($column->isPrimaryKey()) {
+                $result = $column;
+            }
+        }
+
+        return ($object === true) ? $result : $result->getField();
+    }
+
+    /**
+     * Returns a listing of columns from the specified table.
+     * NOTE: To be removed in v2.0.0.
      *
      * @param  string $tableName
      * @return array
@@ -62,25 +74,28 @@ class Describe
      */
     public function getTable($tableName)
     {
-        $table = $this->driver->getTable($tableName);
+        return $this->getColumns($tableName);
+    }
 
-        if (empty($table) || is_null($table)) {
-            $message = '"' . $tableName . '" table not found in database!';
-
-            throw new Exceptions\TableNameNotFoundException($message);
-        }
-
-        return $table;
+    /**
+     * Returns a listing of tables from the specified database.
+     *
+     * @return array
+     */
+    public function getTableNames()
+    {
+        return $this->driver->showTables();
     }
 
     /**
      * Shows the list of tables.
+     * NOTE: To be removed in v2.0.0.
      *
      * @return array
      */
     public function showTables()
     {
-        return $this->driver->showTables();
+        return $this->getTableNames();
     }
 
     /**
@@ -92,6 +107,13 @@ class Describe
      */
     public function __call($method, $parameters)
     {
-        return MagicMethodHelper::call($this, $method, $parameters);
+        $method = \Doctrine\Common\Inflector\Inflector::camelize($method);
+        $result = $this;
+
+        if (method_exists($this, $method)) {
+            $result = call_user_func_array([ $this, $method ], $parameters);
+        }
+
+        return $result;
     }
 }

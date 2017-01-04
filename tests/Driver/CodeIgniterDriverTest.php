@@ -34,6 +34,20 @@ class CodeIgniterDriverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests Describe::getPrimaryKey method with SQLite Driver as object.
+     *
+     * @return void
+     */
+    public function testGetPrimaryKeyMethodWithSqliteDriverAsObject()
+    {
+        $this->setUpSqliteDriver();
+
+        $primaryKey = $this->describe->getPrimaryKey($this->table, true);
+
+        $this->assertInstanceOf('Rougin\Describe\Column', $primaryKey);
+    }
+
+    /**
      * Tests Describe::getTable method with SQLite Driver.
      *
      * @return void

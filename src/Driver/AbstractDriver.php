@@ -23,8 +23,10 @@ abstract class AbstractDriver
      * @param  string $query
      * @return void
      */
-    public function getQuery($tableName, $query)
+    public function getColumnsFromQuery($tableName, $query)
     {
+        $columns = [];
+
         try {
             $information = $this->pdo->prepare($query);
 
@@ -35,7 +37,18 @@ abstract class AbstractDriver
         }
 
         while ($row = $information->fetch()) {
-            $this->setColumn($tableName, $row);
+            array_push($columns, $this->setColumn($tableName, $row));
         }
+
+        return $columns;
     }
+
+    /**
+     * Prepares the defined columns.
+     *
+     * @param  string $tableName
+     * @param  mixed  $row
+     * @return \Rougin\Describe\Column
+     */
+    abstract protected function setColumn($tableName, $row);
 }

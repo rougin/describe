@@ -34,22 +34,43 @@ class SQLiteDriver extends AbstractDriver implements DriverInterface
     }
 
     /**
-     * Returns the result.
+     * Returns a listing of columns from the specified table.
      *
      * @param  string $tableName
      * @return array
+     * @throws \Rougin\Describe\Exceptions\TableNameNotFoundException
+     */
+    public function getColumns($tableName)
+    {
+        return $this->getColumnsFromQuery($tableName, 'PRAGMA table_info("' . $tableName . '");');
+    }
+
+    /**
+     * Returns a listing of columns from the specified table.
+     * NOTE: To be removed in v2.0.0.
+     *
+     * @param  string $tableName
+     * @return array
+     * @throws \Rougin\Describe\Exceptions\TableNameNotFoundException
      */
     public function getTable($tableName)
     {
-        $this->columns = [];
+        return $this->getColumns($tableName);
+    }
 
-        $this->getQuery($tableName, 'PRAGMA table_info("' . $tableName . '");');
-
-        return $this->columns;
+    /**
+     * Returns a listing of tables from the specified database.
+     *
+     * @return array
+     */
+    public function getTableNames()
+    {
+        return $this->showTables();
     }
 
     /**
      * Shows the list of tables.
+     * NOTE: To be removed in v2.0.0.
      *
      * @return array
      */
@@ -76,31 +97,30 @@ class SQLiteDriver extends AbstractDriver implements DriverInterface
      *
      * @param  string $tableName
      * @param  mixed  $row
-     * @return void
+     * @return \Rougin\Describe\Column
      */
     protected function setColumn($tableName, $row)
     {
         $column = new Column;
 
-        $this->setProperties($row, $column);
-
         $column->setDefaultValue($row->dflt_value);
         $column->setField($row->name);
         $column->setDataType(strtolower($row->type));
 
-        $this->setForeignColumn($tableName, $column);
+        $column = $this->setProperties($row, $column);
+        $column = $this->setForeignColumn($tableName, $column);
 
-        array_push($this->columns, $column);
+        return $column;
     }
 
     /**
      * Sets the properties of the specified column if it does exists.
      *
      * @param  string                  $tableName
-     * @param  \Rougin\Describe\Column &$column
-     * @return void
+     * @param  \Rougin\Describe\Column $column
+     * @return \Rougin\Describe\Column
      */
-    protected function setForeignColumn($tableName, Column &$column)
+    protected function setForeignColumn($tableName, Column $column)
     {
         $query = $this->pdo->prepare('PRAGMA foreign_key_list("' . $tableName . '");');
 
@@ -115,16 +135,18 @@ class SQLiteDriver extends AbstractDriver implements DriverInterface
                 $column->setReferencedTable($row->table);
             }
         }
+
+        return $column;
     }
 
     /**
      * Sets the properties of the specified column.
      *
      * @param  mixed                   $row
-     * @param  \Rougin\Describe\Column &$column
+     * @param  \Rougin\Describe\Column $column
      * @return void
      */
-    protected function setProperties($row, Column &$column)
+    protected function setProperties($row, Column $column)
     {
         if (! $row->notnull) {
             $column->setNull(true);
@@ -134,5 +156,7 @@ class SQLiteDriver extends AbstractDriver implements DriverInterface
             $column->setPrimary(true);
             $column->setAutoIncrement(true);
         }
+
+        return $column;
     }
 }
