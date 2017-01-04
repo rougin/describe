@@ -115,8 +115,7 @@ class MySQLDriver extends AbstractDriver implements DriverInterface
 
         $column = $this->setProperties($row, $column);
         $column = $this->setKey($row, $column);
-
-        $this->setForeignColumn($tableName, $row, $column);
+        $column = $this->setForeignColumn($tableName, $row, $column);
 
         return $column;
     }
@@ -155,10 +154,10 @@ class MySQLDriver extends AbstractDriver implements DriverInterface
      *
      * @param  string                  $tableName
      * @param  mixed                   $row
-     * @param  \Rougin\Describe\Column &$column
+     * @param  \Rougin\Describe\Column $column
      * @return \Rougin\Describe\Column
      */
-    protected function setForeignColumn($tableName, $row, Column &$column)
+    protected function setForeignColumn($tableName, $row, Column $column)
     {
         $query = 'SELECT COLUMN_NAME as "column",' .
             'REFERENCED_COLUMN_NAME as "referenced_column",' .
@@ -184,6 +183,8 @@ class MySQLDriver extends AbstractDriver implements DriverInterface
             $column->setReferencedField($row->referenced_column);
             $column->setReferencedTable($referencedTable);
         }
+
+        return $column;
     }
 
     /**
