@@ -159,23 +159,22 @@ class MySQLDriver extends AbstractDriver implements DriverInterface
      */
     protected function setForeignColumn($tableName, $row, Column $column)
     {
-        $query = 'SELECT COLUMN_NAME as "column",' .
-            'REFERENCED_COLUMN_NAME as "referenced_column",' .
+        $query = 'SELECT COLUMN_NAME as "column", REFERENCED_COLUMN_NAME as "referenced_column",' .
             'CONCAT(REFERENCED_TABLE_SCHEMA, ".", REFERENCED_TABLE_NAME) as "referenced_table"' .
             'FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE ' .
             'WHERE CONSTRAINT_SCHEMA = "' . $this->database . '" ' .
             'AND TABLE_NAME = "' . $tableName . '";';
 
-        $foreignTable = $this->pdo->prepare($query);
+        $statement = $this->pdo->prepare($query);
 
-        $foreignTable->execute();
-        $foreignTable->setFetchMode(\PDO::FETCH_OBJ);
+        $statement->execute();
+        $statement->setFetchMode(\PDO::FETCH_OBJ);
 
         $callback = function ($item) use ($row) {
             return $item->column == $row->Field;
         };
 
-        $columns = array_filter($foreignTable->fetchAll(), $callback);
+        $columns = array_filter($statement->fetchAll(), $callback);
 
         foreach ($columns as $row) {
             $referencedTable = $this->stripTableSchema($row->referenced_table);
