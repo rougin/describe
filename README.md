@@ -30,7 +30,7 @@ $driver      = new Rougin\Describe\Driver\DatabaseDriver('mysql', $credentials);
 
 $describe = new Rougin\Describe\Describe($driver);
 
-// Returns an array of columns from the specified table
+// Returns an array of "Column" objects from the specified table
 var_dump($describe->getColumns('users'));
 var_dump($describe->getTable('users'));
 
@@ -39,9 +39,11 @@ var_dump($describe->showTables());
 var_dump($describe->getTableNames());
 
 // Gets the primary key from the specified table
-// Second parameters means to return the Column object or the column name
+// Second parameter means to return the "Column" object or the column name
 var_dump($describe->getPrimaryKey('users', true));
 ```
+
+For more information regarding the `Column` object, you can check it [here](https://github.com/rougin/describe/blob/master/src/Column.php).
 
 #### Adding a new database driver
 
