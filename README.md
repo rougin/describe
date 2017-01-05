@@ -35,10 +35,16 @@ $driver = new Rougin\Describe\Driver\MySQLDriver('mysql', [
 $describe = new Rougin\Describe\DescribeDescribe($driver);
 
 // Returns an array of columns from the specified table
+var_dump($describe->getColumns('users'));
 var_dump($describe->getTable('users'));
 
+// Returns an array of available tables from the database
+var_dump($describe->showTables());
+var_dump($describe->getTableNames());
+
 // Gets the primary key from the specified table
-var_dump($describe->getPrimaryKey('users'));
+// Second parameters means to return the Column object or the column name
+var_dump($describe->getPrimaryKey('users', true));
 ```
 
 #### Adding a new database driver
