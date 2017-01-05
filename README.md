@@ -7,7 +7,7 @@
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-Gets information of a table schema from a database in PHP
+Gets information of a table schema from a database in PHP.
 
 ## Install
 
@@ -25,14 +25,10 @@ $driver = new Rougin\Describe\Driver\MySQLDriver($pdo, 'demo');
 
 // or
 
-$driver = new Rougin\Describe\Driver\MySQLDriver('mysql', [
-    'hostname' => 'localhost',
-    'database' => 'demo',
-    'username' => 'root',
-    'password' => '',
-]);
+$credentials = [ 'hostname' => 'localhost', 'database' => 'demo', 'username' => 'root', 'password' => '' ];
+$driver      = new Rougin\Describe\Driver\DatabaseDriver('mysql', $credentials);
 
-$describe = new Rougin\Describe\DescribeDescribe($driver);
+$describe = new Rougin\Describe\Describe($driver);
 
 // Returns an array of columns from the specified table
 var_dump($describe->getColumns('users'));
