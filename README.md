@@ -45,7 +45,7 @@ var_dump($describe->getPrimaryKey('users', true));
 
 For more information regarding the `Column` object, you can check it [here](https://github.com/rougin/describe/blob/master/src/Column.php).
 
-#### Adding a new database driver
+### Adding a new database driver
 
 You can always add a new database driver if you want. Just implement the database driver of your choice in a [DriverInterface](https://github.com/rougin/describe/blob/master/src/Driver/DriverInterface.php).
 
