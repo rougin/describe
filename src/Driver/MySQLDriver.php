@@ -17,15 +17,18 @@ use Rougin\Describe\Table;
  */
 class MySQLDriver implements DriverInterface
 {
-    const FOREIGN_QUERY = 'SELECT COLUMN_NAME as "column", REFERENCED_COLUMN_NAME as "referenced_column",' .
-        'CONCAT(REFERENCED_TABLE_SCHEMA, ".", REFERENCED_TABLE_NAME) as "referenced_table"' .
-        'FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE ' .
-        'WHERE CONSTRAINT_SCHEMA = "%s" AND TABLE_NAME = "%s";';
-
     /**
      * @var string
      */
     protected $database;
+
+    /**
+     * @var string
+     */
+    protected $query = 'SELECT COLUMN_NAME as "column", REFERENCED_COLUMN_NAME as "referenced_column",' .
+        'CONCAT(REFERENCED_TABLE_SCHEMA, ".", REFERENCED_TABLE_NAME) as "referenced_table"' .
+        'FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE ' .
+        'WHERE CONSTRAINT_SCHEMA = "%s" AND TABLE_NAME = "%s";';
 
     /**
      * @var \PDO
@@ -155,7 +158,7 @@ class MySQLDriver implements DriverInterface
      */
     protected function foreign($name, $row, Column $column)
     {
-        $query = sprintf(self::FOREIGN_QUERY, $this->database, $name);
+        $query = sprintf($this->query, $this->database, $name);
 
         $table = $this->pdo->prepare($query);
 
