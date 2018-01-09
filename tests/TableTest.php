@@ -18,9 +18,13 @@ class TableTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $pdo = new \PDO('mysql:host=localhost;dbname=demo', 'root', '');
+        $dsn = 'mysql:host=localhost;dbname=demo';
 
-        $this->table = new Table('post', new MySQLDriver($pdo, 'demo'));
+        $pdo = new \PDO($dsn, 'root', '');
+
+        $driver = new MySQLDriver($pdo, 'demo');
+
+        $this->table = new Table('post', $driver);
     }
 
     /**
