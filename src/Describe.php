@@ -3,6 +3,7 @@
 namespace Rougin\Describe;
 
 use Doctrine\Common\Inflector\Inflector;
+use Rougin\Describe\Exceptions\TableNotFoundException;
 
 /**
  * Describe
@@ -33,10 +34,20 @@ class Describe
      *
      * @param  string $table
      * @return \Rougin\Describe\Column[]
+     *
+     * @throws \Rougin\Describe\Exceptions\TableNotFoundException
      */
     public function columns($table)
     {
-        return $this->driver->columns($table);
+        try {
+            $columns = $this->driver->columns($table);
+
+            return $columns;
+        } catch (\PDOException $error) {
+            $text = $error->getMessage();
+
+            throw new TableNotFoundException($text);
+        }
     }
 
     /**

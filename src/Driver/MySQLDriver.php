@@ -3,6 +3,7 @@
 namespace Rougin\Describe\Driver;
 
 use Rougin\Describe\Column;
+use Rougin\Describe\Exceptions\TableNotFoundException;
 use Rougin\Describe\Table;
 
 /**
@@ -14,8 +15,13 @@ use Rougin\Describe\Table;
  * @package Describe
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  */
-class MySQLDriver extends AbstractDriver implements DriverInterface
+class MySQLDriver implements DriverInterface
 {
+    const FOREIGN_QUERY = 'SELECT COLUMN_NAME as "column", REFERENCED_COLUMN_NAME as "referenced_column",' .
+        'CONCAT(REFERENCED_TABLE_SCHEMA, ".", REFERENCED_TABLE_NAME) as "referenced_table"' .
+        'FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE ' .
+        'WHERE CONSTRAINT_SCHEMA = "%s" AND TABLE_NAME = "%s";';
+
     /**
      * @var string
      */
@@ -149,10 +155,7 @@ class MySQLDriver extends AbstractDriver implements DriverInterface
      */
     protected function foreign($name, $row, Column $column)
     {
-        $query = 'SELECT COLUMN_NAME as "column", REFERENCED_COLUMN_NAME as "referenced_column",' .
-            'CONCAT(REFERENCED_TABLE_SCHEMA, ".", REFERENCED_TABLE_NAME) as "referenced_table"' .
-            'FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE ' .
-            'WHERE CONSTRAINT_SCHEMA = "' . $this->database . '" AND TABLE_NAME = "' . $name . '";';
+        $query = sprintf(self::FOREIGN_QUERY, $this->database, $name);
 
         $table = $this->pdo->prepare($query);
 
@@ -224,6 +227,37 @@ class MySQLDriver extends AbstractDriver implements DriverInterface
         }
 
         return $column;
+    }
+
+    /**
+     * Returns the list of columns based on a query.
+     *
+     * @param  string $table
+     * @param  string $query
+     * @param  array  $columns
+     * @return \Rougin\Describe\Column[]
+     */
+    protected function query($table, $query, $columns = array())
+    {
+        $result = $this->pdo->prepare($query);
+
+        $result->execute();
+
+        $result->setFetchMode(\PDO::FETCH_OBJ);
+
+        while ($row = $result->fetch()) {
+            $column = $this->column(new Column, $table, $row);
+
+            array_push($columns, $column);
+        }
+
+        if (empty($columns) === true) {
+            $message = 'Table "' . $table . '" does not exists!';
+
+            throw new TableNotFoundException($message);
+        }
+
+        return $columns;
     }
 
     /**

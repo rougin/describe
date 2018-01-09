@@ -140,13 +140,11 @@ class SQLiteDriver extends MySQLDriver
         $result->setFetchMode(\PDO::FETCH_OBJ);
 
         while ($row = $result->fetch()) {
-            $item = $name = $row->name;
+            if ($row->name !== 'sqlite_sequence') {
+                $name = $row->name;
 
-            $row->name === 'sqlite_sequence' && $name = null;
-
-            $instance && $item = new Table($name, $this);
-
-            is_null($name) || $tables[] = $item;
+                $tables[] = new Table($name, $this);
+            }
         }
 
         return $tables;
