@@ -10,7 +10,7 @@ use Rougin\Describe\Describe;
  * @package Describe
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  */
-class SqliteDriverTest extends AbstractTestCase
+class SQLiteDriverTest extends AbstractTestCase
 {
     /**
      * Sets up the driver instance.

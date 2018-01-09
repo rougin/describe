@@ -278,7 +278,7 @@ class MySQLDriver implements DriverInterface
 
         $column->setAutoIncrement($increment);
 
-        $column->setNull($row->Null === 'YES');
+        $column->setNull($row->{'Null'} === 'YES');
 
         return $column;
     }
