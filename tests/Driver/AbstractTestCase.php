@@ -30,7 +30,7 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->markTestSkipped('No Describe instance yet');
+        $this->markTestSkipped('No Describe instance declared yet.');
     }
 
     /**
