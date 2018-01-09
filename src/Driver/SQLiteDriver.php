@@ -116,39 +116,9 @@ class SQLiteDriver extends MySQLDriver
 
         $column->setDataType(strtolower($row->type));
 
-        $column = $this->foreign($table, $column);
+        $column = $this->reference($table, $column);
 
         return $this->properties($row, $column);
-    }
-
-    /**
-     * Sets the properties of a column if it does exists.
-     *
-     * @param  string                  $table
-     * @param  \Rougin\Describe\Column $column
-     * @return \Rougin\Describe\Column
-     */
-    protected function foreign($table, Column $column)
-    {
-        $query = 'PRAGMA foreign_key_list("' . $table . '");';
-
-        $result = $this->pdo->prepare($query);
-
-        $result->execute();
-
-        $result->setFetchMode(\PDO::FETCH_OBJ);
-
-        while ($row = $result->fetch()) {
-            if ($column->getField() === $row->from) {
-                $column->setForeign(true);
-
-                $column->setReferencedField($row->to);
-
-                $column->setReferencedTable($row->table);
-            }
-        }
-
-        return $column;
     }
 
     /**
@@ -196,6 +166,36 @@ class SQLiteDriver extends MySQLDriver
         $row->pk && $column->setAutoIncrement(true);
 
         $row->pk && $column->setPrimary(true);
+
+        return $column;
+    }
+
+    /**
+     * Sets the properties of a column if it does exists.
+     *
+     * @param  string                  $table
+     * @param  \Rougin\Describe\Column $column
+     * @return \Rougin\Describe\Column
+     */
+    protected function reference($table, Column $column)
+    {
+        $query = 'PRAGMA foreign_key_list("' . $table . '");';
+
+        $result = $this->pdo->prepare($query);
+
+        $result->execute();
+
+        $result->setFetchMode(\PDO::FETCH_OBJ);
+
+        while ($row = $result->fetch()) {
+            if ($column->getField() === $row->from) {
+                $column->setForeign(true);
+
+                $column->setReferencedField($row->to);
+
+                $column->setReferencedTable($row->table);
+            }
+        }
 
         return $column;
     }
