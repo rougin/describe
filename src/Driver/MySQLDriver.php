@@ -25,10 +25,7 @@ class MySQLDriver implements DriverInterface
     /**
      * @var string
      */
-    protected $query = 'SELECT COLUMN_NAME as "column", REFERENCED_COLUMN_NAME as "referenced_column",' .
-        'CONCAT(REFERENCED_TABLE_SCHEMA, ".", REFERENCED_TABLE_NAME) as "referenced_table"' .
-        'FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE ' .
-        'WHERE CONSTRAINT_SCHEMA = "%s" AND TABLE_NAME = "%s";';
+    protected $query = '';
 
     /**
      * @var \PDO
@@ -43,6 +40,11 @@ class MySQLDriver implements DriverInterface
      */
     public function __construct(\PDO $pdo, $database)
     {
+        $this->query = 'SELECT COLUMN_NAME as "column", REFERENCED_COLUMN_NAME as ' .
+            '"referenced_column", CONCAT(REFERENCED_TABLE_SCHEMA, ".", ' .
+            'REFERENCED_TABLE_NAME) as "referenced_table" FROM INFORMATION_SCHEMA' .
+            '.KEY_COLUMN_USAGE WHERE CONSTRAINT_SCHEMA = "%s" AND TABLE_NAME = "%s";';
+
         $this->database = $database;
 
         $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
