@@ -2,21 +2,22 @@
 
 namespace Rougin\Describe\Driver;
 
+use Rougin\Describe\Exceptions\DriverNotFoundException;
+
 /**
  * Database Driver
  *
  * A database driver for using available database drivers.
  *
- * @package  Describe
- * @category Driver
- * @author   Rougin Royce Gutib <rougingutib@gmail.com>
+ * @package Describe
+ * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  */
 class DatabaseDriver implements DriverInterface
 {
     /**
      * @var array
      */
-    protected $configuration = [];
+    protected $data = array();
 
     /**
      * @var \Rougin\Describe\Driver\DriverInterface
@@ -24,82 +25,77 @@ class DatabaseDriver implements DriverInterface
     protected $driver;
 
     /**
-     * @param string $driverName
-     * @param array  $configuration
+     * @var array
      */
-    public function __construct($driverName, $configuration = [])
-    {
-        $this->configuration = $configuration;
-        $this->driver        = $this->getDriver($driverName, $configuration);
-    }
+    protected $mysql = array('mysql', 'mysqli');
 
     /**
-     * Gets the specified driver from the specified database connection.
+     * @var array
+     */
+    protected $sqlite = array('pdo', 'sqlite', 'sqlite3');
+
+    /**
+     * Initializes the driver instance.
      *
-     * @param  string $driverName
-     * @param  array  $configuration
-     * @return \Rougin\Describe\Driver\DriverInterface
-     * @throws \Rougin\Describe\Exceptions\DatabaseDriverNotFoundException
+     * @param string $name
+     * @param array  $data
      */
-    protected function getDriver($driverName, $configuration = [])
+    public function __construct($name, $data = array())
     {
-        $mysql  = [ 'mysql', 'mysqli' ];
-        $sqlite = [ 'pdo', 'sqlite', 'sqlite3' ];
+        $this->data = $data;
 
-        list($database, $hostname, $username, $password) = $this->parseConfiguration($configuration);
-
-        if (in_array($driverName, $mysql)) {
-            $dsn = 'mysql:host=' . $hostname . ';dbname=' . $database;
-            $pdo = new \PDO($dsn, $username, $password);
-
-            return new MySQLDriver($pdo, $database);
-        } elseif (in_array($driverName, $sqlite)) {
-            $pdo = new \PDO($hostname);
-
-            return new SQLiteDriver($pdo);
-        }
-
-        throw new \Rougin\Describe\Exceptions\DatabaseDriverNotFoundException;
+        $this->driver = $this->driver($name, $data);
     }
 
     /**
-     * Returns a listing of columns from the specified table.
+     * Returns an array of Column instances from a table.
      *
-     * @param  string $tableName
-     * @return array
-     * @throws \Rougin\Describe\Exceptions\TableNameNotFoundException
+     * @param  string $table
+     * @return \Rougin\Describe\Column[]
      */
-    public function getColumns($tableName)
+    public function columns($table)
     {
-        return $this->driver->getTable($tableName);
+        return $this->driver->columns($table);
     }
 
     /**
-     * Returns a listing of columns from the specified table.
-     * NOTE: To be removed in v2.0.0.
+     * Returns an array of Column instances from a table.
+     * NOTE: To be removed in v2.0.0. Use columns() instead.
      *
-     * @param  string $tableName
-     * @return array
-     * @throws \Rougin\Describe\Exceptions\TableNameNotFoundException
+     * @param  string $table
+     * @return \Rougin\Describe\Column[]
      */
-    public function getTable($tableName)
+    public function getColumns($table)
     {
-        return $this->getColumns($tableName);
+        return $this->columns($table);
     }
 
     /**
-     * Returns a listing of tables from the specified database.
+     * Returns an array of Column instances from a table.
+     * NOTE: To be removed in v2.0.0. Use getColumns() instead.
+     *
+     * @param  string $table
+     * @return \Rougin\Describe\Column[]
+     */
+    public function getTable($table)
+    {
+        return $this->getColumns($table);
+    }
+
+    /**
+     * Returns an array of table names.
+     * NOTE: To be removed in v2.0.0. Use tables() instead.
      *
      * @return array
      */
     public function getTableNames()
     {
-        return $this->driver->getTableNames();
+        return $this->tables();
     }
 
     /**
-     * Shows the list of tables.
-     * NOTE: To be removed in v2.0.0.
+     * Returns an array of table names.
+     * NOTE: To be removed in v2.0.0. Use getTableNames() instead.
      *
      * @return array
      */
@@ -109,24 +105,42 @@ class DatabaseDriver implements DriverInterface
     }
 
     /**
-     * Parses the configuration into separate variables.
+     * Returns an array of Table instances.
      *
-     * @param  array  $configuration
-     * @return array
+     * @return \Rougin\Describe\Table[]
      */
-    protected function parseConfiguration(array $configuration)
+    public function tables()
     {
-        $database = null;
-        $hostname = null;
-        $password = null;
-        $username = null;
+        return $this->driver->tables();
+    }
 
-        foreach ($configuration as $key => $value) {
-            if (isset($configuration[$key])) {
-                $$key = $configuration[$key];
-            }
+    /**
+     * Returns the Driver instance from the configuration.
+     *
+     * @param  string $name
+     * @param  array  $data
+     * @return \Rougin\Describe\Driver\DriverInterface
+     *
+     * @throws \Rougin\Describe\Exceptions\DriverNotFoundException
+     */
+    protected function driver($name, $data = array())
+    {
+        if (in_array($name, $this->mysql) === true) {
+            $dsn = 'mysql:host=' . $data['hostname'];
+
+            $dsn .= ';dbname=' . $data['database'];
+
+            $pdo = new \PDO($dsn, $data['username'], $data['password']);
+
+            return new MySQLDriver($pdo, $data['database']);
         }
 
-        return [ $database, $hostname, $username, $password ];
+        if (in_array($name, $this->sqlite)) {
+            $pdo = new \PDO($data['hostname']);
+
+            return new SQLiteDriver($pdo);
+        }
+
+        throw new DriverNotFoundException;
     }
 }

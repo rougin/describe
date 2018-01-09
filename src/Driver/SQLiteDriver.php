@@ -3,135 +3,147 @@
 namespace Rougin\Describe\Driver;
 
 use Rougin\Describe\Column;
+use Rougin\Describe\Table;
 
 /**
  * SQLite Driver
  *
  * A database driver extension for SQLite.
+ * NOTE: Should be renamed to "SqliteDriver" in v2.0.0.
  *
- * @package  Describe
- * @category Driver
- * @author   Rougin Royce Gutib <rougingutib@gmail.com>
+ * @package Describe
+ * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  */
-class SQLiteDriver extends AbstractDriver implements DriverInterface
+class SQLiteDriver extends MySQLDriver
 {
-    /**
-     * @var array
-     */
-    protected $columns = [];
-
     /**
      * @var \PDO
      */
     protected $pdo;
 
     /**
-     * @param PDO $pdo
+     * Initializes the driver instance.
+     *
+     * @param \PDO $pdo
      */
     public function __construct(\PDO $pdo)
     {
+        $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
         $this->pdo = $pdo;
     }
 
     /**
-     * Returns a listing of columns from the specified table.
+     * Returns an array of Column instances from a table.
      *
-     * @param  string $tableName
-     * @return array
-     * @throws \Rougin\Describe\Exceptions\TableNameNotFoundException
+     * @param  string $table
+     * @return \Rougin\Describe\Column[]
      */
-    public function getColumns($tableName)
+    public function columns($table)
     {
-        return $this->getColumnsFromQuery($tableName, 'PRAGMA table_info("' . $tableName . '");');
+        return $this->query($table, 'PRAGMA table_info("' . $table . '");');
     }
 
     /**
-     * Returns a listing of columns from the specified table.
-     * NOTE: To be removed in v2.0.0.
+     * Returns an array of Column instances from a table.
+     * NOTE: To be removed in v2.0.0. Use columns() instead.
      *
-     * @param  string $tableName
-     * @return array
-     * @throws \Rougin\Describe\Exceptions\TableNameNotFoundException
+     * @param  string $table
+     * @return \Rougin\Describe\Column[]
      */
-    public function getTable($tableName)
+    public function getColumns($table)
     {
-        return $this->getColumns($tableName);
+        return $this->columns($table);
     }
 
     /**
-     * Returns a listing of tables from the specified database.
+     * Returns an array of Column instances from a table.
+     * NOTE: To be removed in v2.0.0. Use getColumns() instead.
+     *
+     * @param  string $table
+     * @return \Rougin\Describe\Column[]
+     */
+    public function getTable($table)
+    {
+        return $this->getColumns($table);
+    }
+
+    /**
+     * Returns an array of table names.
+     * NOTE: To be removed in v2.0.0. Use tables() instead.
      *
      * @return array
      */
     public function getTableNames()
     {
-        return $this->showTables();
+        return $this->items(false);
     }
 
     /**
-     * Shows the list of tables.
-     * NOTE: To be removed in v2.0.0.
+     * Returns an array of table names.
+     * NOTE: To be removed in v2.0.0. Use getTableNames() instead.
      *
      * @return array
      */
     public function showTables()
     {
-        $tables = [];
+        return $this->getTableNames();
+    }
 
-        $query = $this->pdo->prepare('SELECT name FROM sqlite_master WHERE type = "table";');
-
-        $query->execute();
-        $query->setFetchMode(\PDO::FETCH_OBJ);
-
-        while ($row = $query->fetch()) {
-            if ($row->name != 'sqlite_sequence') {
-                array_push($tables, $row->name);
-            }
-        }
-
-        return $tables;
+    /**
+     * Returns an array of Table instances.
+     *
+     * @return \Rougin\Describe\Table[]
+     */
+    public function tables()
+    {
+        return $this->items(true);
     }
 
     /**
      * Prepares the defined columns.
      *
-     * @param  string $tableName
-     * @param  mixed  $row
+     * @param  \Rougin\Describe\Column $column
+     * @param  string                  $table
+     * @param  mixed                   $row
      * @return \Rougin\Describe\Column
      */
-    protected function setColumn($tableName, $row)
+    protected function column(Column $column, $table, $row)
     {
-        $column = new Column;
-
         $column->setDefaultValue($row->dflt_value);
+
         $column->setField($row->name);
+
         $column->setDataType(strtolower($row->type));
 
-        $column = $this->setProperties($row, $column);
-        $column = $this->setForeignColumn($tableName, $column);
+        $column = $this->foreign($table, $column);
 
-        return $column;
+        return $this->properties($row, $column);
     }
 
     /**
-     * Sets the properties of the specified column if it does exists.
+     * Sets the properties of a column if it does exists.
      *
-     * @param  string                  $tableName
+     * @param  string                  $table
      * @param  \Rougin\Describe\Column $column
      * @return \Rougin\Describe\Column
      */
-    protected function setForeignColumn($tableName, Column $column)
+    protected function foreign($table, Column $column)
     {
-        $query = $this->pdo->prepare('PRAGMA foreign_key_list("' . $tableName . '");');
+        $query = 'PRAGMA foreign_key_list("' . $table . '");';
 
-        $query->execute();
-        $query->setFetchMode(\PDO::FETCH_OBJ);
+        $result = $this->pdo->prepare($query);
 
-        while ($row = $query->fetch()) {
-            if ($column->getField() == $row->from) {
+        $result->execute();
+
+        $result->setFetchMode(\PDO::FETCH_OBJ);
+
+        while ($row = $result->fetch()) {
+            if ($column->getField() === $row->from) {
                 $column->setForeign(true);
 
                 $column->setReferencedField($row->to);
+
                 $column->setReferencedTable($row->table);
             }
         }
@@ -140,22 +152,50 @@ class SQLiteDriver extends AbstractDriver implements DriverInterface
     }
 
     /**
-     * Sets the properties of the specified column.
+     * Returns an array of table names or Table instances.
+     * NOTE: To be removed in v2.0.0. Move to tables() instead.
+     *
+     * @param  boolean $instance
+     * @param  array   $tables
+     * @return array|\Rougin\Describe\Table[]
+     */
+    protected function items($instance = false, $tables = array())
+    {
+        $query = 'SELECT name FROM sqlite_master WHERE type = "table";';
+
+        $result = $this->pdo->prepare($query);
+
+        $result->execute();
+
+        $result->setFetchMode(\PDO::FETCH_OBJ);
+
+        while ($row = $result->fetch()) {
+            $item = $name = $row->name;
+
+            $row->name === 'sqlite_sequence' && $name = null;
+
+            $instance && $item = new Table($name, $this);
+
+            is_null($name) || $tables[] = $item;
+        }
+
+        return $tables;
+    }
+
+    /**
+     * Sets the properties of a column.
      *
      * @param  mixed                   $row
      * @param  \Rougin\Describe\Column $column
      * @return void
      */
-    protected function setProperties($row, Column $column)
+    protected function properties($row, Column $column)
     {
-        if (! $row->notnull) {
-            $column->setNull(true);
-        }
+        $column->setNull(! $row->notnull);
 
-        if ($row->pk) {
-            $column->setPrimary(true);
-            $column->setAutoIncrement(true);
-        }
+        $row->pk && $column->setAutoIncrement(true);
+
+        $row->pk && $column->setPrimary(true);
 
         return $column;
     }

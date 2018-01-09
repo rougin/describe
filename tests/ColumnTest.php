@@ -2,8 +2,15 @@
 
 namespace Rougin\Describe;
 
+use Rougin\Describe\Describe;
+use Rougin\Describe\Driver\MySQLDriver;
+
 class ColumnTest extends \PHPUnit_Framework_TestCase
 {
+    const COLUMN_ID = 0;
+
+    const COLUMN_USER_ID = 3;
+
     /**
      * @var array
      */
@@ -22,9 +29,11 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $pdo = new \PDO('mysql:host=localhost;dbname=demo', 'root', '');
-        $driver = new \Rougin\Describe\Driver\MySQLDriver($pdo, 'demo');
 
-        $describe = new \Rougin\Describe\Describe($driver);
+        $driver = new MySQLDriver($pdo, 'demo');
+
+        $describe = new Describe($driver);
+
         $this->columns = $describe->getTable($this->table);
     }
 
@@ -35,8 +44,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDataType()
     {
-        // id
-        $column = $this->columns[0];
+        $column = $this->columns[self::COLUMN_ID];
 
         $this->assertEquals('integer', $column->getDataType());
     }
@@ -48,10 +56,21 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDefaultValue()
     {
-        // id
-        $column = $this->columns[0];
+        $column = $this->columns[self::COLUMN_ID];
 
         $this->assertEmpty($column->getDefaultValue());
+    }
+
+    /**
+     * Tests Column::getField.
+     *
+     * @return void
+     */
+    public function testGetField()
+    {
+        $column = $this->columns[self::COLUMN_USER_ID];
+
+        $this->assertEquals('user_id', $column->getField());
     }
 
     /**
@@ -61,8 +80,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetReferencedField()
     {
-        // user_id
-        $column = $this->columns[3];
+        $column = $this->columns[self::COLUMN_USER_ID];
 
         $this->assertEquals('id', $column->getReferencedField());
     }
@@ -74,8 +92,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetReferencedTable()
     {
-        // user_id
-        $column = $this->columns[3];
+        $column = $this->columns[self::COLUMN_USER_ID];
 
         $this->assertEquals('user', $column->getReferencedTable());
     }
@@ -87,8 +104,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetLength()
     {
-        // user_id
-        $column = $this->columns[3];
+        $column = $this->columns[self::COLUMN_USER_ID];
 
         $this->assertEquals(10, $column->getLength());
     }
@@ -100,8 +116,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsAutoIncrement()
     {
-        // id
-        $column = $this->columns[0];
+        $column = $this->columns[self::COLUMN_ID];
 
         $this->assertTrue($column->isAutoIncrement());
     }
@@ -113,8 +128,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsForeignKey()
     {
-        // user_id
-        $column = $this->columns[3];
+        $column = $this->columns[self::COLUMN_USER_ID];
 
         $this->assertTrue($column->isForeignKey());
     }
@@ -126,8 +140,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNull()
     {
-        // user_id
-        $column = $this->columns[3];
+        $column = $this->columns[self::COLUMN_USER_ID];
 
         $this->assertFalse($column->isNull());
     }
@@ -139,8 +152,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsUnique()
     {
-        // user_id
-        $column = $this->columns[3];
+        $column = $this->columns[self::COLUMN_USER_ID];
 
         $this->assertFalse($column->isUnique());
     }
@@ -152,8 +164,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsUnsigned()
     {
-        // user_id
-        $column = $this->columns[3];
+        $column = $this->columns[self::COLUMN_USER_ID];
 
         $column->setUnsigned(false);
 
@@ -167,8 +178,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsPrimaryKey()
     {
-        // id
-        $column = $this->columns[0];
+        $column = $this->columns[self::COLUMN_ID];
 
         $this->assertTrue($column->isPrimaryKey());
     }
@@ -180,8 +190,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
      */
     public function testUnderscoreCase()
     {
-        // id
-        $column = $this->columns[0];
+        $column = $this->columns[self::COLUMN_ID];
 
         $column->dummy_method();
 

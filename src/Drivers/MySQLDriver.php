@@ -6,7 +6,7 @@ namespace Rougin\Describe\Drivers;
  * MySQL Driver
  *
  * A database driver extension for MySQL.
- * NOTE: To be removed in v2.0.0
+ * NOTE: To be removed in v2.0.0. Use Driver\MysqlDriver instead.
  *
  * @package  Describe
  * @category Drivers

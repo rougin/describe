@@ -2,6 +2,8 @@
 
 namespace Rougin\Describe;
 
+use Doctrine\Common\Inflector\Inflector;
+
 /**
  * Column Class
  *
@@ -15,17 +17,17 @@ class Column
     /**
      * @var boolean
      */
-    protected $autoIncrement = false;
+    protected $increment = false;
 
     /**
      * @var string
      */
-    protected $dataType = '';
+    protected $type = '';
 
     /**
      * @var string
      */
-    protected $defaultValue = '';
+    protected $default = '';
 
     /**
      * @var string
@@ -53,14 +55,9 @@ class Column
     protected $primary = false;
 
     /**
-     * @var string
+     * @var array
      */
-    protected $referencedField = '';
-
-    /**
-     * @var string
-     */
-    protected $referencedTable = '';
+    protected $reference = array('field' => '', 'table' => '');
 
     /**
      * @var boolean
@@ -79,7 +76,7 @@ class Column
      */
     public function getDataType()
     {
-        return $this->dataType;
+        return $this->type;
     }
 
     /**
@@ -89,7 +86,7 @@ class Column
      */
     public function getDefaultValue()
     {
-        return $this->defaultValue;
+        return $this->default;
     }
 
     /**
@@ -109,7 +106,7 @@ class Column
      */
     public function getReferencedField()
     {
-        return $this->referencedField;
+        return $this->reference['field'];
     }
 
     /**
@@ -119,7 +116,7 @@ class Column
      */
     public function getReferencedTable()
     {
-        return $this->referencedTable;
+        return $this->reference['table'];
     }
 
     /**
@@ -139,7 +136,7 @@ class Column
      */
     public function isAutoIncrement()
     {
-        return $this->autoIncrement;
+        return $this->increment;
     }
 
     /**
@@ -195,11 +192,11 @@ class Column
     /**
      * Sets the auto increment.
      *
-     * @param boolean $autoIncrement
+     * @param boolean $increment
      */
-    public function setAutoIncrement($autoIncrement)
+    public function setAutoIncrement($increment)
     {
-        $this->autoIncrement = $autoIncrement;
+        $this->increment = $increment;
 
         return $this;
     }
@@ -207,26 +204,30 @@ class Column
     /**
      * Sets the data type.
      *
-     * @param string $dataType
+     * @param  string $type
+     * @return self
      */
-    public function setDataType($dataType)
+    public function setDataType($type)
     {
-        $dataTypes = [ 'integer', 'string', 'string' ];
-        $shortHand = [ 'int', 'varchar', 'text' ];
+        $types = array('integer', 'string', 'string');
 
-        $index = array_search($dataType, $shortHand);
+        $shorthand = array('int', 'varchar', 'text');
 
-        $this->dataType = ($index === false) ? $dataType : $dataTypes[$index];
+        $index = array_search($type, $shorthand);
+
+        $this->type = $index === false ? $type : $types[$index];
+
+        return $this;
     }
 
     /**
      * Sets the default value.
      *
-     * @param string $defaultValue
+     * @param string $default
      */
-    public function setDefaultValue($defaultValue)
+    public function setDefaultValue($default)
     {
-        $this->defaultValue = $defaultValue;
+        $this->default = $default;
 
         return $this;
     }
@@ -258,11 +259,11 @@ class Column
     /**
      * Sets the foreign field.
      *
-     * @param string $referencedField
+     * @param string $field
      */
-    public function setReferencedField($referencedField)
+    public function setReferencedField($field)
     {
-        $this->referencedField = $referencedField;
+        $this->reference['field'] = $field;
 
         return $this;
     }
@@ -270,11 +271,11 @@ class Column
     /**
      * Sets the foreign table.
      *
-     * @param string $foreignTable
+     * @param string $table
      */
-    public function setReferencedTable($foreignTable)
+    public function setReferencedTable($table)
     {
-        $this->referencedTable = $foreignTable;
+        $this->reference['table'] = $table;
 
         return $this;
     }
@@ -341,6 +342,7 @@ class Column
 
     /**
      * Calls methods from this class in underscore case.
+     * NOTE: To be removed in v2.0.0. All new methods are now in one word.
      *
      * @param  string $method
      * @param  mixed  $parameters
@@ -348,12 +350,14 @@ class Column
      */
     public function __call($method, $parameters)
     {
-        $method = \Doctrine\Common\Inflector\Inflector::camelize($method);
+        $method = Inflector::camelize($method);
 
-        if (method_exists($this, $method)) {
-            return call_user_func_array([ $this, $method ], $parameters);
+        if (method_exists($this, $method) === true) {
+            $instance = array($this, $method);
+
+            $result = call_user_func_array($instance, $parameters);
         }
 
-        return $this;
+        return isset($result) ? $result : $this;
     }
 }

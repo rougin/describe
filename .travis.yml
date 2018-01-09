@@ -1,4 +1,5 @@
 language: php
+dist: trusty
 
 php:
   - 5.4
@@ -7,6 +8,10 @@ php:
   - 7.0
   - hhvm
 
+# This triggers builds to run on the new TravisCI infrastructure.
+# See: http://docs.travis-ci.com/user/workers/container-based-infrastructure/
+sudo: false
+
 services:
   - mysql
 
@@ -14,6 +19,8 @@ matrix:
   allow_failures:
     - php: 7.0
   include:
+    - php: 5.3
+      dist: precise
     - php: 5.4
       env: 'COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
 

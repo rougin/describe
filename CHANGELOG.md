@@ -1,6 +1,20 @@
 # Changelog
 
-All Notable changes to `Describe` will be documented in this file.
+All notable changes to `Describe` will be documented in this file.
+
+## [1.7.0](https://github.com/rougin/describe/compare/v1.6.0...v1.7.0) - Unreleased
+
+### Added
+- `DriverInterface::columns`
+- `DriverInterface::primary`
+- `DriverInterface::tables`
+- `DriverNotFoundException`
+- `Table` class
+- `TableNotFoundException`
+
+### Changed
+- Code quality
+- Minimum version of PHP to `v5.3.0`
 
 ## [1.6.0](https://github.com/rougin/describe/compare/v1.5.1...v1.6.0) - 2017-01-05
 

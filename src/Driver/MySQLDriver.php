@@ -3,15 +3,16 @@
 namespace Rougin\Describe\Driver;
 
 use Rougin\Describe\Column;
+use Rougin\Describe\Table;
 
 /**
  * MySQL Driver
  *
  * A database driver extension for MySQL.
+ * NOTE: Should be renamed to "MySqlDriver" in v2.0.0.
  *
- * @package  Describe
- * @category Driver
- * @author   Rougin Royce Gutib <rougingutib@gmail.com>
+ * @package Describe
+ * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  */
 class MySQLDriver extends AbstractDriver implements DriverInterface
 {
@@ -26,64 +27,170 @@ class MySQLDriver extends AbstractDriver implements DriverInterface
     protected $pdo;
 
     /**
-     * @param PDO    $pdo
+     * Initializes the driver instance.
+     *
+     * @param \PDO   $pdo
      * @param string $database
      */
     public function __construct(\PDO $pdo, $database)
     {
         $this->database = $database;
+
+        $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
         $this->pdo = $pdo;
     }
 
     /**
-     * Returns a listing of columns from the specified table.
+     * Returns an array of Column instances from a table.
      *
-     * @param  string $tableName
-     * @return array
-     * @throws \Rougin\Describe\Exceptions\TableNameNotFoundException
+     * @param  string $table
+     * @return \Rougin\Describe\Column[]
      */
-    public function getColumns($tableName)
+    public function columns($table)
     {
-        return $this->getColumnsFromQuery($tableName, 'DESCRIBE ' . $tableName);
+        return $this->query($table, 'DESCRIBE ' . $table);
     }
 
     /**
-     * Returns a listing of columns from the specified table.
-     * NOTE: To be removed in v2.0.0.
+     * Returns an array of Column instances from a table.
+     * NOTE: To be removed in v2.0.0. Use columns() instead.
      *
-     * @param  string $tableName
-     * @return array
-     * @throws \Rougin\Describe\Exceptions\TableNameNotFoundException
+     * @param  string $table
+     * @return \Rougin\Describe\Column[]
      */
-    public function getTable($tableName)
+    public function getColumns($table)
     {
-        return $this->getColumns($tableName);
+        return $this->columns($table);
     }
 
     /**
-     * Returns a listing of tables from the specified database.
+     * Returns an array of Column instances from a table.
+     * NOTE: To be removed in v2.0.0. Use getColumns() instead.
+     *
+     * @param  string $table
+     * @return \Rougin\Describe\Column[]
+     */
+    public function getTable($table)
+    {
+        return $this->getColumns($table);
+    }
+
+    /**
+     * Returns an array of table names.
+     * NOTE: To be removed in v2.0.0. Use tables() instead.
      *
      * @return array
      */
     public function getTableNames()
     {
-        return $this->showTables();
+        return $this->items(false);
     }
 
     /**
-     * Shows the list of tables.
-     * NOTE: To be removed in v2.0.0.
+     * Returns an array of table names.
+     * NOTE: To be removed in v2.0.0. Use getTableNames() instead.
      *
      * @return array
      */
     public function showTables()
     {
-        $tables = [];
+        return $this->getTableNames();
+    }
 
+    /**
+     * Returns an array of Table instances.
+     *
+     * @return \Rougin\Describe\Table[]
+     */
+    public function tables()
+    {
+        return $this->items(true);
+    }
+
+    /**
+     * Prepares the defined columns.
+     *
+     * @param  \Rougin\Describe\Column $column
+     * @param  string                  $table
+     * @param  mixed                   $row
+     * @return \Rougin\Describe\Column
+     */
+    protected function column(Column $column, $table, $row)
+    {
+        preg_match('/(.*?)\((.*?)\)/', $row->Type, $match);
+
+        $column->setDataType($row->Type);
+
+        $column->setDefaultValue($row->Default);
+
+        $column->setField($row->Field);
+
+        if (isset($match[1]) === true) {
+            $column->setDataType($match[1]);
+
+            $column->setLength($match[2]);
+        }
+
+        $column = $this->properties($row, $column);
+
+        $column = $this->keys($row, $column);
+
+        return $this->foreign($table, $row, $column);
+    }
+
+    /**
+     * Sets the properties of a column if it does exists.
+     *
+     * @param  string                  $name
+     * @param  mixed                   $row
+     * @param  \Rougin\Describe\Column $column
+     * @return \Rougin\Describe\Column
+     */
+    protected function foreign($name, $row, Column $column)
+    {
+        $query = 'SELECT COLUMN_NAME as "column", REFERENCED_COLUMN_NAME as "referenced_column",' .
+            'CONCAT(REFERENCED_TABLE_SCHEMA, ".", REFERENCED_TABLE_NAME) as "referenced_table"' .
+            'FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE ' .
+            'WHERE CONSTRAINT_SCHEMA = "' . $this->database . '" AND TABLE_NAME = "' . $name . '";';
+
+        $table = $this->pdo->prepare($query);
+
+        $table->execute();
+
+        $table->setFetchMode(\PDO::FETCH_OBJ);
+
+        while ($item = $table->fetch()) {
+            if ($item->column === $row->Field) {
+                $referenced = $this->strip($item->referenced_table);
+
+                $column->setReferencedField($item->referenced_column);
+
+                $column->setReferencedTable($referenced);
+            }
+        }
+
+        return $column;
+    }
+
+    /**
+     * Returns an array of table names or Table instances.
+     * NOTE: To be removed in v2.0.0. Move to tables() instead.
+     *
+     * @param  boolean $instance
+     * @param  array   $tables
+     * @return array|\Rougin\Describe\Table[]
+     */
+    protected function items($instance = false, $tables = array())
+    {
         $information = $this->pdo->prepare('SHOW TABLES');
+
         $information->execute();
 
         while ($row = $information->fetch()) {
+            // NOTE: To be removed in v2.0.0. Always return Table instance.
+            $instance && $row[0] = new Table($row[0], $this);
+
             array_push($tables, $row[0]);
         }
 
@@ -91,43 +198,13 @@ class MySQLDriver extends AbstractDriver implements DriverInterface
     }
 
     /**
-     * Prepares the defined columns.
-     *
-     * @param  string $tableName
-     * @param  mixed  $row
-     * @return \Rougin\Describe\Column
-     */
-    protected function setColumn($tableName, $row)
-    {
-        preg_match('/(.*?)\((.*?)\)/', $row->Type, $match);
-
-        $column = new Column;
-
-
-        $column->setDataType($row->Type);
-        $column->setDefaultValue($row->Default);
-        $column->setField($row->Field);
-
-        if (isset($match[1])) {
-            $column->setDataType($match[1]);
-            $column->setLength($match[2]);
-        }
-
-        $column = $this->setProperties($row, $column);
-        $column = $this->setKey($row, $column);
-        $column = $this->setForeignColumn($tableName, $row, $column);
-
-        return $column;
-    }
-
-    /**
-     * Sets the key of the specified column.
+     * Sets the key of a column.
      *
      * @param  mixed                   $row
      * @param  \Rougin\Describe\Column $column
      * @return \Rougin\Describe\Column
      */
-    protected function setKey($row, Column $column)
+    protected function keys($row, Column $column)
     {
         switch ($row->Key) {
             case 'PRI':
@@ -150,55 +227,19 @@ class MySQLDriver extends AbstractDriver implements DriverInterface
     }
 
     /**
-     * Sets the properties of the specified column if it does exists.
-     *
-     * @param  string                  $tableName
-     * @param  mixed                   $row
-     * @param  \Rougin\Describe\Column $column
-     * @return \Rougin\Describe\Column
-     */
-    protected function setForeignColumn($tableName, $row, Column $column)
-    {
-        $query = 'SELECT COLUMN_NAME as "column", REFERENCED_COLUMN_NAME as "referenced_column",' .
-            'CONCAT(REFERENCED_TABLE_SCHEMA, ".", REFERENCED_TABLE_NAME) as "referenced_table"' .
-            'FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE ' .
-            'WHERE CONSTRAINT_SCHEMA = "' . $this->database . '" AND TABLE_NAME = "' . $tableName . '";';
-
-        $foreignTable = $this->pdo->prepare($query);
-
-        $foreignTable->execute();
-        $foreignTable->setFetchMode(\PDO::FETCH_OBJ);
-
-        while ($foreignRow = $foreignTable->fetch()) {
-            if ($foreignRow->column == $row->Field) {
-                $referencedTable = $this->stripTableSchema($foreignRow->referenced_table);
-
-                $column->setReferencedField($foreignRow->referenced_column);
-                $column->setReferencedTable($referencedTable);
-            }
-        }
-
-        return $column;
-    }
-
-    /**
-     * Sets the properties of the specified column.
+     * Sets the properties of a column.
      *
      * @param  mixed                   $row
      * @param  \Rougin\Describe\Column $column
      * @return \Rougin\Describe\Column
      */
-    protected function setProperties($row, Column $column)
+    protected function properties($row, Column $column)
     {
-        $null = 'Null';
+        $increment = $row->Extra === 'auto_increment';
 
-        if ($row->Extra == 'auto_increment') {
-            $column->setAutoIncrement(true);
-        }
+        $column->setAutoIncrement($increment);
 
-        if ($row->$null == 'YES') {
-            $column->setNull(true);
-        }
+        $column->setNull($row->Null === 'YES');
 
         return $column;
     }
@@ -209,8 +250,12 @@ class MySQLDriver extends AbstractDriver implements DriverInterface
      * @param  string $table
      * @return string
      */
-    protected function stripTableSchema($table)
+    protected function strip($table)
     {
-        return (strpos($table, '.') !== false) ? substr($table, strpos($table, '.') + 1) : $table;
+        $exists = strpos($table, '.') !== false;
+
+        $updated = substr($table, strpos($table, '.') + 1);
+
+        return $exists ? $updated : $table;
     }
 }

@@ -2,17 +2,45 @@
 
 namespace Rougin\Describe\Driver;
 
-class DatabaseDriverTest extends \PHPUnit_Framework_TestCase
+use Rougin\Describe\Describe;
+
+/**
+ * Database Driver Test
+ *
+ * @package Describe
+ * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ */
+class DatabaseDriverTest extends TestCase
 {
+    const DRIVER_NOT_FOUND = 'Rougin\Describe\Exceptions\DriverNotFoundException';
+
     /**
-     * Tests \Rougin\Describe\Exceptions\DatabaseDriverNotFoundException.
+     * Sets up the driver instance.
      *
      * @return void
      */
-    public function testDatabaseDriverNotFoundException()
+    public function setUp()
     {
-        $this->setExpectedException('Rougin\Describe\Exceptions\DatabaseDriverNotFoundException');
+        $config = array('password' => '');
 
-        $driver = new \Rougin\Describe\Driver\DatabaseDriver('mssql', []);
+        $config['hostname'] = 'sqlite:' . __DIR__ . '/../Databases/test.db';
+        $config['username'] = 'root';
+        $config['database'] = 'demo';
+
+        $driver = new DatabaseDriver('sqlite', $config);
+
+        $this->describe = new Describe($driver);
+    }
+
+    /**
+     * Tests DatabaseDriver::driver with DriverNotFoundException.
+     *
+     * @return void
+     */
+    public function testDriverMethodWithDriverNotFoundException()
+    {
+        $this->setExpectedException(self::DRIVER_NOT_FOUND);
+
+        $driver = new DatabaseDriver('test', array());
     }
 }

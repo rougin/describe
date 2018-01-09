@@ -19,28 +19,63 @@ $ composer require rougin/describe
 
 ## Usage
 
+### Using a vendor-specific driver
+
 ``` php
-$pdo    = new PDO('mysql:host=localhost;dbname=demo', 'root', '');
-$driver = new Rougin\Describe\Driver\MySQLDriver($pdo, 'demo');
+use Rougin\Describe\Driver\MySQLDriver;
 
-// or
+$dsn = 'mysql:host=localhost;dbname=demo';
 
-$credentials = [ 'hostname' => 'localhost', 'database' => 'demo', 'username' => 'root', 'password' => '' ];
-$driver      = new Rougin\Describe\Driver\DatabaseDriver('mysql', $credentials);
+$pdo = new PDO($dsn, 'root', '');
 
+$driver = new MySQLDriver($pdo, 'demo');
+```
+
+Available drivers:
+
+* [`MySQLDriver`](src/Driver/MySQLDriver.php)
+* [`SQLiteDriver`](src/Driver/SQLiteDriver.php)
+
+### Using [`DatabaseDriver`](src/Driver/DatabaseDriver.php)
+
+``` php
+use Rougin\Describe\Driver\DatabaseDriver;
+
+$credentials = array('password' => '');
+
+$credentials['hostname'] = 'localhost';
+$credentials['database'] = 'demo';
+$credentials['username'] = 'root';
+
+$driver = new DatabaseDriver('mysql', $credentials);
+```
+
+### Using `Describe` (deprecated as of `v1.7.0`)
+
+``` php
 $describe = new Rougin\Describe\Describe($driver);
 
-// Returns an array of "Column" objects from the specified table
-var_dump($describe->getColumns('users'));
-var_dump($describe->getTable('users'));
+// Returns an array of "Column" instances
+var_dump($describe->columns('users'));
 
-// Returns an array of available tables from the database
-var_dump($describe->showTables());
-var_dump($describe->getTableNames());
+// Returns an array of "Table" instances
+var_dump($describe->tables());
 
-// Gets the primary key from the specified table
+// Returns the primary key from the table
 // Second parameter means to return the "Column" object or the column name
-var_dump($describe->getPrimaryKey('users', true));
+var_dump($describe->primary('users', true));
+```
+
+### Using `Table`
+
+``` php
+$table = new Table('users', $driver);
+
+// Returns an array of "Column" instances
+var_dump($table->columns());
+
+// Returns the primary key "Column" from the table
+var_dump($table->primary());
 ```
 
 For more information regarding the `Column` object, you can check it [here](https://github.com/rougin/describe/blob/master/src/Column.php).

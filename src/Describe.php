@@ -2,10 +2,13 @@
 
 namespace Rougin\Describe;
 
+use Doctrine\Common\Inflector\Inflector;
+
 /**
  * Describe
  *
  * Gets information of a table schema from a database.
+ * NOTE: To be removed in v2.0.0. Use Table class instead.
  *
  * @package Describe
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
@@ -26,80 +29,104 @@ class Describe
     }
 
     /**
-     * Returns a listing of columns from the specified table.
+     * Returns an array of Column instances from a table.
      *
-     * @param  string $tableName
-     * @return array
-     * @throws \Rougin\Describe\Exceptions\TableNameNotFoundException
+     * @param  string $table
+     * @return \Rougin\Describe\Column[]
      */
-    public function getColumns($tableName)
+    public function columns($table)
     {
-        $table = $this->driver->getTable($tableName);
-
-        if (empty($table) || is_null($table)) {
-            throw new Exceptions\TableNameNotFoundException;
-        }
-
-        return $table;
+        return $this->driver->columns($table);
     }
 
     /**
-     * Gets the primary key in the specified table.
+     * Returns an array of Column instances from a table.
+     * NOTE: To be removed in v2.0.0. Use columns() instead.
      *
-     * @param  string  $tableName
+     * @param  string $table
+     * @return \Rougin\Describe\Column[]
+     */
+    public function getColumns($table)
+    {
+        return $this->driver->getColumns($table);
+    }
+
+    /**
+     * Returns the primary key of a table.
+     * NOTE: To be removed in v2.0.0. Use primary() instead.
+     *
+     * @param  string  $table
      * @param  boolean $object
-     * @return string
+     * @return \Rougin\Describe\Column|string
      */
-    public function getPrimaryKey($tableName, $object = false)
+    public function getPrimaryKey($table, $object = false)
     {
-        $columns = $this->getColumns($tableName);
-        $result  = '';
-
-        foreach ($columns as $column) {
-            if ($column->isPrimaryKey()) {
-                $result = $column;
-            }
-        }
-
-        return ($object === true) ? $result : $result->getField();
+        return $this->primary($table, $object);
     }
 
     /**
-     * Returns a listing of columns from the specified table.
-     * NOTE: To be removed in v2.0.0.
+     * Returns an array of columns from a table.
+     * NOTE: To be removed in v2.0.0. Use getColumns() instead.
      *
-     * @param  string $tableName
+     * @param  string $table
      * @return array
-     * @throws \Rougin\Describe\Exceptions\TableNameNotFoundException
      */
-    public function getTable($tableName)
+    public function getTable($table)
     {
-        return $this->getColumns($tableName);
+        return $this->driver->getTable($table);
     }
 
     /**
-     * Returns a listing of tables from the specified database.
+     * Returns an array of table names.
+     * NOTE: To be removed in v2.0.0. Use tables() instead.
      *
      * @return array
      */
     public function getTableNames()
     {
-        return $this->driver->showTables();
+        return $this->driver->getTableNames();
     }
 
     /**
-     * Shows the list of tables.
-     * NOTE: To be removed in v2.0.0.
+     * Returns the primary key of a table.
+     *
+     * @param  string  $table
+     * @param  boolean $object
+     * @return \Rougin\Describe\Column|string
+     */
+    public function primary($table, $object = false)
+    {
+        $table = new Table($table, $this->driver);
+
+        ($result = $table->primary()) === null && $result = '';
+
+        return $object ? $result : $result->getField();
+    }
+
+    /**
+     * Returns an array of table names.
+     * NOTE: To be removed in v2.0.0. Use getTableNames() instead.
      *
      * @return array
      */
     public function showTables()
     {
-        return $this->getTableNames();
+        return $this->driver->showTables();
+    }
+
+    /**
+     * Returns an array of Table instances.
+     *
+     * @return \Rougin\Describe\Table[]
+     */
+    public function tables()
+    {
+        return $this->driver->tables();
     }
 
     /**
      * Calls methods from this class in underscore case.
+     * NOTE: To be removed in v2.0.0. All new methods are now in one word.
      *
      * @param  string $method
      * @param  mixed  $parameters
@@ -107,13 +134,10 @@ class Describe
      */
     public function __call($method, $parameters)
     {
-        $method = \Doctrine\Common\Inflector\Inflector::camelize($method);
-        $result = $this;
+        $method = Inflector::camelize($method);
 
-        if (method_exists($this, $method)) {
-            $result = call_user_func_array([ $this, $method ], $parameters);
-        }
+        $instance = array($this, $method);
 
-        return $result;
+        return call_user_func_array($instance, $parameters);
     }
 }
