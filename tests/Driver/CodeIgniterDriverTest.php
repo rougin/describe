@@ -10,7 +10,7 @@ use Rougin\Describe\Describe;
  * @package Describe
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  */
-class CodeigniterDriverTest extends TestCase
+class CodeigniterDriverTest extends AbstractTestCase
 {
     /**
      * Sets up the driver instance.

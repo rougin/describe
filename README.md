@@ -69,7 +69,7 @@ var_dump($describe->primary('users', true));
 ### Using `Table`
 
 ``` php
-$table = new Table('users', $driver);
+$table = new Rougin\Describe\Table('users', $driver);
 
 // Returns an array of "Column" instances
 var_dump($table->columns());
@@ -93,10 +93,6 @@ Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recen
 ``` bash
 $ composer test
 ```
-
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ## Security
 

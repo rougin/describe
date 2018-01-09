@@ -8,7 +8,7 @@ namespace Rougin\Describe\Driver;
  * @package Describe
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  */
-class TestCase extends \PHPUnit_Framework_TestCase
+abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
 {
     const TABLE_NOT_FOUND = 'Rougin\Describe\Exceptions\TableNotFoundException';
 
@@ -22,6 +22,16 @@ class TestCase extends \PHPUnit_Framework_TestCase
      * @var \Rougin\Describe\Describe
      */
     protected $describe;
+
+    /**
+     * Sets up the driver instance.
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        $this->markTestSkipped('No Describe instance yet');
+    }
 
     /**
      * Tests DriverInterface::columns.

@@ -10,7 +10,7 @@ use Rougin\Describe\Describe;
  * @package Describe
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  */
-class DatabaseDriverTest extends TestCase
+class DatabaseDriverTest extends AbstractTestCase
 {
     const DRIVER_NOT_FOUND = 'Rougin\Describe\Exceptions\DriverNotFoundException';
 

@@ -20,8 +20,7 @@ class CodeIgniterDriver extends DatabaseDriver
      */
     public function __construct(array $database)
     {
-        // NOTE: To be removed in v2.0.0. Use $database['default'] as the
-        // $database parameter in __construct(array $database).
+        // NOTE: To be removed in v2.0.0. Use $database['default'] outside.
         isset($database['default']) && $database = $database['default'];
 
         $this->driver = $this->driver($database['dbdriver'], $database);
