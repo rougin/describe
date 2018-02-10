@@ -141,6 +141,8 @@ class DatabaseDriver implements DriverInterface
             return new SQLiteDriver($pdo);
         }
 
-        throw new DriverNotFoundException;
+        $message = 'Database driver "' . $name . '" not found.';
+
+        throw new DriverNotFoundException($message);
     }
 }

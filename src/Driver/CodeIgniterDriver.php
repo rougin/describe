@@ -6,6 +6,7 @@ namespace Rougin\Describe\Driver;
  * CodeIgniter Driver
  *
  * A database driver specifically used for CodeIgniter.
+ * NOTE: To be removed in v2.0.0. Use "DatabaseDriver" instead.
  * NOTE: Should be renamed to "CodeigniterDriver" in v2.0.0.
  *
  * @package Describe

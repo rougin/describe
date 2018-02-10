@@ -44,7 +44,7 @@ class Describe
 
             return $columns;
         } catch (\PDOException $error) {
-            $text = $error->getMessage();
+            $text = (string) $error->getMessage();
 
             throw new TableNotFoundException($text);
         }
@@ -145,7 +145,7 @@ class Describe
      */
     public function __call($method, $parameters)
     {
-        $method = Inflector::camelize($method);
+        $method = (string) Inflector::camelize($method);
 
         $instance = array($this, $method);
 

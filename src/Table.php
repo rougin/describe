@@ -2,6 +2,8 @@
 
 namespace Rougin\Describe;
 
+use Rougin\Describe\Driver\DriverInterface;
+
 /**
  * Table
  *
@@ -28,11 +30,11 @@ class Table
      * @param string                                  $name
      * @param \Rougin\Describe\Driver\DriverInterface $driver
      */
-    public function __construct($name, Driver\DriverInterface $driver)
+    public function __construct($name, DriverInterface $driver)
     {
         $this->driver = $driver;
 
-        $this->name = $name;
+        $this->name = (string) $name;
     }
 
     /**

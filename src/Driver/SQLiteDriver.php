@@ -118,7 +118,13 @@ class SQLiteDriver extends MySQLDriver
 
         $column = $this->reference($table, $column);
 
-        return $this->properties($row, $column);
+        $column->setNull(! $row->notnull);
+
+        $row->pk && $column->setAutoIncrement(true);
+
+        $row->pk && $column->setPrimary(true);
+
+        return $column;
     }
 
     /**
@@ -151,24 +157,6 @@ class SQLiteDriver extends MySQLDriver
     }
 
     /**
-     * Sets the properties of a column.
-     *
-     * @param  mixed                   $row
-     * @param  \Rougin\Describe\Column $column
-     * @return void
-     */
-    protected function properties($row, Column $column)
-    {
-        $column->setNull(! $row->notnull);
-
-        $row->pk && $column->setAutoIncrement(true);
-
-        $row->pk && $column->setPrimary(true);
-
-        return $column;
-    }
-
-    /**
      * Sets the properties of a column if it does exists.
      *
      * @param  string                  $table
@@ -187,11 +175,11 @@ class SQLiteDriver extends MySQLDriver
 
         while ($row = $result->fetch()) {
             if ($column->getField() === $row->from) {
+                $column->setReferencedTable($row->table);
+
                 $column->setForeign(true);
 
                 $column->setReferencedField($row->to);
-
-                $column->setReferencedTable($row->table);
             }
         }
 
