@@ -1,6 +1,6 @@
 {
     "name": "rougin/describe",
-    "description": "Get the information about the database you're working on in PHP",
+    "description": "Returns an array of column information from a database table.",
     "keywords": ["describe", "database", "php"],
     "homepage": "https://github.com/rougin/describe",
     "license": "MIT",
@@ -8,7 +8,7 @@
         {
             "name": "Rougin Royce Gutib",
             "email": "rougingutib@gmail.com",
-            "homepage": "http://rougin.github.io",
+            "homepage": "https://rougin.github.io",
             "role": "Developer"
         }
     ],
