@@ -7,17 +7,17 @@
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-Gets information of a table schema from a database in PHP.
+Describe is a PHP library that returns `Column` objects based on table schema information from a database.
 
-## Install
+## Installation
 
-Via Composer
+Install Describe through [Composer](https://getcomposer.org):
 
 ``` bash
 $ composer require rougin/describe
 ```
 
-## Usage
+## Basic Usage
 
 ### Using a vendor-specific driver
 
@@ -33,10 +33,10 @@ $driver = new MySQLDriver($pdo, 'demo');
 
 Available drivers:
 
-* [`MySQLDriver`](src/Driver/MySQLDriver.php)
-* [`SQLiteDriver`](src/Driver/SQLiteDriver.php)
+* [MySQLDriver](https://github.com/rougin/describe/blob/master/src/Driver/MySQLDriver.php)
+* [SQLiteDriver](https://github.com/rougin/describe/blob/master/src/Driver/SQLiteDriver.php)
 
-### Using [`DatabaseDriver`](src/Driver/DatabaseDriver.php)
+### Using a `DatabaseDriver`
 
 ``` php
 use Rougin\Describe\Driver\DatabaseDriver;
@@ -48,22 +48,6 @@ $credentials['database'] = 'demo';
 $credentials['username'] = 'root';
 
 $driver = new DatabaseDriver('mysql', $credentials);
-```
-
-### Using `Describe` (deprecated as of `v1.7.0`)
-
-``` php
-$describe = new Rougin\Describe\Describe($driver);
-
-// Returns an array of "Column" instances
-var_dump($describe->columns('users'));
-
-// Returns an array of "Table" instances
-var_dump($describe->tables());
-
-// Returns the primary key from the table
-// Second parameter means to return the "Column" object or the column name
-var_dump($describe->primary('users', true));
 ```
 
 ### Using `Table`
@@ -78,11 +62,51 @@ var_dump($table->columns());
 var_dump($table->primary());
 ```
 
-For more information regarding the `Column` object, you can check it [here](https://github.com/rougin/describe/blob/master/src/Column.php).
+For more information regarding the `Column` object, kindly check it [here](https://github.com/rougin/describe/blob/master/src/Column.php).
 
 ### Adding a new database driver
 
-You can always add a new database driver if you want. Just implement the database driver of your choice in a [DriverInterface](https://github.com/rougin/describe/blob/master/src/Driver/DriverInterface.php).
+To add a driver for a specified database, just implement it to a `DriverInterface`:
+
+``` php
+namespace Rougin\Describe\Driver;
+
+/**
+ * Database Driver Interface
+ *
+ * An interface for handling PDO drivers.
+ *
+ * @package Describe
+ * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ */
+interface DriverInterface
+{
+    /**
+     * Returns an array of Column instances from a table.
+     *
+     * @param  string $table
+     * @return \Rougin\Describe\Column[]
+     */
+    public function columns($table);
+
+    /**
+     * Returns an array of Table instances.
+     *
+     * @return \Rougin\Describe\Table[]
+     */
+    public function tables();
+}
+```
+
+## Projects using Describe
+
+### [Combustor](https://rougin.github.io/combustor/)
+
+Combustor uses Describe for getting database information for generating a codebase.
+
+### [Refinery](https://rougin.github.io/refinery/)
+
+Same as Combustor, Refinery also uses Describe for creating database migrations for Codeigniter.
 
 ## Change log
 
