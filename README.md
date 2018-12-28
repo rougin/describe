@@ -1,7 +1,7 @@
 # Describe
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
-[![Software License][ico-license]](LICENSE.md)
+[![Software License][ico-license]][link-license]
 [![Build Status][ico-travis]][link-travis]
 [![Coverage Status][ico-scrutinizer]][link-scrutinizer]
 [![Quality Score][ico-code-quality]][link-code-quality]
@@ -11,7 +11,7 @@ Describe is a PHP library that returns `Column` objects based on table schema in
 
 ## Installation
 
-Install Describe through [Composer](https://getcomposer.org):
+Install `Describe` via [Composer](https://getcomposer.org/):
 
 ``` bash
 $ composer require rougin/describe
@@ -77,7 +77,7 @@ namespace Rougin\Describe\Driver;
  * An interface for handling PDO drivers.
  *
  * @package Describe
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
 interface DriverInterface
 {
@@ -108,9 +108,9 @@ Combustor uses Describe for getting database information for generating a codeba
 
 Same as Combustor, Refinery also uses Describe for creating database migrations for Codeigniter.
 
-## Change log
+## Changelog
 
-Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
+Please see [CHANGELOG][link-changelog] for more information what has changed recently.
 
 ## Testing
 
@@ -118,30 +118,26 @@ Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recen
 $ composer test
 ```
 
-## Security
-
-If you discover any security related issues, please email rougingutib@gmail.com instead of using the issue tracker.
-
 ## Credits
 
-- [Rougin Royce Gutib][link-author]
-- [All Contributors][link-contributors]
+- [All contributors][link-contributors]
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+The MIT License (MIT). Please see [LICENSE][link-license] for more information.
 
-[ico-version]: https://img.shields.io/packagist/v/rougin/describe.svg?style=flat-square
-[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/rougin/describe/master.svg?style=flat-square
-[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/rougin/describe.svg?style=flat-square
 [ico-code-quality]: https://img.shields.io/scrutinizer/g/rougin/describe.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/rougin/describe.svg?style=flat-square
+[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
+[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/rougin/describe.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/rougin/describe/master.svg?style=flat-square
+[ico-version]: https://img.shields.io/packagist/v/rougin/describe.svg?style=flat-square
 
-[link-packagist]: https://packagist.org/packages/rougin/describe
-[link-travis]: https://travis-ci.org/rougin/describe
-[link-scrutinizer]: https://scrutinizer-ci.com/g/rougin/describe/code-structure
+[link-changelog]: https://github.com/rougin/describe/blob/master/CHANGELOG.md
 [link-code-quality]: https://scrutinizer-ci.com/g/rougin/describe
+[link-contributors]: https://github.com/rougin/describe/contributors
 [link-downloads]: https://packagist.org/packages/rougin/describe
-[link-author]: https://github.com/rougin
-[link-contributors]: ../../contributors
+[link-license]: https://github.com/rougin/describe/blob/master/LICENSE.md
+[link-packagist]: https://packagist.org/packages/rougin/describe
+[link-scrutinizer]: https://scrutinizer-ci.com/g/rougin/describe/code-structure
+[link-travis]: https://travis-ci.org/rougin/describe
