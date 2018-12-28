@@ -8,7 +8,7 @@ use Rougin\Describe\Describe;
  * Codeigniter Driver Test
  *
  * @package Describe
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
 class CodeIgniterDriverTest extends AbstractTestCase
 {

@@ -8,7 +8,7 @@ use Rougin\Describe\Describe;
  * SQLite Driver Test
  *
  * @package Describe
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
 class SQLiteDriverTest extends AbstractTestCase
 {
