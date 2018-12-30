@@ -2,6 +2,8 @@
 
 namespace Rougin\Describe\Drivers;
 
+use Rougin\Describe\Driver\MysqlDriver as BaseDriver;
+
 /**
  * MySQL Driver
  *
@@ -10,8 +12,8 @@ namespace Rougin\Describe\Drivers;
  *
  * @package  Describe
  * @category Drivers
- * @author   Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author   Rougin Gutib <rougingutib@gmail.com>
  */
-class MySQLDriver extends \Rougin\Describe\Driver\MySQLDriver
+class MySQLDriver extends BaseDriver
 {
 }

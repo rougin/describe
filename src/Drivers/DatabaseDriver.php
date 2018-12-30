@@ -2,6 +2,8 @@
 
 namespace Rougin\Describe\Drivers;
 
+use Rougin\Describe\Driver\DatabaseDriver as BaseDriver;
+
 /**
  * Database Driver
  *
@@ -10,8 +12,8 @@ namespace Rougin\Describe\Drivers;
  *
  * @package  Describe
  * @category Drivers
- * @author   Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author   Rougin Gutib <rougingutib@gmail.com>
  */
-class DatabaseDriver extends \Rougin\Describe\Driver\DatabaseDriver
+class DatabaseDriver extends BaseDriver
 {
 }
