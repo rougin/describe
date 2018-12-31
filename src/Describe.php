@@ -12,7 +12,7 @@ use Rougin\Describe\Exceptions\TableNotFoundException;
  * NOTE: To be removed in v2.0.0. Use Table class instead.
  *
  * @package Describe
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
 class Describe
 {

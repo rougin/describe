@@ -7,12 +7,8 @@ namespace Rougin\Describe\Exceptions;
  * NOTE: To be removed in v2.0.0. Use TableNotFoundException instead.
  *
  * @package Describe
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
-class TableNameNotFoundException extends \PDOException
+class TableNameNotFoundException extends TableNotFoundException
 {
-    /**
-     * @var string
-     */
-    protected $message = 'Table name not found on database!';
 }

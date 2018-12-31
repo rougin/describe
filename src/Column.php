@@ -10,7 +10,7 @@ use Doctrine\Common\Inflector\Inflector;
  * Stores a column information from the results given.
  *
  * @package Describe
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
 class Column
 {

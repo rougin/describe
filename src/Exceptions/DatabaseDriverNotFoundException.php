@@ -7,12 +7,8 @@ namespace Rougin\Describe\Exceptions;
  * NOTE: To be removed in v2.0.0. Use DriverNotFoundException instead.
  *
  * @package Describe
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
-class DatabaseDriverNotFoundException extends \UnexpectedValueException
+class DatabaseDriverNotFoundException extends DriverNotFoundException
 {
-    /**
-     * @var string
-     */
-    protected $message = 'Database driver not found!';
 }

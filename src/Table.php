@@ -10,7 +10,7 @@ use Rougin\Describe\Driver\DriverInterface;
  * Stores the table information from the given results.
  *
  * @package Describe
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
 class Table
 {
