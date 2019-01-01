@@ -10,7 +10,7 @@ use Rougin\Describe\Exceptions\DriverNotFoundException;
  * A database driver for using available database drivers.
  *
  * @package Describe
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
 class DatabaseDriver implements DriverInterface
 {
@@ -126,22 +126,22 @@ class DatabaseDriver implements DriverInterface
     protected function driver($name, $data = array())
     {
         if (in_array($name, $this->mysql) === true) {
-            $dsn = 'mysql:host=' . $data['hostname'];
+            $dsn = (string) 'mysql:host=%s;dbname=%s';
 
-            $dsn .= ';dbname=' . $data['database'];
+            $dsn = sprintf($dsn, $data['hostname'], $data['database']);
 
             $pdo = new \PDO($dsn, $data['username'], $data['password']);
 
-            return new MySQLDriver($pdo, $data['database']);
+            return new MysqlDriver($pdo, (string) $data['database']);
         }
 
         if (in_array($name, $this->sqlite)) {
-            $pdo = new \PDO($data['hostname']);
-
-            return new SQLiteDriver($pdo);
+            return new SqliteDriver(new \PDO($data['hostname']));
         }
 
-        $message = 'Database driver "' . $name . '" not found.';
+        $message = 'Database driver "%s" not found.';
+
+        $message = sprintf($message, (string) $name);
 
         throw new DriverNotFoundException($message);
     }

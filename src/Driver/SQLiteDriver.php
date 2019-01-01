@@ -12,9 +12,9 @@ use Rougin\Describe\Table;
  * NOTE: Should be renamed to "SqliteDriver" in v2.0.0.
  *
  * @package Describe
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
-class SQLiteDriver extends MySQLDriver
+class SqliteDriver extends MySQLDriver
 {
     /**
      * @var \PDO

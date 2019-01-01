@@ -3,16 +3,15 @@
 namespace Rougin\Describe\Driver;
 
 /**
- * CodeIgniter Driver
+ * Codeigniter Driver
  *
- * A database driver specifically used for CodeIgniter.
+ * A database driver specifically used for Codeigniter.
  * NOTE: To be removed in v2.0.0. Use "DatabaseDriver" instead.
- * NOTE: Should be renamed to "CodeigniterDriver" in v2.0.0.
  *
  * @package Describe
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
-class CodeIgniterDriver extends DatabaseDriver
+class CodeigniterDriver extends DatabaseDriver
 {
     /**
      * Initializes the driver instance.

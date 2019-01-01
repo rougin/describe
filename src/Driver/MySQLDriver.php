@@ -13,9 +13,9 @@ use Rougin\Describe\Table;
  * NOTE: Should be renamed to "MySqlDriver" in v2.0.0.
  *
  * @package Describe
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
-class MySQLDriver implements DriverInterface
+class MysqlDriver implements DriverInterface
 {
     /**
      * @var string
