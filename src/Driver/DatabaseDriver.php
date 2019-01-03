@@ -132,11 +132,11 @@ class DatabaseDriver implements DriverInterface
 
             $pdo = new \PDO($dsn, $data['username'], $data['password']);
 
-            return new MysqlDriver($pdo, (string) $data['database']);
+            return new MySQLDriver($pdo, (string) $data['database']);
         }
 
         if (in_array($name, $this->sqlite)) {
-            return new SqliteDriver(new \PDO($data['hostname']));
+            return new SQLiteDriver(new \PDO($data['hostname']));
         }
 
         $message = 'Database driver "%s" not found.';

@@ -2,7 +2,7 @@
 
 namespace Rougin\Describe\Drivers;
 
-use Rougin\Describe\Driver\MysqlDriver as BaseDriver;
+use Rougin\Describe\Driver\MySQLDriver as BaseDriver;
 
 /**
  * MySQL Driver

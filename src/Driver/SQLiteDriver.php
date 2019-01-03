@@ -14,7 +14,7 @@ use Rougin\Describe\Table;
  * @package Describe
  * @author  Rougin Gutib <rougingutib@gmail.com>
  */
-class SqliteDriver extends MySQLDriver
+class SQLiteDriver extends MySQLDriver
 {
     /**
      * @var \PDO
