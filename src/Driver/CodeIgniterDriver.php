@@ -11,7 +11,7 @@ namespace Rougin\Describe\Driver;
  * @package Describe
  * @author  Rougin Gutib <rougingutib@gmail.com>
  */
-class CodeigniterDriver extends DatabaseDriver
+class CodeIgniterDriver extends DatabaseDriver
 {
     /**
      * Initializes the driver instance.
