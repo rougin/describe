@@ -100,11 +100,11 @@ interface DriverInterface
 
 ## Projects using Describe
 
-### [Combustor](https://rougin.github.io/combustor/)
+### [Combustor](https://roug.in/combustor/)
 
 Combustor uses Describe for getting database information for generating a codebase.
 
-### [Refinery](https://rougin.github.io/refinery/)
+### [Refinery](https://roug.in/refinery/)
 
 Same as Combustor, Refinery also uses Describe for creating database migrations for Codeigniter.
 
