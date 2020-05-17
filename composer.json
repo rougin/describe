@@ -2,13 +2,13 @@
     "name": "rougin/describe",
     "description": "Returns an array of column information from a database table.",
     "keywords": ["describe", "database", "php"],
-    "homepage": "https://rougin.github.io/describe/",
+    "homepage": "https://roug.in/describe/",
     "license": "MIT",
     "authors":
     [
         {
             "email": "rougingutib@gmail.com",
-            "homepage": "https://rougin.github.io/",
+            "homepage": "https://roug.in/",
             "name": "Rougin Gutib",
             "role": "Software Engineer"
         }
