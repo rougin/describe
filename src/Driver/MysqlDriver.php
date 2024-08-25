@@ -113,10 +113,12 @@ class MysqlDriver implements DriverInterface
 
         $result->execute();
 
-        /** @var string[] $row */
         while ($row = $result->fetch())
         {
-            $tables[] = new Table($row[0], $this);
+            /** @var string[] */
+            $item = $row;
+
+            $tables[] = new Table($item[0], $this);
         }
 
         return $tables;
@@ -146,7 +148,7 @@ class MysqlDriver implements DriverInterface
         {
             $column->setDataType($match[1]);
 
-            $column->setLength($match[2]);
+            $column->setLength((int) $match[2]);
         }
         // --------------------------------------------------
 
@@ -209,7 +211,12 @@ class MysqlDriver implements DriverInterface
 
         while ($row = $result->fetch())
         {
-            $columns[] = $this->column(new Column, $table, $row);
+            /** @var array<string, string> */
+            $item = $row;
+
+            $column = $this->column(new Column, $table, $item);
+
+            $columns[] = $column;
         }
 
         if (count($columns) > 0)
@@ -246,9 +253,11 @@ class MysqlDriver implements DriverInterface
 
         $table->setFetchMode(\PDO::FETCH_ASSOC);
 
-        /** @var array<string, string> $item */
-        while ($item = $table->fetch())
+        while ($result = $table->fetch())
         {
+            /** @var array<string, string> */
+            $item = $result;
+
             if ($item['column'] !== $row['Field'])
             {
                 continue;

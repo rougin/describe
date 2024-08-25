@@ -7,6 +7,12 @@ use Rougin\Describe\Exceptions\TableNotFoundException;
 /**
  * @deprecated since ~1.7, use "Table" instead.
  *
+ * @method \Rougin\Describe\Column[] get_columns(string $table)
+ * @method string|null               get_primary_key(string $table)
+ * @method \Rougin\Describe\Column[] get_table(string $table)
+ * @method \Rougin\Describe\Table[]  get_table_names()
+ * @method \Rougin\Describe\Table[]  show_tables()
+ *
  * @package Describe
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -103,8 +109,7 @@ class Describe
     /**
      * Returns the primary key of a table.
      *
-     * @param string  $table
-     * @param boolean $object
+     * @param string $table
      *
      * @return string|null
      */
@@ -142,12 +147,12 @@ class Describe
      *
      * Calls methods from this class in underscore case.
      *
-     * @param string $method
-     * @param mixed  $parameters
+     * @param string  $method
+     * @param mixed[] $params
      *
      * @return mixed
      */
-    public function __call($method, $parameters)
+    public function __call($method, $params)
     {
         // Camelize the method name ---------------
         $words = ucwords($method, ' _-');
@@ -159,8 +164,9 @@ class Describe
         $method = lcfirst((string) $method);
         // ----------------------------------------
 
-        $instance = array($this, $method);
+        /** @var callable */
+        $class = array($this, $method);
 
-        return call_user_func_array($instance, $parameters);
+        return call_user_func_array($class, $params);
     }
 }

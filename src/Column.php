@@ -5,6 +5,31 @@ namespace Rougin\Describe;
 /**
  * @package Describe
  *
+ * @method string                  get_data_type()
+ * @method string                  get_default_value()
+ * @method string                  get_field()
+ * @method string                  get_referenced_field()
+ * @method string                  get_referenced_table()
+ * @method integer                 get_length()
+ * @method boolean                 is_auto_increment()
+ * @method boolean                 is_foreign_key()
+ * @method boolean                 is_null()
+ * @method boolean                 is_primary_key()
+ * @method boolean                 is_unique()
+ * @method boolean                 is_unsigned()
+ * @method \Rougin\Describe\Column set_auto_increment(boolean $increment)
+ * @method \Rougin\Describe\Column set_data_type(string $type)
+ * @method \Rougin\Describe\Column set_default_value(string $default)
+ * @method \Rougin\Describe\Column set_field(string $field)
+ * @method \Rougin\Describe\Column set_foreign(string $field)
+ * @method \Rougin\Describe\Column set_referenced_field(string $field)
+ * @method \Rougin\Describe\Column set_referenced_table(string $table)
+ * @method \Rougin\Describe\Column set_length(integer $length)
+ * @method \Rougin\Describe\Column set_null(boolean $null = true)
+ * @method \Rougin\Describe\Column set_primary(boolean $primary = true)
+ * @method \Rougin\Describe\Column set_unique(boolean $unique = true)
+ * @method \Rougin\Describe\Column set_unsigned(boolean $unsigned = true)
+ *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class Column
@@ -188,6 +213,8 @@ class Column
      * Sets the auto increment.
      *
      * @param boolean $increment
+     *
+     * @return self
      */
     public function setAutoIncrement($increment)
     {
@@ -225,6 +252,8 @@ class Column
      * Sets the default value.
      *
      * @param string $default
+     *
+     * @return self
      */
     public function setDefaultValue($default)
     {
@@ -237,6 +266,8 @@ class Column
      * Sets the column's description.
      *
      * @param string $field
+     *
+     * @return self
      */
     public function setField($field)
     {
@@ -249,6 +280,8 @@ class Column
      * Sets the field as a foreign key.
      *
      * @param boolean $foreign
+     *
+     * @return self
      */
     public function setForeign($foreign)
     {
@@ -261,6 +294,8 @@ class Column
      * Sets the foreign field.
      *
      * @param string $field
+     *
+     * @return self
      */
     public function setReferencedField($field)
     {
@@ -273,6 +308,8 @@ class Column
      * Sets the foreign table.
      *
      * @param string $table
+     *
+     * @return self
      */
     public function setReferencedTable($table)
     {
@@ -285,6 +322,8 @@ class Column
      * Sets the field's length.
      *
      * @param integer $length
+     *
+     * @return self
      */
     public function setLength($length)
     {
@@ -297,6 +336,8 @@ class Column
      * Sets if field accepts NULL values.
      *
      * @param boolean $null
+     *
+     * @return self
      */
     public function setNull($null = true)
     {
@@ -309,6 +350,8 @@ class Column
      * Sets if field is a primary key.
      *
      * @param boolean $primary
+     *
+     * @return self
      */
     public function setPrimary($primary = true)
     {
@@ -321,6 +364,8 @@ class Column
      * Sets if field is a unique key.
      *
      * @param boolean $unique
+     *
+     * @return self
      */
     public function setUnique($unique = true)
     {
@@ -333,6 +378,8 @@ class Column
      * Sets if field is an unsigned key.
      *
      * @param boolean $unsigned
+     *
+     * @return self
      */
     public function setUnsigned($unsigned = true)
     {
@@ -346,12 +393,12 @@ class Column
      *
      * Calls methods from this class in underscore case.
      *
-     * @param string $method
-     * @param mixed  $parameters
+     * @param string  $method
+     * @param mixed[] $params
      *
      * @return mixed
      */
-    public function __call($method, $parameters)
+    public function __call($method, $params)
     {
         // Camelize the method name ---------------
         $words = ucwords($method, ' _-');
@@ -365,9 +412,10 @@ class Column
 
         if (method_exists($this, $method) === true)
         {
-            $instance = array($this, $method);
+            /** @var callable */
+            $class = array($this, $method);
 
-            $result = call_user_func_array($instance, $parameters);
+            $result = call_user_func_array($class, $params);
         }
 
         return isset($result) ? $result : $this;

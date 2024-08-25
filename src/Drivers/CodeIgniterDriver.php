@@ -11,6 +11,6 @@ use Rougin\Describe\Driver\CodeigniterDriver as Driver;
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class CodeIgniterDriver extends Driver
+class CodeigniterDriver extends Driver
 {
 }

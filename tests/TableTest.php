@@ -2,7 +2,7 @@
 
 namespace Rougin\Describe;
 
-use Rougin\Describe\Driver\MySQLDriver;
+use Rougin\Describe\Driver\MysqlDriver;
 
 class TableTest extends Testcase
 {
@@ -20,7 +20,7 @@ class TableTest extends Testcase
 
         $pdo = new \PDO($dsn, 'root', 'password');
 
-        $driver = new MySQLDriver($pdo, 'demo');
+        $driver = new MysqlDriver($pdo, 'demo');
 
         $this->table = new Table('post', $driver);
     }

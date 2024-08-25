@@ -132,7 +132,7 @@ class DatabaseDriver implements DriverInterface
 
         if ($isSqlite)
         {
-            return new SQLiteDriver(new \PDO($data['hostname']));
+            return new SqliteDriver(new \PDO($data['hostname']));
         }
 
         $dsn = (string) 'mysql:host={HOST};dbname={NAME}';
@@ -143,6 +143,6 @@ class DatabaseDriver implements DriverInterface
 
         $pdo = new \PDO($dsn, $data['username'], $data['password']);
 
-        return new MySQLDriver($pdo, $data['database']);
+        return new MysqlDriver($pdo, $data['database']);
     }
 }

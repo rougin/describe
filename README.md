@@ -21,19 +21,19 @@ $ composer require rougin/describe
 ### Using a vendor-specific driver
 
 ``` php
-use Rougin\Describe\Driver\MySQLDriver;
+use Rougin\Describe\Driver\MysqlDriver;
 
 $dsn = 'mysql:host=localhost;dbname=demo';
 
 $pdo = new PDO($dsn, 'root', 'password');
 
-$driver = new MySQLDriver($pdo, 'demo');
+$driver = new MysqlDriver($pdo, 'demo');
 ```
 
 Available drivers:
 
-* [MySQLDriver](https://github.com/rougin/describe/blob/master/src/Driver/MySQLDriver.php)
-* [SQLiteDriver](https://github.com/rougin/describe/blob/master/src/Driver/SQLiteDriver.php)
+* [MysqlDriver](https://github.com/rougin/describe/blob/master/src/Driver/MysqlDriver.php)
+* [SqliteDriver](https://github.com/rougin/describe/blob/master/src/Driver/SqliteDriver.php)
 
 ### Using a `DatabaseDriver`
 

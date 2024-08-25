@@ -2,7 +2,7 @@
 
 namespace Rougin\Describe;
 
-use Rougin\Describe\Driver\MySQLDriver;
+use Rougin\Describe\Driver\MysqlDriver;
 
 class ColumnTest extends Testcase
 {
@@ -27,7 +27,7 @@ class ColumnTest extends Testcase
     {
         $pdo = new \PDO('mysql:host=localhost;dbname=demo', 'root', 'password');
 
-        $driver = new MySQLDriver($pdo, 'demo');
+        $driver = new MysqlDriver($pdo, 'demo');
 
         $describe = new Describe($driver);
 
@@ -162,8 +162,6 @@ class ColumnTest extends Testcase
     public function test_underscore_case_fields()
     {
         $column = $this->columns[self::COLUMN_ID];
-
-        $column->dummy_method();
 
         $this->assertTrue($column->is_primary_key());
     }

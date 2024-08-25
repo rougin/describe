@@ -10,7 +10,7 @@ use Rougin\Describe\Table;
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class SqliteDriver extends MySQLDriver
+class SqliteDriver extends MysqlDriver
 {
     /**
      * @var \PDO
@@ -108,15 +108,17 @@ class SqliteDriver extends MySQLDriver
 
         $tables = array();
 
-        /** @var array<string, string>[] */
         while ($row = $result->fetch())
         {
-            if ($row['name'] !== 'sqlite_sequence')
-            {
-                $name = $row['name'];
+            /** @var array<string, string> $item */
+            $item = $row;
 
-                $tables[] = new Table($name, $this);
+            if ($item['name'] === 'sqlite_sequence')
+            {
+                continue;
             }
+
+            $tables[] = new Table($item['name'], $this);
         }
 
         return $tables;
@@ -170,19 +172,21 @@ class SqliteDriver extends MySQLDriver
 
         $result->setFetchMode(\PDO::FETCH_ASSOC);
 
-        /** @var array<string, string> $row */
         while ($row = $result->fetch())
         {
-            if ($column->getField() !== $row['from'])
+            /** @var array<string, string> */
+            $item = $row;
+
+            if ($column->getField() !== $item['from'])
             {
                 continue;
             }
 
-            $column->setReferencedTable($row['table']);
+            $column->setReferencedTable($item['table']);
 
             $column->setForeign(true);
 
-            $column->setReferencedField($row['to']);
+            $column->setReferencedField($item['to']);
         }
 
         return $column;

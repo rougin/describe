@@ -2,7 +2,7 @@
 
 namespace Rougin\Describe\Drivers;
 
-use Rougin\Describe\Driver\SQLiteDriver as Driver;
+use Rougin\Describe\Driver\SqliteDriver as Driver;
 
 /**
  * @deprecated since ~1.5, use "Driver\SqliteDriver" instead.
@@ -11,6 +11,6 @@ use Rougin\Describe\Driver\SQLiteDriver as Driver;
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class SQLiteDriver extends Driver
+class SqliteDriver extends Driver
 {
 }

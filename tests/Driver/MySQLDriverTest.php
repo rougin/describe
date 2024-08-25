@@ -9,7 +9,7 @@ use Rougin\Describe\Describe;
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class MySQLDriverTest extends AbstractTestCase
+class MysqlDriverTest extends AbstractTestCase
 {
     /**
      * @return void
@@ -20,7 +20,7 @@ class MySQLDriverTest extends AbstractTestCase
 
         $pdo = new \PDO($dsn, 'root', 'password');
 
-        $driver = new MySQLDriver($pdo, 'demo');
+        $driver = new MysqlDriver($pdo, 'demo');
 
         $this->describe = new Describe($driver);
     }

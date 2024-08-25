@@ -9,7 +9,7 @@ use Rougin\Describe\Describe;
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class SQLiteDriverTest extends AbstractTestCase
+class SqliteDriverTest extends AbstractTestCase
 {
     /**
      * @return void
@@ -18,7 +18,7 @@ class SQLiteDriverTest extends AbstractTestCase
     {
         $file = __DIR__ . '/../Databases/test.db';
 
-        $driver = new SQLiteDriver(new \PDO('sqlite:' . $file));
+        $driver = new SqliteDriver(new \PDO('sqlite:' . $file));
 
         $this->describe = new Describe($driver);
     }
