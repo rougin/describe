@@ -18,7 +18,7 @@ class MysqlDriverTest extends AbstractTestCase
     {
         $dsn = 'mysql:host=localhost;dbname=demo';
 
-        $pdo = new \PDO($dsn, 'root', 'password');
+        $pdo = new \PDO($dsn, 'root', '');
 
         $driver = new MysqlDriver($pdo, 'demo');
 
