@@ -2,7 +2,7 @@
 
 namespace Rougin\Describe\Drivers;
 
-use Rougin\Describe\Driver\MySQLDriver as BaseDriver;
+use Rougin\Describe\Driver\MySQLDriver as Driver;
 
 /**
  * @deprecated since ~1.5, use "Driver\MysqlDriver" instead.
@@ -11,6 +11,6 @@ use Rougin\Describe\Driver\MySQLDriver as BaseDriver;
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class MySQLDriver extends BaseDriver
+class MySQLDriver extends Driver
 {
 }

@@ -108,6 +108,7 @@ class SqliteDriver extends MySQLDriver
 
         $tables = array();
 
+        /** @var array<string, string>[] */
         while ($row = $result->fetch())
         {
             if ($row['name'] !== 'sqlite_sequence')
@@ -138,9 +139,7 @@ class SqliteDriver extends MySQLDriver
 
         $column->setDataType(strtolower($row['type']));
 
-        $column = $this->reference($table, $column);
-
-        $column->setNull(! $row['notnull']);
+        $column = $this->getForeign($table, $column);
 
         if ($row['pk'])
         {
@@ -149,7 +148,8 @@ class SqliteDriver extends MySQLDriver
             $column->setPrimary(true);
         }
 
-        return $column;
+        return $column->setNull(! $row['notnull']);
+
     }
 
     /**
@@ -160,7 +160,7 @@ class SqliteDriver extends MySQLDriver
      *
      * @return \Rougin\Describe\Column
      */
-    protected function reference($table, Column $column)
+    protected function getForeign($table, Column $column)
     {
         $query = 'PRAGMA foreign_key_list("' . $table . '");';
 
@@ -170,16 +170,19 @@ class SqliteDriver extends MySQLDriver
 
         $result->setFetchMode(\PDO::FETCH_ASSOC);
 
+        /** @var array<string, string> $row */
         while ($row = $result->fetch())
         {
-            if ($column->getField() === $row['from'])
+            if ($column->getField() !== $row['from'])
             {
-                $column->setReferencedTable($row['table']);
-
-                $column->setForeign(true);
-
-                $column->setReferencedField($row['to']);
+                continue;
             }
+
+            $column->setReferencedTable($row['table']);
+
+            $column->setForeign(true);
+
+            $column->setReferencedField($row['to']);
         }
 
         return $column;

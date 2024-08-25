@@ -57,17 +57,20 @@ class Table
     /**
      * Returns the primary key of a table.
      *
-     * @return \Rougin\Describe\Column|null
+     * @return string|null
      */
     public function primary()
     {
+        $result = null;
+
         foreach ($this->columns() as $column)
         {
-            $primary = $column->isPrimaryKey();
-
-            $primary && $result = $column;
+            if ($column->isPrimaryKey())
+            {
+                $result = $column->getField();
+            }
         }
 
-        return isset($result) ? $result : null;
+        return $result;
     }
 }

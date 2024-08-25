@@ -22,16 +22,6 @@ class DatabaseDriver implements DriverInterface
     protected $driver;
 
     /**
-     * @var string[]
-     */
-    protected $mysql = array('mysql', 'mysqli');
-
-    /**
-     * @var string[]
-     */
-    protected $sqlite = array('pdo', 'sqlite', 'sqlite3');
-
-    /**
      * @param string                $name
      * @param array<string, string> $data
      */
@@ -127,9 +117,9 @@ class DatabaseDriver implements DriverInterface
      */
     protected function driver($name, $data = array())
     {
-        $isMysql = in_array($name, $this->mysql);
+        $isMysql = in_array($name, array('mysql', 'mysqli'));
 
-        $isSqlite = in_array($name, $this->sqlite);
+        $isSqlite = in_array($name, array('pdo', 'sqlite', 'sqlite3'));
 
         if (! $isMysql && ! $isSqlite)
         {
@@ -140,14 +130,16 @@ class DatabaseDriver implements DriverInterface
             throw new DriverNotFoundException($message);
         }
 
-        if (in_array($name, $this->sqlite))
+        if ($isSqlite)
         {
             return new SQLiteDriver(new \PDO($data['hostname']));
         }
 
-        $dsn = (string) 'mysql:host=%s;dbname=%s';
+        $dsn = (string) 'mysql:host={HOST};dbname={NAME}';
 
-        $dsn = sprintf($dsn, $data['hostname'], $data['database']);
+        $dsn = str_replace('{HOST}', $data['hostname'], $dsn);
+
+        $dsn = str_replace('{NAME}', $data['database'], $dsn);
 
         $pdo = new \PDO($dsn, $data['username'], $data['password']);
 

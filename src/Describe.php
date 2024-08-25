@@ -39,15 +39,11 @@ class Describe
     {
         try
         {
-            $columns = $this->driver->columns($table);
-
-            return $columns;
+            return $this->driver->columns($table);
         }
         catch (\PDOException $error)
         {
-            $text = (string) $error->getMessage();
-
-            throw new TableNotFoundException($text);
+            throw new TableNotFoundException($error->getMessage());
         }
     }
 
@@ -70,14 +66,13 @@ class Describe
      *
      * Returns the primary key of a table.
      *
-     * @param string  $table
-     * @param boolean $object
+     * @param string $table
      *
-     * @return \Rougin\Describe\Column|string
+     * @return string|null
      */
-    public function getPrimaryKey($table, $object = false)
+    public function getPrimaryKey($table)
     {
-        return $this->primary($table, $object);
+        return $this->primary($table);
     }
 
     /**
@@ -112,15 +107,13 @@ class Describe
      * @param string  $table
      * @param boolean $object
      *
-     * @return \Rougin\Describe\Column|string
+     * @return string|null
      */
-    public function primary($table, $object = false)
+    public function primary($table)
     {
         $table = new Table($table, $this->driver);
 
-        ($result = $table->primary()) === null && $result = '';
-
-        return $object ? $result : $result->getField();
+        return $table->primary();
     }
 
     /**

@@ -36,6 +36,6 @@ class DatabaseDriverTest extends AbstractTestCase
     {
         $this->setExpectedException(self::DRIVER_NOT_FOUND);
 
-        $driver = new DatabaseDriver('test', array());
+        new DatabaseDriver('test', array());
     }
 }

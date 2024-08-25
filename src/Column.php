@@ -213,7 +213,12 @@ class Column
 
         $index = array_search($type, $shorthand);
 
-        $this->type = $index === false ? $type : $types[$index];
+        if ($index !== false)
+        {
+            $type = $types[$index];
+        }
+
+        $this->type = $type;
 
         return $this;
     }

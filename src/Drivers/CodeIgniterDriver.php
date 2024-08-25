@@ -2,7 +2,7 @@
 
 namespace Rougin\Describe\Drivers;
 
-use Rougin\Describe\Driver\CodeigniterDriver as BaseDriver;
+use Rougin\Describe\Driver\CodeigniterDriver as Driver;
 
 /**
  * @deprecated since ~1.5, use "Driver\CodeigniterDriver" instead.
@@ -11,6 +11,6 @@ use Rougin\Describe\Driver\CodeigniterDriver as BaseDriver;
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class CodeIgniterDriver extends BaseDriver
+class CodeIgniterDriver extends Driver
 {
 }

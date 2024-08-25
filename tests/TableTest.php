@@ -28,6 +28,16 @@ class TableTest extends Testcase
     /**
      * @return void
      */
+    public function test_table_name()
+    {
+        $result = $this->table->name();
+
+        $this->assertEquals('post', $result);
+    }
+
+    /**
+     * @return void
+     */
     public function test_total_columns()
     {
         $columns = $this->table->columns();
@@ -37,15 +47,5 @@ class TableTest extends Testcase
         $result = count($columns);
 
         $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * @return void
-     */
-    public function test_table_name()
-    {
-        $result = $this->table->name();
-
-        $this->assertEquals('post', $result);
     }
 }

@@ -18,9 +18,7 @@ class SQLiteDriverTest extends AbstractTestCase
     {
         $file = __DIR__ . '/../Databases/test.db';
 
-        $pdo = new \PDO('sqlite:' . $file);
-
-        $driver = new SQLiteDriver($pdo);
+        $driver = new SQLiteDriver(new \PDO('sqlite:' . $file));
 
         $this->describe = new Describe($driver);
     }

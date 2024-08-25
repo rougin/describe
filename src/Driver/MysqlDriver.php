@@ -16,7 +16,7 @@ class MysqlDriver implements DriverInterface
     /**
      * @var string
      */
-    protected $database;
+    protected $db;
 
     /**
      * @var \PDO
@@ -24,26 +24,16 @@ class MysqlDriver implements DriverInterface
     protected $pdo;
 
     /**
-     * @var string
-     */
-    protected $script = '';
-
-    /**
      * @param \PDO   $pdo
-     * @param string $database
+     * @param string $db
      */
-    public function __construct(\PDO $pdo, $database)
+    public function __construct(\PDO $pdo, $db)
     {
-        $this->database = $database;
+        $this->db = $db;
 
         $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
         $this->pdo = $pdo;
-
-        $this->script = 'SELECT COLUMN_NAME as "column", REFERENCED_COLUMN_NAME as ' .
-            '"referenced_column", CONCAT(REFERENCED_TABLE_SCHEMA, ".", ' .
-            'REFERENCED_TABLE_NAME) as "referenced_table" FROM INFORMATION_SCHEMA' .
-            '.KEY_COLUMN_USAGE WHERE CONSTRAINT_SCHEMA = "%s" AND TABLE_NAME = "%s";';
     }
 
     /**
@@ -123,6 +113,7 @@ class MysqlDriver implements DriverInterface
 
         $result->execute();
 
+        /** @var string[] $row */
         while ($row = $result->fetch())
         {
             $tables[] = new Table($row[0], $this);
@@ -142,13 +133,14 @@ class MysqlDriver implements DriverInterface
      */
     protected function column(Column $column, $table, $row)
     {
-        preg_match('/(.*?)\((.*?)\)/', $row['Type'], $match);
-
         $column->setDataType($row['Type']);
 
         $column->setDefaultValue($row['Default']);
 
         $column->setField($row['Field']);
+
+        // Return the data type and its length --------------
+        preg_match('/(.*?)\((.*?)\)/', $row['Type'], $match);
 
         if (isset($match[1]))
         {
@@ -156,6 +148,7 @@ class MysqlDriver implements DriverInterface
 
             $column->setLength($match[2]);
         }
+        // --------------------------------------------------
 
         // In MySQL ~8.0, integer does not show its length ---
         if ($column->getDataType() === 'integer')
@@ -167,11 +160,66 @@ class MysqlDriver implements DriverInterface
         }
         // --------------------------------------------------
 
-        $column = $this->properties($row, $column);
+        if ($row['Null'] === 'YES')
+        {
+            $column->setNull(true);
+        }
 
-        $column = $this->keys($row, $column);
+        if ($row['Extra'] === 'auto_increment')
+        {
+            $column->setAutoIncrement(true);
+        }
 
-        return $this->foreign($table, $row, $column);
+        if ($row['Key'] === 'PRI')
+        {
+            $column->setPrimary(true);
+        }
+
+        if ($row['Key'] === 'MUL')
+        {
+            $column->setForeign(true);
+        }
+
+        if ($row['Key'] === 'UNI')
+        {
+            $column->setUnique(true);
+        }
+
+        return $this->setForeign($table, $row, $column);
+    }
+
+    /**
+     * Returns the list of columns based on a query.
+     *
+     * @param string $table
+     * @param string $query
+     *
+     * @return \Rougin\Describe\Column[]
+     * @throws \Rougin\Describe\Exceptions\TableNotFoundException
+     */
+    protected function query($table, $query)
+    {
+        $columns = array();
+
+        $result = $this->pdo->prepare($query);
+
+        $result->execute();
+
+        $result->setFetchMode(\PDO::FETCH_ASSOC);
+
+        while ($row = $result->fetch())
+        {
+            $columns[] = $this->column(new Column, $table, $row);
+        }
+
+        if (count($columns) > 0)
+        {
+            return $columns;
+        }
+
+        $message = 'Table "' . $table . '" does not exists!';
+
+        throw new TableNotFoundException($message);
     }
 
     /**
@@ -183,9 +231,14 @@ class MysqlDriver implements DriverInterface
      *
      * @return \Rougin\Describe\Column
      */
-    protected function foreign($name, $row, Column $column)
+    protected function setForeign($name, $row, Column $column)
     {
-        $query = sprintf($this->script, $this->database, $name);
+        $script = 'SELECT COLUMN_NAME as "column", REFERENCED_COLUMN_NAME as ' .
+            '"referenced_column", CONCAT(REFERENCED_TABLE_SCHEMA, ".", ' .
+            'REFERENCED_TABLE_NAME) as "referenced_table" FROM INFORMATION_SCHEMA' .
+            '.KEY_COLUMN_USAGE WHERE CONSTRAINT_SCHEMA = "%s" AND TABLE_NAME = "%s";';
+
+        $query = sprintf($script, $this->db, $name);
 
         $table = $this->pdo->prepare($query);
 
@@ -193,101 +246,22 @@ class MysqlDriver implements DriverInterface
 
         $table->setFetchMode(\PDO::FETCH_ASSOC);
 
+        /** @var array<string, string> $item */
         while ($item = $table->fetch())
         {
-            if ($item['column'] === $row['Field'])
+            if ($item['column'] !== $row['Field'])
             {
-                $referenced = $this->strip($item['referenced_table']);
-
-                $column->setReferencedField($item['referenced_column']);
-
-                $column->setReferencedTable($referenced);
+                continue;
             }
+
+            $refTable = $item['referenced_table'];
+
+            $refTable = $this->strip($refTable);
+
+            $column->setReferencedField($item['referenced_column']);
+
+            $column->setReferencedTable($refTable);
         }
-
-        return $column;
-    }
-
-    /**
-     * Sets the key of a column.
-     *
-     * @param array<string, string>   $row
-     * @param \Rougin\Describe\Column $column
-     *
-     * @return \Rougin\Describe\Column
-     */
-    protected function keys($row, Column $column)
-    {
-        switch ($row['Key'])
-        {
-            case 'PRI':
-                $column->setPrimary(true);
-
-                break;
-
-            case 'MUL':
-                $column->setForeign(true);
-
-                break;
-
-            case 'UNI':
-                $column->setUnique(true);
-
-                break;
-        }
-
-        return $column;
-    }
-
-    /**
-     * Returns the list of columns based on a query.
-     *
-     * @param string $table
-     * @param string $query
-     * @param array  $columns
-     *
-     * @return \Rougin\Describe\Column[]
-     */
-    protected function query($table, $query, $columns = array())
-    {
-        $result = $this->pdo->prepare($query);
-
-        $result->execute();
-
-        $result->setFetchMode(\PDO::FETCH_ASSOC);
-
-        while ($row = $result->fetch())
-        {
-            $column = $this->column(new Column, $table, $row);
-
-            array_push($columns, $column);
-        }
-
-        if (empty($columns) === true)
-        {
-            $message = 'Table "' . $table . '" does not exists!';
-
-            throw new TableNotFoundException($message);
-        }
-
-        return $columns;
-    }
-
-    /**
-     * Sets the properties of a column.
-     *
-     * @param mixed                   $row
-     * @param \Rougin\Describe\Column $column
-     *
-     * @return \Rougin\Describe\Column
-     */
-    protected function properties($row, Column $column)
-    {
-        $increment = $row['Extra'] === 'auto_increment';
-
-        $column->setAutoIncrement($increment);
-
-        $column->setNull($row['Null'] === 'YES');
 
         return $column;
     }
