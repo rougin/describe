@@ -7,13 +7,11 @@ use Rougin\Describe\Exceptions\TableNotFoundException;
 use Rougin\Describe\Table;
 
 /**
- * NOTE: Should be renamed to "MySqlDriver" in v2.0.0.
- *
  * @package Describe
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class MySQLDriver implements DriverInterface
+class MysqlDriver implements DriverInterface
 {
     /**
      * @var string
@@ -97,7 +95,7 @@ class MySQLDriver implements DriverInterface
      */
     public function getTableNames()
     {
-        return $this->items(false);
+        return $this->tables();
     }
 
     /**
@@ -119,7 +117,18 @@ class MySQLDriver implements DriverInterface
      */
     public function tables()
     {
-        return $this->items(true);
+        $tables = array();
+
+        $result = $this->pdo->prepare('SHOW TABLES');
+
+        $result->execute();
+
+        while ($row = $result->fetch())
+        {
+            $tables[] = new Table($row[0], $this);
+        }
+
+        return $tables;
     }
 
     /**
@@ -147,6 +156,16 @@ class MySQLDriver implements DriverInterface
 
             $column->setLength($match[2]);
         }
+
+        // In MySQL ~8.0, integer does not show its length ---
+        if ($column->getDataType() === 'integer')
+        {
+            if (! isset($match[1]))
+            {
+                $column->setLength(10);
+            }
+        }
+        // --------------------------------------------------
 
         $column = $this->properties($row, $column);
 
@@ -187,33 +206,6 @@ class MySQLDriver implements DriverInterface
         }
 
         return $column;
-    }
-
-    /**
-     * @deprecated since ~1.7, move to "tables" instead.
-     *
-     * Returns an array of table names or tables.
-     *
-     * @param boolean  $instance
-     * @param string[] $tables
-     *
-     * @return \Rougin\Describe\Table[]|array
-     */
-    protected function items($instance = false, $tables = array())
-    {
-        $information = $this->pdo->prepare('SHOW TABLES');
-
-        $information->execute();
-
-        while ($row = $information->fetch())
-        {
-            // NOTE: To be removed in v2.0.0. Always return Table instance.
-            $instance && $row[0] = new Table($row[0], $this);
-
-            array_push($tables, $row[0]);
-        }
-
-        return $tables;
     }
 
     /**

@@ -6,13 +6,11 @@ use Rougin\Describe\Column;
 use Rougin\Describe\Table;
 
 /**
- * NOTE: Should be renamed to "SqliteDriver" in v2.0.0.
- *
  * @package Describe
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class SQLiteDriver extends MySQLDriver
+class SqliteDriver extends MySQLDriver
 {
     /**
      * @var \PDO
@@ -78,7 +76,7 @@ class SQLiteDriver extends MySQLDriver
      */
     public function getTableNames()
     {
-        return $this->items(false);
+        return $this->tables();
     }
 
     /**
@@ -100,7 +98,27 @@ class SQLiteDriver extends MySQLDriver
      */
     public function tables()
     {
-        return $this->items(true);
+        $query = 'SELECT name FROM sqlite_master WHERE type = "table";';
+
+        $result = $this->pdo->prepare($query);
+
+        $result->execute();
+
+        $result->setFetchMode(\PDO::FETCH_ASSOC);
+
+        $tables = array();
+
+        while ($row = $result->fetch())
+        {
+            if ($row['name'] !== 'sqlite_sequence')
+            {
+                $name = $row['name'];
+
+                $tables[] = new Table($name, $this);
+            }
+        }
+
+        return $tables;
     }
 
     /**
@@ -132,39 +150,6 @@ class SQLiteDriver extends MySQLDriver
         }
 
         return $column;
-    }
-
-    /**
-     * @deprecated since ~1.7, move to "tables" instead.
-     *
-     * Returns an array of table names or tables.
-     *
-     * @param boolean  $instance
-     * @param string[] $tables
-     *
-     * @return \Rougin\Describe\Table[]|array
-     */
-    protected function items($instance = false, $tables = array())
-    {
-        $query = 'SELECT name FROM sqlite_master WHERE type = "table";';
-
-        $result = $this->pdo->prepare($query);
-
-        $result->execute();
-
-        $result->setFetchMode(\PDO::FETCH_ASSOC);
-
-        while ($row = $result->fetch())
-        {
-            if ($row['name'] !== 'sqlite_sequence')
-            {
-                $name = $row['name'];
-
-                $tables[] = new Table($name, $this);
-            }
-        }
-
-        return $tables;
     }
 
     /**

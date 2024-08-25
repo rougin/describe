@@ -127,15 +127,17 @@ class DatabaseDriver implements DriverInterface
      */
     protected function driver($name, $data = array())
     {
-        if (in_array($name, $this->mysql))
+        $isMysql = in_array($name, $this->mysql);
+
+        $isSqlite = in_array($name, $this->sqlite);
+
+        if (! $isMysql && ! $isSqlite)
         {
-            $dsn = (string) 'mysql:host=%s;dbname=%s';
+            $message = 'Database driver "%s" not found.';
 
-            $dsn = sprintf($dsn, $data['hostname'], $data['database']);
+            $message = sprintf($message, (string) $name);
 
-            $pdo = new \PDO($dsn, $data['username'], $data['password']);
-
-            return new MySQLDriver($pdo, (string) $data['database']);
+            throw new DriverNotFoundException($message);
         }
 
         if (in_array($name, $this->sqlite))
@@ -143,10 +145,12 @@ class DatabaseDriver implements DriverInterface
             return new SQLiteDriver(new \PDO($data['hostname']));
         }
 
-        $message = 'Database driver "%s" not found.';
+        $dsn = (string) 'mysql:host=%s;dbname=%s';
 
-        $message = sprintf($message, (string) $name);
+        $dsn = sprintf($dsn, $data['hostname'], $data['database']);
 
-        throw new DriverNotFoundException($message);
+        $pdo = new \PDO($dsn, $data['username'], $data['password']);
+
+        return new MySQLDriver($pdo, $data['database']);
     }
 }
