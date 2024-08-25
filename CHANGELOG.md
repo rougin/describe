@@ -7,6 +7,9 @@ All notable changes to `Describe` will be documented in this file.
 ### Changed
 - Code documentation by `php-cs-fixer`, code quality by `phpstan`
 
+### Removed
+- `doctrine/inflector` package
+
 ## [1.7.0](https://github.com/rougin/describe/compare/v1.6.0...v1.7.0) - 2018-01-10
 
 ### Added

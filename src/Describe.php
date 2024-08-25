@@ -157,7 +157,15 @@ class Describe
      */
     public function __call($method, $parameters)
     {
-        $method = (string) Inflector::camelize($method);
+        // Camelize the method name ---------------
+        $words = ucwords($method, ' _-');
+
+        $search = array(' ', '_', '-');
+
+        $method = str_replace($search, '', $words);
+
+        $method = lcfirst((string) $method);
+        // ----------------------------------------
 
         $instance = array($this, $method);
 

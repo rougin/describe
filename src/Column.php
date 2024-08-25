@@ -350,7 +350,15 @@ class Column
      */
     public function __call($method, $parameters)
     {
-        $method = Inflector::camelize($method);
+        // Camelize the method name ---------------
+        $words = ucwords($method, ' _-');
+
+        $search = array(' ', '_', '-');
+
+        $method = str_replace($search, '', $words);
+
+        $method = lcfirst((string) $method);
+        // ----------------------------------------
 
         if (method_exists($this, $method) === true)
         {
