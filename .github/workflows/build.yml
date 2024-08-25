@@ -16,20 +16,20 @@ jobs:
       matrix:
         php-versions: [ '5.3', '5.4', '5.5', '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3' ]
 
+    servics:
+      mysql:
+        image: mysql:8
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_USER=root -e MYSQL_PASSWORD=root -e MYSQL_DATABASE=test --entrypoint sh mysql:8 -c "exec docker-entrypoint.sh mysqld --default-authentication-plugin=mysql_native_password"
+
     name: Run Unit Test on PHP ${{ matrix.php-versions }}
 
     steps:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Start MySQL server
-      uses: samin/mysql-action@v1
-
-    - name: Run scripts to MySQL
+    - name: Run the MySQL server
       run: |
         sudo /etc/init.d/mysql start
-        mysql -uroot -proot -e 'ALTER USER "root"@"localhost" IDENTIFIED WITH mysql_native_password BY "root";'
-        mysql -uroot -proot -e 'ALTER USER "root"@"%" IDENTIFIED WITH mysql_native_password BY "root";'
         mysql -uroot -proot -e 'CREATE DATABASE IF NOT EXISTS test;'
         mysql -uroot -proot -e 'USE test; CREATE TABLE IF NOT EXISTS `post` ( `id` int(10) NOT NULL AUTO_INCREMENT, `subject` varchar(100) NOT NULL, `message` varchar(500) NOT NULL, `user_id` int(10) NOT NULL, `description` varchar(100) DEFAULT NULL, PRIMARY KEY (`id`), UNIQUE KEY `description` (`description`), KEY `user_id` (`user_id`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;'
         mysql -uroot -proot -e 'USE test; CREATE TABLE IF NOT EXISTS `user` ( `id` int(10) NOT NULL AUTO_INCREMENT, `name` varchar(200) NOT NULL, `age` int(2) NOT NULL, `gender` varchar(10) NOT NULL, PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;'
