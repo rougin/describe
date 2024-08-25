@@ -16,11 +16,11 @@ class TableTest extends Testcase
      */
     public function doSetUp()
     {
-        $dsn = 'mysql:host=localhost;dbname=demo';
+        $dsn = 'mysql:host=localhost;dbname=test';
 
         $pdo = new \PDO($dsn, 'root', '');
 
-        $driver = new MysqlDriver($pdo, 'demo');
+        $driver = new MysqlDriver($pdo, 'test');
 
         $this->table = new Table('post', $driver);
     }

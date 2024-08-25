@@ -25,9 +25,9 @@ class ColumnTest extends Testcase
      */
     public function doSetUp()
     {
-        $pdo = new \PDO('mysql:host=localhost;dbname=demo', 'root', '');
+        $pdo = new \PDO('mysql:host=localhost;dbname=test', 'root', '');
 
-        $driver = new MysqlDriver($pdo, 'demo');
+        $driver = new MysqlDriver($pdo, 'test');
 
         $describe = new Describe($driver);
 

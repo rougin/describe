@@ -23,11 +23,11 @@ $ composer require rougin/describe
 ``` php
 use Rougin\Describe\Driver\MysqlDriver;
 
-$dsn = 'mysql:host=localhost;dbname=demo';
+$dsn = 'mysql:host=localhost;dbname=test';
 
 $pdo = new PDO($dsn, 'root', '');
 
-$driver = new MysqlDriver($pdo, 'demo');
+$driver = new MysqlDriver($pdo, 'test');
 ```
 
 Available drivers:
@@ -43,7 +43,7 @@ use Rougin\Describe\Driver\DatabaseDriver;
 $credentials = array('password' => '');
 
 $credentials['hostname'] = 'localhost';
-$credentials['database'] = 'demo';
+$credentials['database'] = 'test';
 $credentials['username'] = 'root';
 
 $driver = new DatabaseDriver('mysql', $credentials);

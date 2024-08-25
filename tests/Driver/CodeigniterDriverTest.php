@@ -22,7 +22,7 @@ class CodeigniterDriverTest extends AbstractTestCase
         $config['hostname'] = 'localhost';
         $config['username'] = 'root';
         $config['password'] = '';
-        $config['database'] = 'demo';
+        $config['database'] = 'test';
 
         $driver = new CodeigniterDriver($config);
 
