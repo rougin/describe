@@ -91,8 +91,6 @@ class ColumnTest extends Testcase
     {
         $column = $this->columns[self::COLUMN_USER_ID];
 
-        print_r($column);exit;
-
         $this->assertEquals(10, $column->getLength());
     }
 

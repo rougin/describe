@@ -21,7 +21,7 @@ class CodeIgniterDriverTest extends AbstractTestCase
         $config['default']['dbdriver'] = 'mysqli';
         $config['default']['hostname'] = 'localhost';
         $config['default']['username'] = 'root';
-        $config['default']['password'] = '';
+        $config['default']['password'] = 'password';
         $config['default']['database'] = 'demo';
 
         $driver = new CodeIgniterDriver($config);

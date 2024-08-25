@@ -141,15 +141,8 @@ class MySQLDriver implements DriverInterface
 
         $column->setField($row['Field']);
 
-        if ($row['Field'] === 'user_id')
-        {
-            var_dump($row);exit;
-        }
-
         if (isset($match[1]))
         {
-            var_dump($match);
-
             $column->setDataType($match[1]);
 
             $column->setLength($match[2]);
