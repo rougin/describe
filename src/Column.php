@@ -2,8 +2,6 @@
 
 namespace Rougin\Describe;
 
-use Doctrine\Common\Inflector\Inflector;
-
 /**
  * @package Describe
  *

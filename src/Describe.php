@@ -2,7 +2,6 @@
 
 namespace Rougin\Describe;
 
-use Doctrine\Common\Inflector\Inflector;
 use Rougin\Describe\Exceptions\TableNotFoundException;
 
 /**
