@@ -21,8 +21,10 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Run MySQL server
+    - name: Start MySQL server
       uses: samin/mysql-action@v1
+
+    - name: Run scripts to MySQL
       run: |
         mysql -uroot -e 'CREATE TABLE IF NOT EXISTS `post` ( `id` int(10) NOT NULL AUTO_INCREMENT, `subject` varchar(100) NOT NULL, `message` varchar(500) NOT NULL, `user_id` int(10) NOT NULL, `description` varchar(100) DEFAULT NULL, PRIMARY KEY (`id`), UNIQUE KEY `description` (`description`), KEY `user_id` (`user_id`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;'
         mysql -uroot -e 'CREATE TABLE IF NOT EXISTS `user` ( `id` int(10) NOT NULL AUTO_INCREMENT, `name` varchar(200) NOT NULL, `age` int(2) NOT NULL, `gender` varchar(10) NOT NULL, PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;'
