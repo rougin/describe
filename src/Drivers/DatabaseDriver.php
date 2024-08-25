@@ -5,14 +5,11 @@ namespace Rougin\Describe\Drivers;
 use Rougin\Describe\Driver\DatabaseDriver as BaseDriver;
 
 /**
- * Database Driver
+ * @deprecated since ~1.5, use "Driver\DatabaseDriver" instead.
  *
- * A database driver for using available database drivers.
- * NOTE: To be removed in v2.0.0. Use Driver\DatabaseDriver instead.
+ * @package Describe
  *
- * @package  Describe
- * @category Drivers
- * @author   Rougin Gutib <rougingutib@gmail.com>
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class DatabaseDriver extends BaseDriver
 {

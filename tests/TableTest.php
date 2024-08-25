@@ -4,7 +4,7 @@ namespace Rougin\Describe;
 
 use Rougin\Describe\Driver\MySQLDriver;
 
-class TableTest extends \PHPUnit_Framework_TestCase
+class TableTest extends Testcase
 {
     /**
      * @var \Rougin\Describe\Table
@@ -12,15 +12,13 @@ class TableTest extends \PHPUnit_Framework_TestCase
     protected $table;
 
     /**
-     * Sets up the table instance.
-     *
      * @return void
      */
-    public function setUp()
+    public function doSetUp()
     {
         $dsn = 'mysql:host=localhost;dbname=demo';
 
-        $pdo = new \PDO($dsn, 'root', '');
+        $pdo = new \PDO($dsn, 'root', 'password');
 
         $driver = new MySQLDriver($pdo, 'demo');
 
@@ -28,11 +26,9 @@ class TableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests Table::columns.
-     *
      * @return void
      */
-    public function testColumnsMethod()
+    public function test_total_columns()
     {
         $columns = $this->table->columns();
 
@@ -44,11 +40,9 @@ class TableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests Table::name.
-     *
      * @return void
      */
-    public function testNameMethod()
+    public function test_table_name()
     {
         $result = $this->table->name();
 

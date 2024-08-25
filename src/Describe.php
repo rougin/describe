@@ -6,13 +6,11 @@ use Doctrine\Common\Inflector\Inflector;
 use Rougin\Describe\Exceptions\TableNotFoundException;
 
 /**
- * Describe
- *
- * Gets information of a table schema from a database.
- * NOTE: To be removed in v2.0.0. Use Table class instead.
+ * @deprecated since ~1.7, use "Table" instead.
  *
  * @package Describe
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class Describe
 {
@@ -30,20 +28,23 @@ class Describe
     }
 
     /**
-     * Returns an array of Column instances from a table.
+     * Returns an array of columns from a table.
      *
-     * @param  string $table
+     * @param string $table
+     *
      * @return \Rougin\Describe\Column[]
-     *
      * @throws \Rougin\Describe\Exceptions\TableNotFoundException
      */
     public function columns($table)
     {
-        try {
+        try
+        {
             $columns = $this->driver->columns($table);
 
             return $columns;
-        } catch (\PDOException $error) {
+        }
+        catch (\PDOException $error)
+        {
             $text = (string) $error->getMessage();
 
             throw new TableNotFoundException($text);
@@ -51,23 +52,27 @@ class Describe
     }
 
     /**
-     * Returns an array of Column instances from a table.
-     * NOTE: To be removed in v2.0.0. Use columns() instead.
+     * @deprecated since ~1.7, use "columns" instead.
      *
-     * @param  string $table
+     * Returns an array of columns from a table.
+     *
+     * @param string $table
+     *
      * @return \Rougin\Describe\Column[]
      */
     public function getColumns($table)
     {
-        return $this->driver->getColumns($table);
+        return $this->driver->columns($table);
     }
 
     /**
-     * Returns the primary key of a table.
-     * NOTE: To be removed in v2.0.0. Use primary() instead.
+     * @deprecated since ~1.7, use "primary" instead.
      *
-     * @param  string  $table
-     * @param  boolean $object
+     * Returns the primary key of a table.
+     *
+     * @param string  $table
+     * @param boolean $object
+     *
      * @return \Rougin\Describe\Column|string
      */
     public function getPrimaryKey($table, $object = false)
@@ -76,33 +81,37 @@ class Describe
     }
 
     /**
-     * Returns an array of columns from a table.
-     * NOTE: To be removed in v2.0.0. Use getColumns() instead.
+     * @deprecated since ~1.7, use "columns" instead.
      *
-     * @param  string $table
-     * @return array
+     * Returns an array of columns from a table.
+     *
+     * @param string $table
+     *
+     * @return \Rougin\Describe\Column[]
      */
     public function getTable($table)
     {
-        return $this->driver->getTable($table);
+        return $this->driver->columns($table);
     }
 
     /**
-     * Returns an array of table names.
-     * NOTE: To be removed in v2.0.0. Use tables() instead.
+     * @deprecated since ~1.6, use "tables" instead.
      *
-     * @return array
+     * Returns an array of tables.
+     *
+     * @return \Rougin\Describe\Table[]
      */
     public function getTableNames()
     {
-        return $this->driver->getTableNames();
+        return $this->driver->tables();
     }
 
     /**
      * Returns the primary key of a table.
      *
-     * @param  string  $table
-     * @param  boolean $object
+     * @param string  $table
+     * @param boolean $object
+     *
      * @return \Rougin\Describe\Column|string
      */
     public function primary($table, $object = false)
@@ -115,18 +124,19 @@ class Describe
     }
 
     /**
-     * Returns an array of table names.
-     * NOTE: To be removed in v2.0.0. Use getTableNames() instead.
+     * @deprecated since ~1.4, use "getTableNames" instead.
      *
-     * @return array
+     * Returns an array of tables.
+     *
+     * @return \Rougin\Describe\Table[]
      */
     public function showTables()
     {
-        return $this->driver->showTables();
+        return $this->driver->tables();
     }
 
     /**
-     * Returns an array of Table instances.
+     * Returns an array of tables.
      *
      * @return \Rougin\Describe\Table[]
      */
@@ -136,11 +146,13 @@ class Describe
     }
 
     /**
-     * Calls methods from this class in underscore case.
-     * NOTE: To be removed in v2.0.0. All new methods are now in one word.
+     * @deprecated since ~1.6, all methods are now in one word.
      *
-     * @param  string $method
-     * @param  mixed  $parameters
+     * Calls methods from this class in underscore case.
+     *
+     * @param string $method
+     * @param mixed  $parameters
+     *
      * @return mixed
      */
     public function __call($method, $parameters)

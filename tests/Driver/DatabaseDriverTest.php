@@ -5,21 +5,18 @@ namespace Rougin\Describe\Driver;
 use Rougin\Describe\Describe;
 
 /**
- * Database Driver Test
- *
  * @package Describe
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class DatabaseDriverTest extends AbstractTestCase
 {
     const DRIVER_NOT_FOUND = 'Rougin\Describe\Exceptions\DriverNotFoundException';
 
     /**
-     * Sets up the driver instance.
-     *
      * @return void
      */
-    public function setUp()
+    public function doSetUp()
     {
         $config = array('password' => '');
 
@@ -33,11 +30,9 @@ class DatabaseDriverTest extends AbstractTestCase
     }
 
     /**
-     * Tests DatabaseDriver::driver with DriverNotFoundException.
-     *
      * @return void
      */
-    public function testDriverMethodWithDriverNotFoundException()
+    public function test_driver_not_found_exception()
     {
         $this->setExpectedException(self::DRIVER_NOT_FOUND);
 

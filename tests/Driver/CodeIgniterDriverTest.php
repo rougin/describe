@@ -5,19 +5,16 @@ namespace Rougin\Describe\Driver;
 use Rougin\Describe\Describe;
 
 /**
- * Codeigniter Driver Test
- *
  * @package Describe
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class CodeIgniterDriverTest extends AbstractTestCase
 {
     /**
-     * Sets up the driver instance.
-     *
      * @return void
      */
-    public function setUp()
+    public function doSetUp()
     {
         $config = array('default' => array());
 

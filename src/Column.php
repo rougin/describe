@@ -5,12 +5,9 @@ namespace Rougin\Describe;
 use Doctrine\Common\Inflector\Inflector;
 
 /**
- * Column Class
- *
- * Stores a column information from the results given.
- *
  * @package Describe
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class Column
 {
@@ -55,7 +52,7 @@ class Column
     protected $primary = false;
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $reference = array('field' => '', 'table' => '');
 
@@ -204,7 +201,8 @@ class Column
     /**
      * Sets the data type.
      *
-     * @param  string $type
+     * @param string $type
+     *
      * @return self
      */
     public function setDataType($type)
@@ -341,18 +339,21 @@ class Column
     }
 
     /**
-     * Calls methods from this class in underscore case.
-     * NOTE: To be removed in v2.0.0. All new methods are now in one word.
+     * @deprecated since ~1.6, all methods are now in one word.
      *
-     * @param  string $method
-     * @param  mixed  $parameters
+     * Calls methods from this class in underscore case.
+     *
+     * @param string $method
+     * @param mixed  $parameters
+     *
      * @return mixed
      */
     public function __call($method, $parameters)
     {
         $method = Inflector::camelize($method);
 
-        if (method_exists($this, $method) === true) {
+        if (method_exists($this, $method) === true)
+        {
             $instance = array($this, $method);
 
             $result = call_user_func_array($instance, $parameters);

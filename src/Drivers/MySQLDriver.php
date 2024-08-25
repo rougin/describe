@@ -5,14 +5,11 @@ namespace Rougin\Describe\Drivers;
 use Rougin\Describe\Driver\MySQLDriver as BaseDriver;
 
 /**
- * MySQL Driver
+ * @deprecated since ~1.5, use "Driver\MysqlDriver" instead.
  *
- * A database driver extension for MySQL.
- * NOTE: To be removed in v2.0.0. Use Driver\MysqlDriver instead.
+ * @package Describe
  *
- * @package  Describe
- * @category Drivers
- * @author   Rougin Gutib <rougingutib@gmail.com>
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class MySQLDriver extends BaseDriver
 {

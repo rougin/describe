@@ -5,19 +5,16 @@ namespace Rougin\Describe\Driver;
 use Rougin\Describe\Describe;
 
 /**
- * SQLite Driver Test
- *
  * @package Describe
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class SQLiteDriverTest extends AbstractTestCase
 {
     /**
-     * Sets up the driver instance.
-     *
      * @return void
      */
-    public function setUp()
+    public function doSetUp()
     {
         $file = __DIR__ . '/../Databases/test.db';
 

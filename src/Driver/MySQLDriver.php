@@ -7,13 +7,11 @@ use Rougin\Describe\Exceptions\TableNotFoundException;
 use Rougin\Describe\Table;
 
 /**
- * MySQL Driver
- *
- * A database driver extension for MySQL.
  * NOTE: Should be renamed to "MySqlDriver" in v2.0.0.
  *
  * @package Describe
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class MySQLDriver implements DriverInterface
 {
@@ -33,8 +31,6 @@ class MySQLDriver implements DriverInterface
     protected $script = '';
 
     /**
-     * Initializes the driver instance.
-     *
      * @param \PDO   $pdo
      * @param string $database
      */
@@ -53,9 +49,10 @@ class MySQLDriver implements DriverInterface
     }
 
     /**
-     * Returns an array of Column instances from a table.
+     * Returns an array of columns from a table.
      *
-     * @param  string $table
+     * @param string $table
+     *
      * @return \Rougin\Describe\Column[]
      */
     public function columns($table)
@@ -64,10 +61,12 @@ class MySQLDriver implements DriverInterface
     }
 
     /**
-     * Returns an array of Column instances from a table.
-     * NOTE: To be removed in v2.0.0. Use columns() instead.
+     * @deprecated since ~1.7, use "columns" instead.
      *
-     * @param  string $table
+     * Returns an array of columns from a table.
+     *
+     * @param string $table
+     *
      * @return \Rougin\Describe\Column[]
      */
     public function getColumns($table)
@@ -76,10 +75,12 @@ class MySQLDriver implements DriverInterface
     }
 
     /**
-     * Returns an array of Column instances from a table.
-     * NOTE: To be removed in v2.0.0. Use getColumns() instead.
+     * @deprecated since ~1.7, use "columns" instead.
      *
-     * @param  string $table
+     * Returns an array of columns from a table.
+     *
+     * @param string $table
+     *
      * @return \Rougin\Describe\Column[]
      */
     public function getTable($table)
@@ -88,10 +89,11 @@ class MySQLDriver implements DriverInterface
     }
 
     /**
-     * Returns an array of table names.
-     * NOTE: To be removed in v2.0.0. Use tables() instead.
+     * @deprecated since ~1.6, use "tables" instead.
      *
-     * @return array
+     * Returns an array of tables.
+     *
+     * @return \Rougin\Describe\Table[]
      */
     public function getTableNames()
     {
@@ -99,10 +101,11 @@ class MySQLDriver implements DriverInterface
     }
 
     /**
-     * Returns an array of table names.
-     * NOTE: To be removed in v2.0.0. Use getTableNames() instead.
+     * @deprecated since ~1.4, use "getTableNames" instead.
      *
-     * @return array
+     * Returns an array of tables.
+     *
+     * @return \Rougin\Describe\Table[]
      */
     public function showTables()
     {
@@ -110,7 +113,7 @@ class MySQLDriver implements DriverInterface
     }
 
     /**
-     * Returns an array of Table instances.
+     * Returns an array of tables.
      *
      * @return \Rougin\Describe\Table[]
      */
@@ -122,22 +125,31 @@ class MySQLDriver implements DriverInterface
     /**
      * Prepares the defined columns.
      *
-     * @param  \Rougin\Describe\Column $column
-     * @param  string                  $table
-     * @param  mixed                   $row
+     * @param \Rougin\Describe\Column $column
+     * @param string                  $table
+     * @param array<string, string>   $row
+     *
      * @return \Rougin\Describe\Column
      */
     protected function column(Column $column, $table, $row)
     {
-        preg_match('/(.*?)\((.*?)\)/', $row->Type, $match);
+        preg_match('/(.*?)\((.*?)\)/', $row['Type'], $match);
 
-        $column->setDataType($row->Type);
+        $column->setDataType($row['Type']);
 
-        $column->setDefaultValue($row->Default);
+        $column->setDefaultValue($row['Default']);
 
-        $column->setField($row->Field);
+        $column->setField($row['Field']);
 
-        if (isset($match[1]) === true) {
+        if ($row['Field'] === 'user_id')
+        {
+            var_dump($row);exit;
+        }
+
+        if (isset($match[1]))
+        {
+            var_dump($match);
+
             $column->setDataType($match[1]);
 
             $column->setLength($match[2]);
@@ -153,9 +165,10 @@ class MySQLDriver implements DriverInterface
     /**
      * Sets the properties of a column if it does exists.
      *
-     * @param  string                  $name
-     * @param  mixed                   $row
-     * @param  \Rougin\Describe\Column $column
+     * @param string                  $name
+     * @param array<string, string>   $row
+     * @param \Rougin\Describe\Column $column
+     *
      * @return \Rougin\Describe\Column
      */
     protected function foreign($name, $row, Column $column)
@@ -166,13 +179,15 @@ class MySQLDriver implements DriverInterface
 
         $table->execute();
 
-        $table->setFetchMode(\PDO::FETCH_OBJ);
+        $table->setFetchMode(\PDO::FETCH_ASSOC);
 
-        while ($item = $table->fetch()) {
-            if ($item->column === $row->Field) {
-                $referenced = $this->strip($item->referenced_table);
+        while ($item = $table->fetch())
+        {
+            if ($item['column'] === $row['Field'])
+            {
+                $referenced = $this->strip($item['referenced_table']);
 
-                $column->setReferencedField($item->referenced_column);
+                $column->setReferencedField($item['referenced_column']);
 
                 $column->setReferencedTable($referenced);
             }
@@ -182,12 +197,14 @@ class MySQLDriver implements DriverInterface
     }
 
     /**
-     * Returns an array of table names or Table instances.
-     * NOTE: To be removed in v2.0.0. Move to tables() instead.
+     * @deprecated since ~1.7, move to "tables" instead.
      *
-     * @param  boolean $instance
-     * @param  array   $tables
-     * @return array|\Rougin\Describe\Table[]
+     * Returns an array of table names or tables.
+     *
+     * @param boolean  $instance
+     * @param string[] $tables
+     *
+     * @return \Rougin\Describe\Table[]|array
      */
     protected function items($instance = false, $tables = array())
     {
@@ -195,7 +212,8 @@ class MySQLDriver implements DriverInterface
 
         $information->execute();
 
-        while ($row = $information->fetch()) {
+        while ($row = $information->fetch())
+        {
             // NOTE: To be removed in v2.0.0. Always return Table instance.
             $instance && $row[0] = new Table($row[0], $this);
 
@@ -208,18 +226,20 @@ class MySQLDriver implements DriverInterface
     /**
      * Sets the key of a column.
      *
-     * @param  mixed                   $row
-     * @param  \Rougin\Describe\Column $column
+     * @param array<string, string>   $row
+     * @param \Rougin\Describe\Column $column
+     *
      * @return \Rougin\Describe\Column
      */
     protected function keys($row, Column $column)
     {
-        switch ($row->Key) {
+        switch ($row['Key'])
+        {
             case 'PRI':
                 $column->setPrimary(true);
 
                 break;
-            
+
             case 'MUL':
                 $column->setForeign(true);
 
@@ -237,9 +257,10 @@ class MySQLDriver implements DriverInterface
     /**
      * Returns the list of columns based on a query.
      *
-     * @param  string $table
-     * @param  string $query
-     * @param  array  $columns
+     * @param string $table
+     * @param string $query
+     * @param array  $columns
+     *
      * @return \Rougin\Describe\Column[]
      */
     protected function query($table, $query, $columns = array())
@@ -248,15 +269,17 @@ class MySQLDriver implements DriverInterface
 
         $result->execute();
 
-        $result->setFetchMode(\PDO::FETCH_OBJ);
+        $result->setFetchMode(\PDO::FETCH_ASSOC);
 
-        while ($row = $result->fetch()) {
+        while ($row = $result->fetch())
+        {
             $column = $this->column(new Column, $table, $row);
 
             array_push($columns, $column);
         }
 
-        if (empty($columns) === true) {
+        if (empty($columns) === true)
+        {
             $message = 'Table "' . $table . '" does not exists!';
 
             throw new TableNotFoundException($message);
@@ -268,17 +291,18 @@ class MySQLDriver implements DriverInterface
     /**
      * Sets the properties of a column.
      *
-     * @param  mixed                   $row
-     * @param  \Rougin\Describe\Column $column
+     * @param mixed                   $row
+     * @param \Rougin\Describe\Column $column
+     *
      * @return \Rougin\Describe\Column
      */
     protected function properties($row, Column $column)
     {
-        $increment = $row->Extra === 'auto_increment';
+        $increment = $row['Extra'] === 'auto_increment';
 
         $column->setAutoIncrement($increment);
 
-        $column->setNull($row->{'Null'} === 'YES');
+        $column->setNull($row['Null'] === 'YES');
 
         return $column;
     }
@@ -286,7 +310,8 @@ class MySQLDriver implements DriverInterface
     /**
      * Strips the table schema from the table name.
      *
-     * @param  string $table
+     * @param string $table
+     *
      * @return string
      */
     protected function strip($table)

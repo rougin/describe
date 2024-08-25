@@ -3,11 +3,11 @@
 namespace Rougin\Describe\Exceptions;
 
 /**
- * Database Driver Not Found Exception
- * NOTE: To be removed in v2.0.0. Use DriverNotFoundException instead.
+ * @deprecated since ~1.7, use "DriverNotFoundException" instead.
  *
  * @package Describe
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class DatabaseDriverNotFoundException extends DriverNotFoundException
 {

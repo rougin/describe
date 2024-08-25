@@ -2,9 +2,8 @@
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]][link-license]
-[![Build Status][ico-travis]][link-travis]
-[![Coverage Status][ico-scrutinizer]][link-scrutinizer]
-[![Quality Score][ico-code-quality]][link-code-quality]
+[![Build Status][ico-build]][link-build]
+[![Coverage Status][ico-coverage]][link-coverage]
 [![Total Downloads][ico-downloads]][link-downloads]
 
 Describe is a PHP library that returns `Column` objects based on table schema information from a database.
@@ -26,7 +25,7 @@ use Rougin\Describe\Driver\MySQLDriver;
 
 $dsn = 'mysql:host=localhost;dbname=demo';
 
-$pdo = new PDO($dsn, 'root', '');
+$pdo = new PDO($dsn, 'root', 'password');
 
 $driver = new MySQLDriver($pdo, 'demo');
 ```
@@ -77,12 +76,12 @@ namespace Rougin\Describe\Driver;
  * An interface for handling PDO drivers.
  *
  * @package Describe
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 interface DriverInterface
 {
     /**
-     * Returns an array of Column instances from a table.
+     * Returns an array of columns from a table.
      *
      * @param  string $table
      * @return \Rougin\Describe\Column[]
@@ -90,7 +89,7 @@ interface DriverInterface
     public function columns($table);
 
     /**
-     * Returns an array of Table instances.
+     * Returns an array of tables.
      *
      * @return \Rougin\Describe\Table[]
      */
@@ -126,18 +125,16 @@ $ composer test
 
 The MIT License (MIT). Please see [LICENSE][link-license] for more information.
 
-[ico-code-quality]: https://img.shields.io/scrutinizer/g/rougin/describe.svg?style=flat-square
+[ico-build]: https://img.shields.io/github/actions/workflow/status/rougin/describe/build.yml?style=flat-square
+[ico-coverage]: https://img.shields.io/codecov/c/github/rougin/describe?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/rougin/describe.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/rougin/describe.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/rougin/describe/master.svg?style=flat-square
 [ico-version]: https://img.shields.io/packagist/v/rougin/describe.svg?style=flat-square
 
+[link-build]: https://github.com/rougin/describe/actions
 [link-changelog]: https://github.com/rougin/describe/blob/master/CHANGELOG.md
-[link-code-quality]: https://scrutinizer-ci.com/g/rougin/describe
 [link-contributors]: https://github.com/rougin/describe/contributors
+[link-coverage]: https://app.codecov.io/gh/rougin/describe
 [link-downloads]: https://packagist.org/packages/rougin/describe
 [link-license]: https://github.com/rougin/describe/blob/master/LICENSE.md
 [link-packagist]: https://packagist.org/packages/rougin/describe
-[link-scrutinizer]: https://scrutinizer-ci.com/g/rougin/describe/code-structure
-[link-travis]: https://travis-ci.org/rougin/describe

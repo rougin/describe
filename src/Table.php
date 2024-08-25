@@ -5,12 +5,9 @@ namespace Rougin\Describe;
 use Rougin\Describe\Driver\DriverInterface;
 
 /**
- * Table
- *
- * Stores the table information from the given results.
- *
  * @package Describe
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class Table
 {
@@ -38,7 +35,7 @@ class Table
     }
 
     /**
-     * Returns an array of Column instances.
+     * Returns an array of columns.
      *
      * @return \Rougin\Describe\Column[]
      */
@@ -64,7 +61,8 @@ class Table
      */
     public function primary()
     {
-        foreach ($this->columns() as $column) {
+        foreach ($this->columns() as $column)
+        {
             $primary = $column->isPrimaryKey();
 
             $primary && $result = $column;

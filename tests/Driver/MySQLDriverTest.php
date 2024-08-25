@@ -5,23 +5,20 @@ namespace Rougin\Describe\Driver;
 use Rougin\Describe\Describe;
 
 /**
- * MySQL Driver Test
- *
  * @package Describe
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class MySQLDriverTest extends AbstractTestCase
 {
     /**
-     * Sets up the driver instance.
-     *
      * @return void
      */
-    public function setUp()
+    public function doSetUp()
     {
         $dsn = 'mysql:host=localhost;dbname=demo';
 
-        $pdo = new \PDO($dsn, 'root', '');
+        $pdo = new \PDO($dsn, 'root', 'password');
 
         $driver = new MySQLDriver($pdo, 'demo');
 

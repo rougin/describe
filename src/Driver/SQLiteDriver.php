@@ -6,13 +6,11 @@ use Rougin\Describe\Column;
 use Rougin\Describe\Table;
 
 /**
- * SQLite Driver
- *
- * A database driver extension for SQLite.
  * NOTE: Should be renamed to "SqliteDriver" in v2.0.0.
  *
  * @package Describe
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class SQLiteDriver extends MySQLDriver
 {
@@ -22,8 +20,6 @@ class SQLiteDriver extends MySQLDriver
     protected $pdo;
 
     /**
-     * Initializes the driver instance.
-     *
      * @param \PDO $pdo
      */
     public function __construct(\PDO $pdo)
@@ -34,9 +30,10 @@ class SQLiteDriver extends MySQLDriver
     }
 
     /**
-     * Returns an array of Column instances from a table.
+     * Returns an array of columns from a table.
      *
-     * @param  string $table
+     * @param string $table
+     *
      * @return \Rougin\Describe\Column[]
      */
     public function columns($table)
@@ -45,10 +42,12 @@ class SQLiteDriver extends MySQLDriver
     }
 
     /**
-     * Returns an array of Column instances from a table.
-     * NOTE: To be removed in v2.0.0. Use columns() instead.
+     * @deprecated since ~1.7, use "columns" instead.
      *
-     * @param  string $table
+     * Returns an array of columns from a table.
+     *
+     * @param string $table
+     *
      * @return \Rougin\Describe\Column[]
      */
     public function getColumns($table)
@@ -57,10 +56,12 @@ class SQLiteDriver extends MySQLDriver
     }
 
     /**
-     * Returns an array of Column instances from a table.
-     * NOTE: To be removed in v2.0.0. Use getColumns() instead.
+     * @deprecated since ~1.7, use "columns" instead.
      *
-     * @param  string $table
+     * Returns an array of columns from a table.
+     *
+     * @param string $table
+     *
      * @return \Rougin\Describe\Column[]
      */
     public function getTable($table)
@@ -69,10 +70,11 @@ class SQLiteDriver extends MySQLDriver
     }
 
     /**
-     * Returns an array of table names.
-     * NOTE: To be removed in v2.0.0. Use tables() instead.
+     * @deprecated since ~1.6, use "tables" instead.
      *
-     * @return array
+     * Returns an array of tables.
+     *
+     * @return \Rougin\Describe\Table[]
      */
     public function getTableNames()
     {
@@ -80,10 +82,11 @@ class SQLiteDriver extends MySQLDriver
     }
 
     /**
-     * Returns an array of table names.
-     * NOTE: To be removed in v2.0.0. Use getTableNames() instead.
+     * @deprecated since ~1.4, use "getTableNames" instead.
      *
-     * @return array
+     * Returns an array of tables.
+     *
+     * @return \Rougin\Describe\Table[]
      */
     public function showTables()
     {
@@ -91,7 +94,7 @@ class SQLiteDriver extends MySQLDriver
     }
 
     /**
-     * Returns an array of Table instances.
+     * Returns an array of tables.
      *
      * @return \Rougin\Describe\Table[]
      */
@@ -103,37 +106,43 @@ class SQLiteDriver extends MySQLDriver
     /**
      * Prepares the defined columns.
      *
-     * @param  \Rougin\Describe\Column $column
-     * @param  string                  $table
-     * @param  mixed                   $row
+     * @param \Rougin\Describe\Column $column
+     * @param string                  $table
+     * @param array<string, string>   $row
+     *
      * @return \Rougin\Describe\Column
      */
     protected function column(Column $column, $table, $row)
     {
-        $column->setDefaultValue($row->dflt_value);
+        $column->setDefaultValue($row['dflt_value']);
 
-        $column->setField($row->name);
+        $column->setField($row['name']);
 
-        $column->setDataType(strtolower($row->type));
+        $column->setDataType(strtolower($row['type']));
 
         $column = $this->reference($table, $column);
 
-        $column->setNull(! $row->notnull);
+        $column->setNull(! $row['notnull']);
 
-        $row->pk && $column->setAutoIncrement(true);
+        if ($row['pk'])
+        {
+            $column->setAutoIncrement(true);
 
-        $row->pk && $column->setPrimary(true);
+            $column->setPrimary(true);
+        }
 
         return $column;
     }
 
     /**
-     * Returns an array of table names or Table instances.
-     * NOTE: To be removed in v2.0.0. Move to tables() instead.
+     * @deprecated since ~1.7, move to "tables" instead.
      *
-     * @param  boolean $instance
-     * @param  array   $tables
-     * @return array|\Rougin\Describe\Table[]
+     * Returns an array of table names or tables.
+     *
+     * @param boolean  $instance
+     * @param string[] $tables
+     *
+     * @return \Rougin\Describe\Table[]|array
      */
     protected function items($instance = false, $tables = array())
     {
@@ -143,11 +152,13 @@ class SQLiteDriver extends MySQLDriver
 
         $result->execute();
 
-        $result->setFetchMode(\PDO::FETCH_OBJ);
+        $result->setFetchMode(\PDO::FETCH_ASSOC);
 
-        while ($row = $result->fetch()) {
-            if ($row->name !== 'sqlite_sequence') {
-                $name = $row->name;
+        while ($row = $result->fetch())
+        {
+            if ($row['name'] !== 'sqlite_sequence')
+            {
+                $name = $row['name'];
 
                 $tables[] = new Table($name, $this);
             }
@@ -159,8 +170,9 @@ class SQLiteDriver extends MySQLDriver
     /**
      * Sets the properties of a column if it does exists.
      *
-     * @param  string                  $table
-     * @param  \Rougin\Describe\Column $column
+     * @param string                  $table
+     * @param \Rougin\Describe\Column $column
+     *
      * @return \Rougin\Describe\Column
      */
     protected function reference($table, Column $column)
@@ -171,15 +183,17 @@ class SQLiteDriver extends MySQLDriver
 
         $result->execute();
 
-        $result->setFetchMode(\PDO::FETCH_OBJ);
+        $result->setFetchMode(\PDO::FETCH_ASSOC);
 
-        while ($row = $result->fetch()) {
-            if ($column->getField() === $row->from) {
-                $column->setReferencedTable($row->table);
+        while ($row = $result->fetch())
+        {
+            if ($column->getField() === $row['from'])
+            {
+                $column->setReferencedTable($row['table']);
 
                 $column->setForeign(true);
 
-                $column->setReferencedField($row->to);
+                $column->setReferencedField($row['to']);
             }
         }
 

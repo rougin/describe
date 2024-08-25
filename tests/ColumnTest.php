@@ -2,17 +2,16 @@
 
 namespace Rougin\Describe;
 
-use Rougin\Describe\Describe;
 use Rougin\Describe\Driver\MySQLDriver;
 
-class ColumnTest extends \PHPUnit_Framework_TestCase
+class ColumnTest extends Testcase
 {
     const COLUMN_ID = 0;
 
     const COLUMN_USER_ID = 3;
 
     /**
-     * @var array
+     * @var \Rougin\Describe\Column[]
      */
     protected $columns;
 
@@ -22,13 +21,11 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     protected $table = 'post';
 
     /**
-     * Sets up the Describe class.
-     *
      * @return void
      */
-    public function setUp()
+    public function doSetUp()
     {
-        $pdo = new \PDO('mysql:host=localhost;dbname=demo', 'root', '');
+        $pdo = new \PDO('mysql:host=localhost;dbname=demo', 'root', 'password');
 
         $driver = new MySQLDriver($pdo, 'demo');
 
@@ -38,11 +35,9 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests Column::getDataType.
-     *
      * @return void
      */
-    public function testGetDataType()
+    public function test_getting_data_type()
     {
         $column = $this->columns[self::COLUMN_ID];
 
@@ -50,11 +45,9 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests Column::getDefaultValue.
-     *
      * @return void
      */
-    public function testGetDefaultValue()
+    public function test_getting_default_value()
     {
         $column = $this->columns[self::COLUMN_ID];
 
@@ -62,11 +55,9 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests Column::getField.
-     *
      * @return void
      */
-    public function testGetField()
+    public function test_getting_field_name()
     {
         $column = $this->columns[self::COLUMN_USER_ID];
 
@@ -74,11 +65,9 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests Column::getReferencedField.
-     *
      * @return void
      */
-    public function testGetReferencedField()
+    public function test_getting_referenced_field()
     {
         $column = $this->columns[self::COLUMN_USER_ID];
 
@@ -86,11 +75,9 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests Column::getReferencedTable.
-     *
      * @return void
      */
-    public function testGetReferencedTable()
+    public function test_getting_referenced_table()
     {
         $column = $this->columns[self::COLUMN_USER_ID];
 
@@ -98,23 +85,21 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests Column::getLength.
-     *
      * @return void
      */
-    public function testGetLength()
+    public function test_getting_field_length()
     {
         $column = $this->columns[self::COLUMN_USER_ID];
+
+        print_r($column);exit;
 
         $this->assertEquals(10, $column->getLength());
     }
 
     /**
-     * Tests Column::isAutoIncrement.
-     *
      * @return void
      */
-    public function testIsAutoIncrement()
+    public function test_field_is_auto_increment()
     {
         $column = $this->columns[self::COLUMN_ID];
 
@@ -122,11 +107,9 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests Column::isForeignKey.
-     *
      * @return void
      */
-    public function testIsForeignKey()
+    public function test_field_is_foreign_key()
     {
         $column = $this->columns[self::COLUMN_USER_ID];
 
@@ -134,11 +117,9 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests Column::isNull.
-     *
      * @return void
      */
-    public function testIsNull()
+    public function test_field_is_null()
     {
         $column = $this->columns[self::COLUMN_USER_ID];
 
@@ -146,11 +127,9 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests Column::isUnique.
-     *
      * @return void
      */
-    public function testIsUnique()
+    public function test_field_is_unique()
     {
         $column = $this->columns[self::COLUMN_USER_ID];
 
@@ -158,11 +137,9 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests Column::isUnsigned.
-     *
      * @return void
      */
-    public function testIsUnsigned()
+    public function test_field_is_unsigned()
     {
         $column = $this->columns[self::COLUMN_USER_ID];
 
@@ -172,11 +149,9 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests Column::isPrimaryKey.
-     *
      * @return void
      */
-    public function testIsPrimaryKey()
+    public function test_field_is_primary_key()
     {
         $column = $this->columns[self::COLUMN_ID];
 
@@ -184,11 +159,9 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests methods in underscore case.
-     *
      * @return void
      */
-    public function testUnderscoreCase()
+    public function test_underscore_case_fields()
     {
         $column = $this->columns[self::COLUMN_ID];
 
