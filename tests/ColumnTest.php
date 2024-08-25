@@ -25,13 +25,17 @@ class ColumnTest extends Testcase
      */
     public function doSetUp()
     {
-        $pdo = new \PDO('mysql:host=localhost;dbname=test', 'root', '');
+        $dsn = 'mysql:host=localhost;dbname=desc';
 
-        $driver = new MysqlDriver($pdo, 'test');
+        $pdo = new \PDO($dsn, 'desc', 'desc');
+
+        $driver = new MysqlDriver($pdo, 'desc');
 
         $describe = new Describe($driver);
 
-        $this->columns = $describe->getTable($this->table);
+        $columns = $describe->getTable($this->table);
+
+        $this->columns = $columns;
     }
 
     /**

@@ -19,7 +19,7 @@ jobs:
     services:
       mysql:
         image: mysql:8
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=test --entrypoint sh mysql:8 -c "exec docker-entrypoint.sh mysqld --mysql-native-password=ON"
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=desc -e MYSQL_USER=desc -e MYSQL_PASSWORD=desc -e MYSQL_DATABASE=desc --entrypoint sh mysql:8 -c "exec docker-entrypoint.sh mysqld --mysql-native-password=ON"
 
     name: Run Unit Test on PHP ${{ matrix.php-versions }}
 
@@ -30,10 +30,10 @@ jobs:
     - name: Run the MySQL server
       run: |
         sudo /etc/init.d/mysql start
-        mysql -uroot -proot -e 'CREATE DATABASE IF NOT EXISTS test;'
-        mysql -uroot -proot -e 'USE test; CREATE TABLE IF NOT EXISTS `post` ( `id` int(10) NOT NULL AUTO_INCREMENT, `subject` varchar(100) NOT NULL, `message` varchar(500) NOT NULL, `user_id` int(10) NOT NULL, `description` varchar(100) DEFAULT NULL, PRIMARY KEY (`id`), UNIQUE KEY `description` (`description`), KEY `user_id` (`user_id`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;'
-        mysql -uroot -proot -e 'USE test; CREATE TABLE IF NOT EXISTS `user` ( `id` int(10) NOT NULL AUTO_INCREMENT, `name` varchar(200) NOT NULL, `age` int(2) NOT NULL, `gender` varchar(10) NOT NULL, PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;'
-        mysql -uroot -proot -e 'USE test; ALTER TABLE `post` ADD CONSTRAINT `post_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;'
+        mysql -uroot -proot -e 'CREATE DATABASE IF NOT EXISTS desc;'
+        mysql -uroot -proot -e 'USE desc; CREATE TABLE IF NOT EXISTS `post` ( `id` int(10) NOT NULL AUTO_INCREMENT, `subject` varchar(100) NOT NULL, `message` varchar(500) NOT NULL, `user_id` int(10) NOT NULL, `description` varchar(100) DEFAULT NULL, PRIMARY KEY (`id`), UNIQUE KEY `description` (`description`), KEY `user_id` (`user_id`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;'
+        mysql -uroot -proot -e 'USE desc; CREATE TABLE IF NOT EXISTS `user` ( `id` int(10) NOT NULL AUTO_INCREMENT, `name` varchar(200) NOT NULL, `age` int(2) NOT NULL, `gender` varchar(10) NOT NULL, PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;'
+        mysql -uroot -proot -e 'USE desc; ALTER TABLE `post` ADD CONSTRAINT `post_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;'
 
     - name: Install PHP
       uses: shivammathur/setup-php@v2

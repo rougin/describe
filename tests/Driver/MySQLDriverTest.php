@@ -16,11 +16,11 @@ class MysqlDriverTest extends AbstractTestCase
      */
     public function doSetUp()
     {
-        $dsn = 'mysql:host=localhost;dbname=test';
+        $dsn = 'mysql:host=localhost;dbname=desc';
 
-        $pdo = new \PDO($dsn, 'root', 'root');
+        $pdo = new \PDO($dsn, 'desc', 'desc');
 
-        $driver = new MysqlDriver($pdo, 'test');
+        $driver = new MysqlDriver($pdo, 'desc');
 
         $this->describe = new Describe($driver);
     }
