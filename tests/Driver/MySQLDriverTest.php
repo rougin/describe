@@ -3,6 +3,7 @@
 namespace Rougin\Describe\Driver;
 
 use Rougin\Describe\Describe;
+use Rougin\Describe\Testcase;
 
 /**
  * @package Describe
@@ -18,7 +19,7 @@ class MysqlDriverTest extends AbstractTestCase
     {
         $dsn = 'mysql:host=localhost;dbname=desc';
 
-        $pdo = new \PDO($dsn, 'desc', 'desc');
+        $pdo = new \PDO($dsn, Testcase::ROOT_USER, Testcase::ROOT_USER);
 
         $driver = new MysqlDriver($pdo, 'desc');
 

@@ -3,6 +3,7 @@
 namespace Rougin\Describe\Driver;
 
 use Rougin\Describe\Describe;
+use Rougin\Describe\Testcase;
 
 /**
  * @package Describe
@@ -20,8 +21,8 @@ class CodeigniterDriverTest extends AbstractTestCase
 
         $config['dbdriver'] = 'mysqli';
         $config['hostname'] = 'localhost';
-        $config['username'] = 'desc';
-        $config['password'] = 'desc';
+        $config['username'] = Testcase::ROOT_USER;
+        $config['password'] = Testcase::ROOT_USER;
         $config['database'] = 'desc';
 
         $driver = new CodeigniterDriver($config);
