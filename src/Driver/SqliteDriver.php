@@ -41,6 +41,7 @@ class SqliteDriver extends MysqlDriver
 
     /**
      * @deprecated since ~1.7, use "columns" instead.
+     * @codeCoverageIgnore
      *
      * Returns an array of columns from a table.
      *
@@ -55,6 +56,7 @@ class SqliteDriver extends MysqlDriver
 
     /**
      * @deprecated since ~1.7, use "columns" instead.
+     * @codeCoverageIgnore
      *
      * Returns an array of columns from a table.
      *
@@ -69,6 +71,7 @@ class SqliteDriver extends MysqlDriver
 
     /**
      * @deprecated since ~1.6, use "tables" instead.
+     * @codeCoverageIgnore
      *
      * Returns an array of tables.
      *
@@ -81,6 +84,7 @@ class SqliteDriver extends MysqlDriver
 
     /**
      * @deprecated since ~1.4, use "getTableNames" instead.
+     * @codeCoverageIgnore
      *
      * Returns an array of tables.
      *

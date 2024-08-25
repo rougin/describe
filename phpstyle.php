@@ -46,7 +46,7 @@ $rules['concat_space'] = ['spacing' => 'one'];
 $rules['no_empty_phpdoc'] = true;
 
 $groups = [];
-$groups[] = ['deprecated', 'link', 'see', 'since'];
+$groups[] = ['deprecated', 'link', 'see', 'since', 'codeCoverageIgnore'];
 $groups[] = ['property', 'property-read', 'property-write'];
 $groups[] = ['method'];
 $groups[] = ['author', 'copyright', 'license'];

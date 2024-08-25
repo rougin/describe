@@ -2,6 +2,7 @@
 
 namespace Rougin\Describe;
 
+use Rougin\Describe\Driver\DriverInterface;
 use Rougin\Describe\Exceptions\TableNotFoundException;
 
 /**
@@ -27,7 +28,7 @@ class Describe
     /**
      * @param \Rougin\Describe\Driver\DriverInterface $driver
      */
-    public function __construct(Driver\DriverInterface $driver)
+    public function __construct(DriverInterface $driver)
     {
         $this->driver = $driver;
     }

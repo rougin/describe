@@ -46,6 +46,7 @@ class DatabaseDriver implements DriverInterface
 
     /**
      * @deprecated since ~1.7, use "columns" instead.
+     * @codeCoverageIgnore
      *
      * Returns an array of columns from a table.
      *
@@ -60,6 +61,7 @@ class DatabaseDriver implements DriverInterface
 
     /**
      * @deprecated since ~1.7, use "columns" instead.
+     * @codeCoverageIgnore
      *
      * Returns an array of columns from a table.
      *
@@ -74,6 +76,7 @@ class DatabaseDriver implements DriverInterface
 
     /**
      * @deprecated since ~1.6, use "tables" instead.
+     * @codeCoverageIgnore
      *
      * Returns an array of tables.
      *
@@ -86,6 +89,7 @@ class DatabaseDriver implements DriverInterface
 
     /**
      * @deprecated since ~1.4, use "getTableNames" instead.
+     * @codeCoverageIgnore
      *
      * Returns an array of tables.
      *
