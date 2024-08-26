@@ -3,10 +3,9 @@
 namespace Rougin\Describe\Exceptions;
 
 /**
- * Driver Not Found Exception
- *
  * @package Describe
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class DriverNotFoundException extends \UnexpectedValueException
 {

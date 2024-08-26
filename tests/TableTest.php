@@ -2,9 +2,9 @@
 
 namespace Rougin\Describe;
 
-use Rougin\Describe\Driver\MySQLDriver;
+use Rougin\Describe\Driver\MysqlDriver;
 
-class TableTest extends \PHPUnit_Framework_TestCase
+class TableTest extends Testcase
 {
     /**
      * @var \Rougin\Describe\Table
@@ -12,27 +12,37 @@ class TableTest extends \PHPUnit_Framework_TestCase
     protected $table;
 
     /**
-     * Sets up the table instance.
-     *
      * @return void
      */
-    public function setUp()
+    public function doSetUp()
     {
-        $dsn = 'mysql:host=localhost;dbname=demo';
+        $dsn = 'mysql:host=127.0.0.1;dbname=dscb';
 
-        $pdo = new \PDO($dsn, 'root', '');
+        $user = Testcase::TEST_USER;
 
-        $driver = new MySQLDriver($pdo, 'demo');
+        $pass = Testcase::TEST_PASS;
+
+        $pdo = new \PDO((string) $dsn, $user, $pass);
+
+        $driver = new MysqlDriver($pdo, 'dscb');
 
         $this->table = new Table('post', $driver);
     }
 
     /**
-     * Tests Table::columns.
-     *
      * @return void
      */
-    public function testColumnsMethod()
+    public function test_table_name()
+    {
+        $result = $this->table->name();
+
+        $this->assertEquals('post', $result);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_total_columns()
     {
         $columns = $this->table->columns();
 
@@ -41,17 +51,5 @@ class TableTest extends \PHPUnit_Framework_TestCase
         $result = count($columns);
 
         $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Tests Table::name.
-     *
-     * @return void
-     */
-    public function testNameMethod()
-    {
-        $result = $this->table->name();
-
-        $this->assertEquals('post', $result);
     }
 }

@@ -2,15 +2,35 @@
 
 namespace Rougin\Describe;
 
-use Doctrine\Common\Inflector\Inflector;
-
 /**
- * Column Class
- *
- * Stores a column information from the results given.
- *
  * @package Describe
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @method string                  get_data_type()
+ * @method string                  get_default_value()
+ * @method string                  get_field()
+ * @method string                  get_referenced_field()
+ * @method string                  get_referenced_table()
+ * @method integer                 get_length()
+ * @method boolean                 is_auto_increment()
+ * @method boolean                 is_foreign_key()
+ * @method boolean                 is_null()
+ * @method boolean                 is_primary_key()
+ * @method boolean                 is_unique()
+ * @method boolean                 is_unsigned()
+ * @method \Rougin\Describe\Column set_auto_increment(boolean $increment)
+ * @method \Rougin\Describe\Column set_data_type(string $type)
+ * @method \Rougin\Describe\Column set_default_value(string $default)
+ * @method \Rougin\Describe\Column set_field(string $field)
+ * @method \Rougin\Describe\Column set_foreign(string $field)
+ * @method \Rougin\Describe\Column set_referenced_field(string $field)
+ * @method \Rougin\Describe\Column set_referenced_table(string $table)
+ * @method \Rougin\Describe\Column set_length(integer $length)
+ * @method \Rougin\Describe\Column set_null(boolean $null = true)
+ * @method \Rougin\Describe\Column set_primary(boolean $primary = true)
+ * @method \Rougin\Describe\Column set_unique(boolean $unique = true)
+ * @method \Rougin\Describe\Column set_unsigned(boolean $unsigned = true)
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class Column
 {
@@ -55,7 +75,7 @@ class Column
     protected $primary = false;
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $reference = array('field' => '', 'table' => '');
 
@@ -193,6 +213,8 @@ class Column
      * Sets the auto increment.
      *
      * @param boolean $increment
+     *
+     * @return self
      */
     public function setAutoIncrement($increment)
     {
@@ -204,7 +226,8 @@ class Column
     /**
      * Sets the data type.
      *
-     * @param  string $type
+     * @param string $type
+     *
      * @return self
      */
     public function setDataType($type)
@@ -215,7 +238,12 @@ class Column
 
         $index = array_search($type, $shorthand);
 
-        $this->type = $index === false ? $type : $types[$index];
+        if ($index !== false)
+        {
+            $type = $types[$index];
+        }
+
+        $this->type = $type;
 
         return $this;
     }
@@ -224,6 +252,8 @@ class Column
      * Sets the default value.
      *
      * @param string $default
+     *
+     * @return self
      */
     public function setDefaultValue($default)
     {
@@ -236,6 +266,8 @@ class Column
      * Sets the column's description.
      *
      * @param string $field
+     *
+     * @return self
      */
     public function setField($field)
     {
@@ -248,6 +280,8 @@ class Column
      * Sets the field as a foreign key.
      *
      * @param boolean $foreign
+     *
+     * @return self
      */
     public function setForeign($foreign)
     {
@@ -260,6 +294,8 @@ class Column
      * Sets the foreign field.
      *
      * @param string $field
+     *
+     * @return self
      */
     public function setReferencedField($field)
     {
@@ -272,6 +308,8 @@ class Column
      * Sets the foreign table.
      *
      * @param string $table
+     *
+     * @return self
      */
     public function setReferencedTable($table)
     {
@@ -284,6 +322,8 @@ class Column
      * Sets the field's length.
      *
      * @param integer $length
+     *
+     * @return self
      */
     public function setLength($length)
     {
@@ -296,6 +336,8 @@ class Column
      * Sets if field accepts NULL values.
      *
      * @param boolean $null
+     *
+     * @return self
      */
     public function setNull($null = true)
     {
@@ -308,6 +350,8 @@ class Column
      * Sets if field is a primary key.
      *
      * @param boolean $primary
+     *
+     * @return self
      */
     public function setPrimary($primary = true)
     {
@@ -320,6 +364,8 @@ class Column
      * Sets if field is a unique key.
      *
      * @param boolean $unique
+     *
+     * @return self
      */
     public function setUnique($unique = true)
     {
@@ -332,6 +378,8 @@ class Column
      * Sets if field is an unsigned key.
      *
      * @param boolean $unsigned
+     *
+     * @return self
      */
     public function setUnsigned($unsigned = true)
     {
@@ -341,21 +389,33 @@ class Column
     }
 
     /**
-     * Calls methods from this class in underscore case.
-     * NOTE: To be removed in v2.0.0. All new methods are now in one word.
+     * @deprecated since ~1.6, all methods are now in one word.
      *
-     * @param  string $method
-     * @param  mixed  $parameters
+     * Calls methods from this class in underscore case.
+     *
+     * @param string  $method
+     * @param mixed[] $params
+     *
      * @return mixed
      */
-    public function __call($method, $parameters)
+    public function __call($method, $params)
     {
-        $method = Inflector::camelize($method);
+        // Camelize the method name -----------------
+        $words = ucwords(strtr($method, '_-', '  '));
 
-        if (method_exists($this, $method) === true) {
-            $instance = array($this, $method);
+        $search = array(' ', '_', '-');
 
-            $result = call_user_func_array($instance, $parameters);
+        $method = str_replace($search, '', $words);
+
+        $method = lcfirst((string) $method);
+        // ------------------------------------------
+
+        if (method_exists($this, $method) === true)
+        {
+            /** @var callable */
+            $class = array($this, $method);
+
+            $result = call_user_func_array($class, $params);
         }
 
         return isset($result) ? $result : $this;

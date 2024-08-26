@@ -3,10 +3,9 @@
 namespace Rougin\Describe\Exceptions;
 
 /**
- * Table Not Found Exception
- *
  * @package Describe
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class TableNotFoundException extends \PDOException
 {

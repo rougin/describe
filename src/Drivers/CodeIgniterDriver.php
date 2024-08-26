@@ -2,18 +2,15 @@
 
 namespace Rougin\Describe\Drivers;
 
-use Rougin\Describe\Driver\CodeigniterDriver as BaseDriver;
+use Rougin\Describe\Driver\CodeigniterDriver as Driver;
 
 /**
- * CodeIgniter Driver
+ * @deprecated since ~1.5, use "Driver\CodeigniterDriver" instead.
  *
- * A database driver specifically used for CodeIgniter.
- * NOTE: To be removed in v2.0.0. Use Driver\CodeigniterDriver instead.
+ * @package Describe
  *
- * @package  Describe
- * @category Drivers
- * @author   Rougin Gutib <rougingutib@gmail.com>
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class CodeIgniterDriver extends BaseDriver
+class CodeigniterDriver extends Driver
 {
 }

@@ -2,13 +2,14 @@
 
 namespace Rougin\Describe\Driver;
 
+use Rougin\Describe\Testcase;
+
 /**
- * Test Case
- *
  * @package Describe
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
-abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
+abstract class AbstractTestCase extends Testcase
 {
     const TABLE_NOT_FOUND = 'Rougin\Describe\Exceptions\TableNotFoundException';
 
@@ -24,105 +25,17 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
     protected $describe;
 
     /**
-     * Sets up the driver instance.
-     *
      * @return void
      */
-    public function setUp()
+    public function doSetUp()
     {
         $this->markTestSkipped('No Describe instance declared yet.');
     }
 
     /**
-     * Tests DriverInterface::columns.
-     *
      * @return void
      */
-    public function testColumnsMethod()
-    {
-        $columns = $this->describe->columns(self::TABLE_NAME);
-
-        $this->columns($columns);
-    }
-
-    /**
-     * Tests DriverInterface::columns with TableNotFoundException.
-     *
-     * @return void
-     */
-    public function testColumnsMethodWithTableNotFoundException()
-    {
-        $this->setExpectedException(self::TABLE_NOT_FOUND);
-
-        $this->describe->columns('test');
-    }
-
-    /**
-     * Tests DriverInterface::getColumns.
-     *
-     * @return void
-     */
-    public function testGetColumnsMethod()
-    {
-        $columns = $this->describe->getColumns(self::TABLE_NAME);
-
-        $this->columns($columns);
-    }
-
-    /**
-     * Tests DriverInterface::getColumns in underscore case.
-     *
-     * @return void
-     */
-    public function testGetColumnsMethodInUnderscoreCase()
-    {
-        $columns = $this->describe->get_columns(self::TABLE_NAME);
-
-        $this->columns($columns);
-    }
-
-    /**
-     * Tests Describe::getPrimaryKey.
-     *
-     * @return void
-     */
-    public function testGetPrimaryKeyMethod()
-    {
-        $result = $this->describe->getPrimaryKey('post');
-
-        $this->assertEquals('id', $result);
-    }
-
-    /**
-     * Tests DriverInterface::getTable.
-     *
-     * @return void
-     */
-    public function testGetTableMethod()
-    {
-        $columns = $this->describe->getTable(self::TABLE_NAME);
-
-        $this->columns($columns);
-    }
-
-    /**
-     * Tests DriverInterface::getTableNames.
-     *
-     * @return void
-     */
-    public function testGetTableNamesMethod()
-    {
-        $tables = $this->describe->getTableNames();
-
-        $this->tables($tables);
-    }
-
-    /**
-     * Tests Describe::primary.
-     *
-     * @return void
-     */
-    public function testPrimaryMethod()
+    public function test_getting_primary_key()
     {
         $result = $this->describe->primary('post');
 
@@ -130,23 +43,69 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests DriverInterface::showTables.
-     *
      * @return void
      */
-    public function testShowTablesMethod()
+    public function test_getting_primary_key_from_getPrimaryKey()
     {
-        $tables = $this->describe->showTables();
+        $result = $this->describe->getPrimaryKey('post');
 
-        $this->tables($tables);
+        $this->assertEquals('id', $result);
     }
 
     /**
-     * Tests DriverInterface::tables.
-     *
      * @return void
      */
-    public function testTablesMethod()
+    public function test_table_not_found_exception()
+    {
+        $this->setExpectedException(self::TABLE_NOT_FOUND);
+
+        $this->describe->columns('test');
+    }
+
+    /**
+     * @return void
+     */
+    public function test_total_columns()
+    {
+        $columns = $this->describe->columns(self::TABLE_NAME);
+
+        $this->columns($columns);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_total_columns_from_getColumns()
+    {
+        $columns = $this->describe->getColumns(self::TABLE_NAME);
+
+        $this->columns($columns);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_total_columns_from_getTable()
+    {
+        $columns = $this->describe->getTable(self::TABLE_NAME);
+
+        $this->columns($columns);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_total_columns_from_underscore()
+    {
+        $columns = $this->describe->get_columns(self::TABLE_NAME);
+
+        $this->columns($columns);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_total_tables()
     {
         $tables = $this->describe->tables();
 
@@ -154,9 +113,30 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
+     */
+    public function test_total_tables_from_getTableNames()
+    {
+        $tables = $this->describe->getTableNames();
+
+        $this->tables($tables);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_total_tables_from_showTables()
+    {
+        $tables = $this->describe->showTables();
+
+        $this->tables($tables);
+    }
+
+    /**
      * Checks if the result is same as the expected.
      *
-     * @param  array $columns
+     * @param \Rougin\Describe\Column[] $columns
+     *
      * @return void
      */
     protected function columns($columns)
@@ -171,7 +151,8 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
     /**
      * Checks if the result is same as the expected.
      *
-     * @param  array $tables
+     * @param \Rougin\Describe\Table[] $tables
+     *
      * @return void
      */
     protected function tables($tables)

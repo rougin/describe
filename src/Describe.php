@@ -2,17 +2,21 @@
 
 namespace Rougin\Describe;
 
-use Doctrine\Common\Inflector\Inflector;
+use Rougin\Describe\Driver\DriverInterface;
 use Rougin\Describe\Exceptions\TableNotFoundException;
 
 /**
- * Describe
+ * @deprecated since ~1.7, use "Table" instead.
  *
- * Gets information of a table schema from a database.
- * NOTE: To be removed in v2.0.0. Use Table class instead.
+ * @method \Rougin\Describe\Column[] get_columns(string $table)
+ * @method string|null               get_primary_key(string $table)
+ * @method \Rougin\Describe\Column[] get_table(string $table)
+ * @method \Rougin\Describe\Table[]  get_table_names()
+ * @method \Rougin\Describe\Table[]  show_tables()
  *
  * @package Describe
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class Describe
 {
@@ -24,109 +28,113 @@ class Describe
     /**
      * @param \Rougin\Describe\Driver\DriverInterface $driver
      */
-    public function __construct(Driver\DriverInterface $driver)
+    public function __construct(DriverInterface $driver)
     {
         $this->driver = $driver;
     }
 
     /**
-     * Returns an array of Column instances from a table.
+     * Returns a list of columns from a table.
      *
-     * @param  string $table
+     * @param string $table
+     *
      * @return \Rougin\Describe\Column[]
-     *
      * @throws \Rougin\Describe\Exceptions\TableNotFoundException
      */
     public function columns($table)
     {
-        try {
-            $columns = $this->driver->columns($table);
-
-            return $columns;
-        } catch (\PDOException $error) {
-            $text = (string) $error->getMessage();
-
-            throw new TableNotFoundException($text);
+        try
+        {
+            return $this->driver->columns($table);
+        }
+        catch (\PDOException $error)
+        {
+            throw new TableNotFoundException($error->getMessage());
         }
     }
 
     /**
-     * Returns an array of Column instances from a table.
-     * NOTE: To be removed in v2.0.0. Use columns() instead.
+     * @deprecated since ~1.7, use "columns" instead.
      *
-     * @param  string $table
+     * Returns a list of columns from a table.
+     *
+     * @param string $table
+     *
      * @return \Rougin\Describe\Column[]
      */
     public function getColumns($table)
     {
-        return $this->driver->getColumns($table);
+        return $this->driver->columns($table);
     }
 
     /**
+     * @deprecated since ~1.7, use "primary" instead.
+     *
      * Returns the primary key of a table.
-     * NOTE: To be removed in v2.0.0. Use primary() instead.
      *
-     * @param  string  $table
-     * @param  boolean $object
-     * @return \Rougin\Describe\Column|string
+     * @param string $table
+     *
+     * @return string|null
      */
-    public function getPrimaryKey($table, $object = false)
+    public function getPrimaryKey($table)
     {
-        return $this->primary($table, $object);
+        return $this->primary($table);
     }
 
     /**
-     * Returns an array of columns from a table.
-     * NOTE: To be removed in v2.0.0. Use getColumns() instead.
+     * @deprecated since ~1.7, use "columns" instead.
      *
-     * @param  string $table
-     * @return array
+     * Returns a list of columns from a table.
+     *
+     * @param string $table
+     *
+     * @return \Rougin\Describe\Column[]
      */
     public function getTable($table)
     {
-        return $this->driver->getTable($table);
+        return $this->driver->columns($table);
     }
 
     /**
-     * Returns an array of table names.
-     * NOTE: To be removed in v2.0.0. Use tables() instead.
+     * @deprecated since ~1.6, use "tables" instead.
      *
-     * @return array
+     * Returns a list of tables.
+     *
+     * @return \Rougin\Describe\Table[]
      */
     public function getTableNames()
     {
-        return $this->driver->getTableNames();
+        return $this->driver->tables();
     }
 
     /**
      * Returns the primary key of a table.
      *
-     * @param  string  $table
-     * @param  boolean $object
-     * @return \Rougin\Describe\Column|string
+     * @param string $table
+     *
+     * @return string|null
      */
-    public function primary($table, $object = false)
+    public function primary($table)
     {
         $table = new Table($table, $this->driver);
 
-        ($result = $table->primary()) === null && $result = '';
-
-        return $object ? $result : $result->getField();
+        return $table->primary();
     }
 
     /**
-     * Returns an array of table names.
-     * NOTE: To be removed in v2.0.0. Use getTableNames() instead.
+     * @deprecated since ~1.4, use "getTableNames" instead.
      *
-     * @return array
+     * Returns a list of tables.
+     *
+     * @return \Rougin\Describe\Table[]
      */
     public function showTables()
     {
-        return $this->driver->showTables();
+        return $this->driver->tables();
     }
 
     /**
-     * Returns an array of Table instances.
+     * Returns a list of tables.
      *
      * @return \Rougin\Describe\Table[]
      */
@@ -136,19 +144,30 @@ class Describe
     }
 
     /**
-     * Calls methods from this class in underscore case.
-     * NOTE: To be removed in v2.0.0. All new methods are now in one word.
+     * @deprecated since ~1.6, all methods are now in one word.
      *
-     * @param  string $method
-     * @param  mixed  $parameters
+     * Calls methods from this class in underscore case.
+     *
+     * @param string  $method
+     * @param mixed[] $params
+     *
      * @return mixed
      */
-    public function __call($method, $parameters)
+    public function __call($method, $params)
     {
-        $method = (string) Inflector::camelize($method);
+        // Camelize the method name -----------------
+        $words = ucwords(strtr($method, '_-', '  '));
 
-        $instance = array($this, $method);
+        $search = array(' ', '_', '-');
 
-        return call_user_func_array($instance, $parameters);
+        $method = str_replace($search, '', $words);
+
+        $method = lcfirst((string) $method);
+        // ------------------------------------------
+
+        /** @var callable */
+        $class = array($this, $method);
+
+        return call_user_func_array($class, $params);
     }
 }

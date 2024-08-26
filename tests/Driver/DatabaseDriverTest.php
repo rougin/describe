@@ -5,27 +5,24 @@ namespace Rougin\Describe\Driver;
 use Rougin\Describe\Describe;
 
 /**
- * Database Driver Test
- *
  * @package Describe
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class DatabaseDriverTest extends AbstractTestCase
 {
     const DRIVER_NOT_FOUND = 'Rougin\Describe\Exceptions\DriverNotFoundException';
 
     /**
-     * Sets up the driver instance.
-     *
      * @return void
      */
-    public function setUp()
+    public function doSetUp()
     {
         $config = array('password' => '');
 
         $config['hostname'] = 'sqlite:' . __DIR__ . '/../Databases/test.db';
         $config['username'] = 'root';
-        $config['database'] = 'demo';
+        $config['database'] = 'test';
 
         $driver = new DatabaseDriver('sqlite', $config);
 
@@ -33,14 +30,12 @@ class DatabaseDriverTest extends AbstractTestCase
     }
 
     /**
-     * Tests DatabaseDriver::driver with DriverNotFoundException.
-     *
      * @return void
      */
-    public function testDriverMethodWithDriverNotFoundException()
+    public function test_driver_not_found_exception()
     {
         $this->setExpectedException(self::DRIVER_NOT_FOUND);
 
-        $driver = new DatabaseDriver('test', array());
+        new DatabaseDriver('test', array());
     }
 }

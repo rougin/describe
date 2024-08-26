@@ -2,12 +2,11 @@
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]][link-license]
-[![Build Status][ico-travis]][link-travis]
-[![Coverage Status][ico-scrutinizer]][link-scrutinizer]
-[![Quality Score][ico-code-quality]][link-code-quality]
+[![Build Status][ico-build]][link-build]
+[![Coverage Status][ico-coverage]][link-coverage]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-Describe is a PHP library that returns `Column` objects based on table schema information from a database.
+Describe is a PHP package that returns details of each column based on the database table schema.
 
 ## Installation
 
@@ -22,40 +21,42 @@ $ composer require rougin/describe
 ### Using a vendor-specific driver
 
 ``` php
-use Rougin\Describe\Driver\MySQLDriver;
+use Rougin\Describe\Driver\MysqlDriver;
 
-$dsn = 'mysql:host=localhost;dbname=demo';
+$dsn = 'mysql:host=localhost;dbname=test';
 
 $pdo = new PDO($dsn, 'root', '');
 
-$driver = new MySQLDriver($pdo, 'demo');
+$driver = new MysqlDriver($pdo, 'test');
 ```
 
 Available drivers:
 
-* [MySQLDriver](https://github.com/rougin/describe/blob/master/src/Driver/MySQLDriver.php)
-* [SQLiteDriver](https://github.com/rougin/describe/blob/master/src/Driver/SQLiteDriver.php)
+* [MysqlDriver](https://github.com/rougin/describe/blob/master/src/Driver/MysqlDriver.php)
+* [SqliteDriver](https://github.com/rougin/describe/blob/master/src/Driver/SqliteDriver.php)
 
 ### Using a `DatabaseDriver`
 
 ``` php
 use Rougin\Describe\Driver\DatabaseDriver;
 
-$credentials = array('password' => '');
+$creds = array('password' => '');
 
-$credentials['hostname'] = 'localhost';
-$credentials['database'] = 'demo';
-$credentials['username'] = 'root';
+$creds['hostname'] = 'localhost';
+$creds['database'] = 'test';
+$creds['username'] = 'root';
 
-$driver = new DatabaseDriver('mysql', $credentials);
+$driver = new DatabaseDriver('mysql', $creds);
 ```
 
 ### Using `Table`
 
 ``` php
-$table = new Rougin\Describe\Table('users', $driver);
+use Rougin\Describe\Table;
 
-// Returns an array of "Column" instances
+$table = new Table('users', $driver);
+
+// Returns a list of columns
 var_dump($table->columns());
 
 // Returns the primary key "Column" from the table
@@ -71,18 +72,10 @@ To add a driver for a specified database, just implement it to a `DriverInterfac
 ``` php
 namespace Rougin\Describe\Driver;
 
-/**
- * Database Driver Interface
- *
- * An interface for handling PDO drivers.
- *
- * @package Describe
- * @author  Rougin Gutib <rougingutib@gmail.com>
- */
 interface DriverInterface
 {
     /**
-     * Returns an array of Column instances from a table.
+     * Returns a list of columns from a table.
      *
      * @param  string $table
      * @return \Rougin\Describe\Column[]
@@ -90,7 +83,7 @@ interface DriverInterface
     public function columns($table);
 
     /**
-     * Returns an array of Table instances.
+     * Returns a list of tables.
      *
      * @return \Rougin\Describe\Table[]
      */
@@ -102,11 +95,11 @@ interface DriverInterface
 
 ### [Combustor](https://roug.in/combustor/)
 
-Combustor uses Describe for getting database information for generating a codebase.
+Combustor uses `Describe` for getting database information for generating a codebase.
 
 ### [Refinery](https://roug.in/refinery/)
 
-Same as Combustor, Refinery also uses Describe for creating database migrations for Codeigniter.
+Same as Combustor, Refinery also uses `Describe` for creating database migrations for Codeigniter.
 
 ## Changelog
 
@@ -126,18 +119,16 @@ $ composer test
 
 The MIT License (MIT). Please see [LICENSE][link-license] for more information.
 
-[ico-code-quality]: https://img.shields.io/scrutinizer/g/rougin/describe.svg?style=flat-square
+[ico-build]: https://img.shields.io/github/actions/workflow/status/rougin/describe/build.yml?style=flat-square
+[ico-coverage]: https://img.shields.io/codecov/c/github/rougin/describe?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/rougin/describe.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/rougin/describe.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/rougin/describe/master.svg?style=flat-square
 [ico-version]: https://img.shields.io/packagist/v/rougin/describe.svg?style=flat-square
 
+[link-build]: https://github.com/rougin/describe/actions
 [link-changelog]: https://github.com/rougin/describe/blob/master/CHANGELOG.md
-[link-code-quality]: https://scrutinizer-ci.com/g/rougin/describe
 [link-contributors]: https://github.com/rougin/describe/contributors
+[link-coverage]: https://app.codecov.io/gh/rougin/describe
 [link-downloads]: https://packagist.org/packages/rougin/describe
 [link-license]: https://github.com/rougin/describe/blob/master/LICENSE.md
 [link-packagist]: https://packagist.org/packages/rougin/describe
-[link-scrutinizer]: https://scrutinizer-ci.com/g/rougin/describe/code-structure
-[link-travis]: https://travis-ci.org/rougin/describe

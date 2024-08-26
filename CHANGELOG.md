@@ -2,6 +2,16 @@
 
 All notable changes to `Describe` will be documented in this file.
 
+## [1.8.0](https://github.com/rougin/describe/compare/v1.7.0...v1.8.0) - Unreleased
+
+### Changed
+- Code documentation by `php-cs-fixer`, code quality by `phpstan`
+- Workflow from `Travis CI` to `Github Actions`
+- Code coverage from `Scrutinizer CI` to `Codecov`
+
+### Removed
+- `doctrine/inflector` package
+
 ## [1.7.0](https://github.com/rougin/describe/compare/v1.6.0...v1.7.0) - 2018-01-10
 
 ### Added
@@ -51,14 +61,14 @@ All notable changes to `Describe` will be documented in this file.
 - Tests for `Column`
 
 ### Fixed
-- Issue in using `MySQLDriver` in `CodeIgniterDriver`
+- Issue in using `MysqlDriver` in `CodeigniterDriver`
 
 ## [1.4.0](https://github.com/rougin/describe/compare/v1.3.0...v1.4.0) - 2016-04-23
 
 ### Added
-- Tests for `MySQLDriver`
-- Getting foreign keys in `SQLiteDriver`
-- `DriverInterface::showTables` in `CodeIgniterDriver` and `SQLiteDriver`
+- Tests for `MysqlDriver`
+- Getting foreign keys in `SqliteDriver`
+- `DriverInterface::showTables` in `CodeigniterDriver` and `SqliteDriver`
 
 ## [1.3.0](https://github.com/rougin/describe/compare/v1.2.2...v1.3.0) - 2016-03-30
 
@@ -66,12 +76,12 @@ All notable changes to `Describe` will be documented in this file.
 - Tests
 
 ### Fixed
-- Wrong inserted parameters in `MySQLDriver` for the `CodeIgniterDriver`
+- Wrong inserted parameters in `MysqlDriver` for the `CodeigniterDriver`
 
 ## [1.2.2](https://github.com/rougin/describe/compare/v1.2.1...v1.2.2) - 2016-03-25
 
 ### Fixed
-- Issue in instantiating `SQLiteDriver` in `CodeIgniterDriver`
+- Issue in instantiating `SqliteDriver` in `CodeigniterDriver`
 
 ## [1.2.1](https://github.com/rougin/describe/compare/v1.2.0...v1.2.1) - 2015-11-04
 
@@ -83,9 +93,9 @@ All notable changes to `Describe` will be documented in this file.
 ### Added
 - [`DriverInterface`](https://github.com/rougin/describe/blob/master/src/Driver/DriverInterface.php) for extending database drivers
 - Drivers
-    - [`MySQLDriver`](https://github.com/rougin/describe/blob/master/src/Driver/MySQLDriver.php)
-    - [`SQLiteDriver`](https://github.com/rougin/describe/blob/master/src/Driver/SQLiteDriver.php)
-    - [`CodeIgniterDriver`](https://github.com/rougin/describe/blob/master/src/Driver/CodeIgniterDriver.php)
+    - [`MysqlDriver`](https://github.com/rougin/describe/blob/master/src/Driver/MysqlDriver.php)
+    - [`SqliteDriver`](https://github.com/rougin/describe/blob/master/src/Driver/SqliteDriver.php)
+    - [`CodeigniterDriver`](https://github.com/rougin/describe/blob/master/src/Driver/CodeigniterDriver.php)
 
 ### Changed
 - `Drivers` folder to `Driver`

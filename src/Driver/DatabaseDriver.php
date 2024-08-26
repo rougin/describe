@@ -5,17 +5,14 @@ namespace Rougin\Describe\Driver;
 use Rougin\Describe\Exceptions\DriverNotFoundException;
 
 /**
- * Database Driver
- *
- * A database driver for using available database drivers.
- *
  * @package Describe
- * @author  Rougin Gutib <rougingutib@gmail.com>
+ *
+ * @author Rougin Gutib <rougingutib@gmail.com>
  */
 class DatabaseDriver implements DriverInterface
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $data = array();
 
@@ -25,20 +22,8 @@ class DatabaseDriver implements DriverInterface
     protected $driver;
 
     /**
-     * @var array
-     */
-    protected $mysql = array('mysql', 'mysqli');
-
-    /**
-     * @var array
-     */
-    protected $sqlite = array('pdo', 'sqlite', 'sqlite3');
-
-    /**
-     * Initializes the driver instance.
-     *
-     * @param string $name
-     * @param array  $data
+     * @param string                $name
+     * @param array<string, string> $data
      */
     public function __construct($name, $data = array())
     {
@@ -48,9 +33,10 @@ class DatabaseDriver implements DriverInterface
     }
 
     /**
-     * Returns an array of Column instances from a table.
+     * Returns a list of columns from a table.
      *
-     * @param  string $table
+     * @param string $table
+     *
      * @return \Rougin\Describe\Column[]
      */
     public function columns($table)
@@ -59,10 +45,13 @@ class DatabaseDriver implements DriverInterface
     }
 
     /**
-     * Returns an array of Column instances from a table.
-     * NOTE: To be removed in v2.0.0. Use columns() instead.
+     * @deprecated since ~1.7, use "columns" instead.
+     * @codeCoverageIgnore
      *
-     * @param  string $table
+     * Returns a list of columns from a table.
+     *
+     * @param string $table
+     *
      * @return \Rougin\Describe\Column[]
      */
     public function getColumns($table)
@@ -71,10 +60,13 @@ class DatabaseDriver implements DriverInterface
     }
 
     /**
-     * Returns an array of Column instances from a table.
-     * NOTE: To be removed in v2.0.0. Use getColumns() instead.
+     * @deprecated since ~1.7, use "columns" instead.
+     * @codeCoverageIgnore
      *
-     * @param  string $table
+     * Returns a list of columns from a table.
+     *
+     * @param string $table
+     *
      * @return \Rougin\Describe\Column[]
      */
     public function getTable($table)
@@ -83,10 +75,12 @@ class DatabaseDriver implements DriverInterface
     }
 
     /**
-     * Returns an array of table names.
-     * NOTE: To be removed in v2.0.0. Use tables() instead.
+     * @deprecated since ~1.6, use "tables" instead.
+     * @codeCoverageIgnore
      *
-     * @return array
+     * Returns a list of tables.
+     *
+     * @return \Rougin\Describe\Table[]
      */
     public function getTableNames()
     {
@@ -94,10 +88,12 @@ class DatabaseDriver implements DriverInterface
     }
 
     /**
-     * Returns an array of table names.
-     * NOTE: To be removed in v2.0.0. Use getTableNames() instead.
+     * @deprecated since ~1.4, use "getTableNames" instead.
+     * @codeCoverageIgnore
      *
-     * @return array
+     * Returns a list of tables.
+     *
+     * @return \Rougin\Describe\Table[]
      */
     public function showTables()
     {
@@ -105,7 +101,7 @@ class DatabaseDriver implements DriverInterface
     }
 
     /**
-     * Returns an array of Table instances.
+     * Returns a list of tables.
      *
      * @return \Rougin\Describe\Table[]
      */
@@ -115,34 +111,42 @@ class DatabaseDriver implements DriverInterface
     }
 
     /**
-     * Returns the Driver instance from the configuration.
+     * Returns the driver based on the configuration.
      *
-     * @param  string $name
-     * @param  array  $data
+     * @param string                $name
+     * @param array<string, string> $data
+     *
      * @return \Rougin\Describe\Driver\DriverInterface
-     *
      * @throws \Rougin\Describe\Exceptions\DriverNotFoundException
      */
     protected function driver($name, $data = array())
     {
-        if (in_array($name, $this->mysql) === true) {
-            $dsn = (string) 'mysql:host=%s;dbname=%s';
+        $isMysql = in_array($name, array('mysql', 'mysqli'));
 
-            $dsn = sprintf($dsn, $data['hostname'], $data['database']);
+        $isSqlite = in_array($name, array('pdo', 'sqlite', 'sqlite3'));
 
-            $pdo = new \PDO($dsn, $data['username'], $data['password']);
+        if (! $isMysql && ! $isSqlite)
+        {
+            $message = 'Database driver "%s" not found.';
 
-            return new MySQLDriver($pdo, (string) $data['database']);
+            $message = sprintf($message, (string) $name);
+
+            throw new DriverNotFoundException($message);
         }
 
-        if (in_array($name, $this->sqlite)) {
-            return new SQLiteDriver(new \PDO($data['hostname']));
+        if ($isSqlite)
+        {
+            return new SqliteDriver(new \PDO($data['hostname']));
         }
 
-        $message = 'Database driver "%s" not found.';
+        $dsn = (string) 'mysql:host={HOST};dbname={NAME}';
 
-        $message = sprintf($message, (string) $name);
+        $dsn = str_replace('{HOST}', $data['hostname'], $dsn);
 
-        throw new DriverNotFoundException($message);
+        $dsn = str_replace('{NAME}', $data['database'], $dsn);
+
+        $pdo = new \PDO($dsn, $data['username'], $data['password']);
+
+        return new MysqlDriver($pdo, $data['database']);
     }
 }
