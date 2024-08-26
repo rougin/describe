@@ -28,10 +28,12 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Create the MySQL server
-    - uses: shogo82148/actions-setup-mysql@v1
+      uses: shogo82148/actions-setup-mysql@v1
       with:
         mysql-version: '5.7'
-    - run: |
+
+    - name: Create the MySQL database
+      run: |
         mysql -uroot -e 'SELECT version()'
         mysql -uroot -e 'CREATE DATABASE IF NOT EXISTS `desc`;'
         mysql -uroot -e 'USE `desc`; CREATE TABLE IF NOT EXISTS `post` ( `id` int(10) NOT NULL AUTO_INCREMENT, `subject` varchar(100) NOT NULL, `message` varchar(500) NOT NULL, `user_id` int(10) NOT NULL, `description` varchar(100) DEFAULT NULL, PRIMARY KEY (`id`), UNIQUE KEY `description` (`description`), KEY `user_id` (`user_id`) ) AUTO_INCREMENT=1;'
