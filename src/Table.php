@@ -35,7 +35,7 @@ class Table
     }
 
     /**
-     * Returns an array of columns.
+     * Returns a list of columns.
      *
      * @return \Rougin\Describe\Column[]
      */

@@ -34,7 +34,7 @@ class Describe
     }
 
     /**
-     * Returns an array of columns from a table.
+     * Returns a list of columns from a table.
      *
      * @param string $table
      *
@@ -56,7 +56,7 @@ class Describe
     /**
      * @deprecated since ~1.7, use "columns" instead.
      *
-     * Returns an array of columns from a table.
+     * Returns a list of columns from a table.
      *
      * @param string $table
      *
@@ -84,7 +84,7 @@ class Describe
     /**
      * @deprecated since ~1.7, use "columns" instead.
      *
-     * Returns an array of columns from a table.
+     * Returns a list of columns from a table.
      *
      * @param string $table
      *
@@ -98,7 +98,7 @@ class Describe
     /**
      * @deprecated since ~1.6, use "tables" instead.
      *
-     * Returns an array of tables.
+     * Returns a list of tables.
      *
      * @return \Rougin\Describe\Table[]
      */
@@ -124,7 +124,7 @@ class Describe
     /**
      * @deprecated since ~1.4, use "getTableNames" instead.
      *
-     * Returns an array of tables.
+     * Returns a list of tables.
      *
      * @return \Rougin\Describe\Table[]
      */
@@ -134,7 +134,7 @@ class Describe
     }
 
     /**
-     * Returns an array of tables.
+     * Returns a list of tables.
      *
      * @return \Rougin\Describe\Table[]
      */

@@ -10,7 +10,7 @@ namespace Rougin\Describe\Driver;
 interface DriverInterface
 {
     /**
-     * Returns an array of columns from a table.
+     * Returns a list of columns from a table.
      *
      * @param string $table
      *
@@ -19,7 +19,7 @@ interface DriverInterface
     public function columns($table);
 
     /**
-     * Returns an array of tables.
+     * Returns a list of tables.
      *
      * @return \Rougin\Describe\Table[]
      */

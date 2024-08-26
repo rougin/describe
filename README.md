@@ -56,7 +56,7 @@ use Rougin\Describe\Table;
 
 $table = new Table('users', $driver);
 
-// Returns an array of "Column" instances
+// Returns a list of columns
 var_dump($table->columns());
 
 // Returns the primary key "Column" from the table
@@ -72,18 +72,10 @@ To add a driver for a specified database, just implement it to a `DriverInterfac
 ``` php
 namespace Rougin\Describe\Driver;
 
-/**
- * Database Driver Interface
- *
- * An interface for handling PDO drivers.
- *
- * @package Describe
- * @author Rougin Gutib <rougingutib@gmail.com>
- */
 interface DriverInterface
 {
     /**
-     * Returns an array of columns from a table.
+     * Returns a list of columns from a table.
      *
      * @param  string $table
      * @return \Rougin\Describe\Column[]
@@ -91,7 +83,7 @@ interface DriverInterface
     public function columns($table);
 
     /**
-     * Returns an array of tables.
+     * Returns a list of tables.
      *
      * @return \Rougin\Describe\Table[]
      */
@@ -103,11 +95,11 @@ interface DriverInterface
 
 ### [Combustor](https://roug.in/combustor/)
 
-Combustor uses Describe for getting database information for generating a codebase.
+Combustor uses `Describe` for getting database information for generating a codebase.
 
 ### [Refinery](https://roug.in/refinery/)
 
-Same as Combustor, Refinery also uses Describe for creating database migrations for Codeigniter.
+Same as Combustor, Refinery also uses `Describe` for creating database migrations for Codeigniter.
 
 ## Changelog
 

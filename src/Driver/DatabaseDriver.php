@@ -33,7 +33,7 @@ class DatabaseDriver implements DriverInterface
     }
 
     /**
-     * Returns an array of columns from a table.
+     * Returns a list of columns from a table.
      *
      * @param string $table
      *
@@ -48,7 +48,7 @@ class DatabaseDriver implements DriverInterface
      * @deprecated since ~1.7, use "columns" instead.
      * @codeCoverageIgnore
      *
-     * Returns an array of columns from a table.
+     * Returns a list of columns from a table.
      *
      * @param string $table
      *
@@ -63,7 +63,7 @@ class DatabaseDriver implements DriverInterface
      * @deprecated since ~1.7, use "columns" instead.
      * @codeCoverageIgnore
      *
-     * Returns an array of columns from a table.
+     * Returns a list of columns from a table.
      *
      * @param string $table
      *
@@ -78,7 +78,7 @@ class DatabaseDriver implements DriverInterface
      * @deprecated since ~1.6, use "tables" instead.
      * @codeCoverageIgnore
      *
-     * Returns an array of tables.
+     * Returns a list of tables.
      *
      * @return \Rougin\Describe\Table[]
      */
@@ -91,7 +91,7 @@ class DatabaseDriver implements DriverInterface
      * @deprecated since ~1.4, use "getTableNames" instead.
      * @codeCoverageIgnore
      *
-     * Returns an array of tables.
+     * Returns a list of tables.
      *
      * @return \Rougin\Describe\Table[]
      */
@@ -101,7 +101,7 @@ class DatabaseDriver implements DriverInterface
     }
 
     /**
-     * Returns an array of tables.
+     * Returns a list of tables.
      *
      * @return \Rougin\Describe\Table[]
      */
