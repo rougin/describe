@@ -6,6 +6,8 @@ All notable changes to `Describe` will be documented in this file.
 
 ### Changed
 - Code documentation by `php-cs-fixer`, code quality by `phpstan`
+- Workflow from `Travis CI` to `Github Actions`
+- Code coverage from `Scrutinizer CI` to `Codecov`
 
 ### Removed
 - `doctrine/inflector` package

@@ -6,7 +6,7 @@
 [![Coverage Status][ico-coverage]][link-coverage]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-Describe is a PHP library that returns `Column` objects based on table schema information from a database.
+Describe is a PHP package that returns details of each column based on the database table schema.
 
 ## Installation
 
@@ -40,19 +40,21 @@ Available drivers:
 ``` php
 use Rougin\Describe\Driver\DatabaseDriver;
 
-$credentials = array('password' => '');
+$creds = array('password' => '');
 
-$credentials['hostname'] = 'localhost';
-$credentials['database'] = 'test';
-$credentials['username'] = 'root';
+$creds['hostname'] = 'localhost';
+$creds['database'] = 'test';
+$creds['username'] = 'root';
 
-$driver = new DatabaseDriver('mysql', $credentials);
+$driver = new DatabaseDriver('mysql', $creds);
 ```
 
 ### Using `Table`
 
 ``` php
-$table = new Rougin\Describe\Table('users', $driver);
+use Rougin\Describe\Table;
+
+$table = new Table('users', $driver);
 
 // Returns an array of "Column" instances
 var_dump($table->columns());
