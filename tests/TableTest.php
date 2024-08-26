@@ -16,7 +16,7 @@ class TableTest extends Testcase
      */
     public function doSetUp()
     {
-        $dsn = 'mysql:host=localhost;dbname=desc';
+        $dsn = 'mysql:host=127.0.0.1;dbname=desc';
 
         $user = Testcase::TEST_USER;
 
