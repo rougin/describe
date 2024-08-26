@@ -13,9 +13,9 @@ use LegacyPHPUnit\TestCase as Legacy;
  */
 class Testcase extends Legacy
 {
-    const ROOT_USER = 'root';
+    const TEST_USER = 'desc';
 
-    const ROOT_PASS = 'root';
+    const TEST_PASS = 'desc';
 
     /** @phpstan-ignore-next-line */
     public function setExpectedException($exception)

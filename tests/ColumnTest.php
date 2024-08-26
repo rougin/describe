@@ -27,9 +27,9 @@ class ColumnTest extends Testcase
     {
         $dsn = 'mysql:host=localhost;dbname=desc';
 
-        $user = Testcase::ROOT_USER;
+        $user = Testcase::TEST_USER;
 
-        $pass = Testcase::ROOT_PASS;
+        $pass = Testcase::TEST_PASS;
 
         $pdo = new \PDO((string) $dsn, $user, $pass);
 

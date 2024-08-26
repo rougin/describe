@@ -21,8 +21,8 @@ class CodeigniterDriverTest extends AbstractTestCase
 
         $config['dbdriver'] = 'mysqli';
         $config['hostname'] = 'localhost';
-        $config['username'] = Testcase::ROOT_USER;
-        $config['password'] = Testcase::ROOT_PASS;
+        $config['username'] = Testcase::TEST_USER;
+        $config['password'] = Testcase::TEST_PASS;
         $config['database'] = 'desc';
 
         $driver = new CodeigniterDriver($config);
