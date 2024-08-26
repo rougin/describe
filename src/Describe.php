@@ -155,15 +155,15 @@ class Describe
      */
     public function __call($method, $params)
     {
-        // Camelize the method name ---------------
-        $words = ucwords($method, ' _-');
+        // Camelize the method name -----------------
+        $words = ucwords(strtr($method, '_-', '  '));
 
         $search = array(' ', '_', '-');
 
         $method = str_replace($search, '', $words);
 
         $method = lcfirst((string) $method);
-        // ----------------------------------------
+        // ------------------------------------------
 
         /** @var callable */
         $class = array($this, $method);
