@@ -23,7 +23,7 @@ class CodeigniterDriverTest extends AbstractTestCase
         $config['hostname'] = '127.0.0.1';
         $config['username'] = Testcase::TEST_USER;
         $config['password'] = Testcase::TEST_PASS;
-        $config['database'] = 'desc';
+        $config['database'] = 'dscb';
 
         $driver = new CodeigniterDriver($config);
 

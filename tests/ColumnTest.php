@@ -25,7 +25,7 @@ class ColumnTest extends Testcase
      */
     public function doSetUp()
     {
-        $dsn = 'mysql:host=127.0.0.1;dbname=desc';
+        $dsn = 'mysql:host=127.0.0.1;dbname=dscb';
 
         $user = Testcase::TEST_USER;
 
@@ -33,7 +33,7 @@ class ColumnTest extends Testcase
 
         $pdo = new \PDO((string) $dsn, $user, $pass);
 
-        $driver = new MysqlDriver($pdo, 'desc');
+        $driver = new MysqlDriver($pdo, 'dscb');
 
         $describe = new Describe($driver);
 

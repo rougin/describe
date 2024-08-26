@@ -16,7 +16,7 @@ class TableTest extends Testcase
      */
     public function doSetUp()
     {
-        $dsn = 'mysql:host=127.0.0.1;dbname=desc';
+        $dsn = 'mysql:host=127.0.0.1;dbname=dscb';
 
         $user = Testcase::TEST_USER;
 
@@ -24,7 +24,7 @@ class TableTest extends Testcase
 
         $pdo = new \PDO((string) $dsn, $user, $pass);
 
-        $driver = new MysqlDriver($pdo, 'desc');
+        $driver = new MysqlDriver($pdo, 'dscb');
 
         $this->table = new Table('post', $driver);
     }

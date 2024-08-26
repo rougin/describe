@@ -17,7 +17,7 @@ class MysqlDriverTest extends AbstractTestCase
      */
     public function doSetUp()
     {
-        $dsn = 'mysql:host=127.0.0.1;dbname=desc';
+        $dsn = 'mysql:host=127.0.0.1;dbname=dscb';
 
         $user = Testcase::TEST_USER;
 
@@ -25,7 +25,7 @@ class MysqlDriverTest extends AbstractTestCase
 
         $pdo = new \PDO((string) $dsn, $user, $pass);
 
-        $driver = new MysqlDriver($pdo, 'desc');
+        $driver = new MysqlDriver($pdo, 'dscb');
 
         $this->describe = new Describe($driver);
     }
