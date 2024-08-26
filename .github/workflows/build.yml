@@ -28,7 +28,7 @@ jobs:
         mysql-version: '5.7'
 
     - name: Check the MySQL version
-      run: run: mysql -uroot \
+      run: mysql -uroot \
         --protocol=SOCKET \
         --socket=${{ steps.setup-mysql.outputs.base-dir }}/tmp/mysql.sock
         -e 'SELECT version()'
