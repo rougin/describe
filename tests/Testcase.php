@@ -15,7 +15,7 @@ class Testcase extends Legacy
 {
     const ROOT_USER = 'root';
 
-    const ROOT_PASS = 'desc';
+    const ROOT_PASS = 'root';
 
     /** @phpstan-ignore-next-line */
     public function setExpectedException($exception)
