@@ -32,15 +32,13 @@ jobs:
       with:
         mysql-version: '5.7'
 
-    - name: Create the MySQL database
+    - name: Check the MySQL version
       run: |
         mysql -uroot -e 'SELECT version();'
-        mysql -uroot -e 'CREATE DATABASE dscb;'
-        mysql -uroot -e 'USE dscb; CREATE TABLE `post` (`id` int(10) NOT NULL AUTO_INCREMENT, `subject` varchar(100) NOT NULL, `message` varchar(500) NOT NULL, `user_id` int(10) NOT NULL, `description` varchar(100) DEFAULT NULL, PRIMARY KEY (`id`), UNIQUE KEY `description` (`description`), KEY `user_id` (`user_id`)) AUTO_INCREMENT=1;'
-        mysql -uroot -e 'USE dscb; CREATE TABLE `user` (`id` int(10) NOT NULL AUTO_INCREMENT, `name` varchar(200) NOT NULL, `age` int(2) NOT NULL, `gender` varchar(10) NOT NULL, PRIMARY KEY (`id`)) AUTO_INCREMENT=1;'
-        mysql -uroot -e 'USE dscb; ALTER TABLE `post` ADD CONSTRAINT `post_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;'
-        mysql -uroot -e 'CREATE USER dscb@"%" IDENTIFIED BY dscb;'
-        mysql -uroot -e 'GRANT ALL PRIVILEGES ON dscb.* TO "dscb"@"%"; FLUSH PRIVILEGES;'
+
+    - name: Create the MySQL database
+      run: |
+        mysql -uroot -e 'CREATE DATABASE IF NOT EXISTS dscb;'
 
     - name: Install PHP
       uses: shivammathur/setup-php@v2
