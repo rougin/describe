@@ -9,6 +9,9 @@ All notable changes to `Describe` will be documented in this file.
 - Workflow from `Travis CI` to `Github Actions`
 - Code coverage from `Scrutinizer CI` to `Codecov`
 
+### Fixed
+- `SqliteDriver` - Incorrect data type from result
+
 ### Removed
 - `doctrine/inflector` package
 
