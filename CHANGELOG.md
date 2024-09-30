@@ -4,6 +4,9 @@ All notable changes to `Describe` will be documented in this file.
 
 ## [1.8.0](https://github.com/rougin/describe/compare/v1.7.0...v1.8.0) - Unreleased
 
+### Added
+- `SqliteDriver` - Cast `tinyint` as `boolean`
+
 ### Changed
 - Code documentation by `php-cs-fixer`, code quality by `phpstan`
 - Workflow from `Travis CI` to `Github Actions`

@@ -233,8 +233,10 @@ class Column
     public function setDataType($type)
     {
         $types = array('integer', 'string', 'string');
+        $types[] = 'boolean';
 
         $shorthand = array('int', 'varchar', 'text');
+        $types[] = 'tinyint';
 
         $index = array_search($type, $shorthand);
 
