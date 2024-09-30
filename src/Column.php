@@ -236,7 +236,7 @@ class Column
         $types[] = 'boolean';
 
         $shorthand = array('int', 'varchar', 'text');
-        $types[] = 'tinyint';
+        $shorthand[] = 'tinyint';
 
         $index = array_search($type, $shorthand);
 
