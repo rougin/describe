@@ -143,6 +143,8 @@ class SqliteDriver extends MysqlDriver
 
         $column->setField($row['name']);
 
+        $column->setDataType(strtolower($row['type']));
+
         // Return the data type and its length --------------
         preg_match('/(.*?)\((.*?)\)/', $row['type'], $match);
 
@@ -151,10 +153,6 @@ class SqliteDriver extends MysqlDriver
             $column->setDataType(strtolower($match[1]));
 
             $column->setLength((int) $match[2]);
-        }
-        else
-        {
-            $column->setDataType($row['type']);
         }
         // --------------------------------------------------
 

@@ -26,9 +26,23 @@ class SqliteDriverTest extends AbstractTestCase
     /**
      * @return void
      */
-    public function test_varchar_as_string()
+    public function test_column_with_length()
     {
-        $column = $this->getColumn();
+        $column = $this->getColumn('gender');
+
+        $expected = 4;
+
+        $actual = $column->getLength();
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_text_as_string()
+    {
+        $column = $this->getColumn('name');
 
         $expected = 'string';
 
@@ -40,30 +54,32 @@ class SqliteDriverTest extends AbstractTestCase
     /**
      * @return void
      */
-    public function test_column_with_length()
+    public function test_varchar_as_string()
     {
-        $column = $this->getColumn();
+        $column = $this->getColumn('gender');
 
-        $expected = 4;
+        $expected = 'string';
 
-        $actual = $column->getLength();
+        $actual = $column->getDataType();
 
         $this->assertEquals($expected, $actual);
     }
 
     /**
+     * @param string $name
+     *
      * @return \Rougin\Describe\Column
      * @throws \Exception
      */
-    protected function getColumn()
+    protected function getColumn($name)
     {
         $columns = $this->describe->columns('user');
 
         foreach ($columns as $column)
         {
-            $name = $column->getField();
+            $field = $column->getField();
 
-            if ($name === 'gender')
+            if ($field === $name)
             {
                 return $column;
             }
