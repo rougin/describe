@@ -102,7 +102,7 @@ use Rougin\Describe\Table;
 $table = new Table('users', $driver);
 
 /** @var \Rougin\Describe\Column[] */
-$columns = $driver->tables();
+$columns = $driver->columns();
 
 /** @var \Rougin\Describe\Column */
 $primary = $driver->primary();
