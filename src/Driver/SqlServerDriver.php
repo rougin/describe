@@ -7,6 +7,8 @@ use Rougin\Describe\Exceptions\TableNotFoundException;
 use Rougin\Describe\Table;
 
 /**
+ * @codeCoverageIgnore
+ *
  * @package Describe
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
