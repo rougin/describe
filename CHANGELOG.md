@@ -2,6 +2,11 @@
 
 All notable changes to `Describe` will be documented in this file.
 
+## [1.8.1](https://github.com/rougin/describe/compare/v1.8.0...v1.8.1) - 2024-10-20
+
+### Fixed
+- Incorrect parse of `int` as data type
+
 ## [1.8.0](https://github.com/rougin/describe/compare/v1.7.0...v1.8.0) - 2024-10-20
 
 ### Added

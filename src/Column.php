@@ -232,13 +232,17 @@ class Column
      */
     public function setDataType($type)
     {
-        $type = str_replace('int', 'integer', $type);
-        $type = str_replace('varchar', 'string', $type);
+        if ($type === 'int')
+        {
+            $type = str_replace('int', 'integer', $type);
+        }
+
+        $type = str_replace('nstring', 'string', $type);
+        $type = str_replace('ntext', 'string', $type);
+        $type = str_replace('nvarchar', 'string', $type);
         $type = str_replace('text', 'string', $type);
         $type = str_replace('tinyint', 'boolean', $type);
-        $type = str_replace('nvarchar', 'string', $type);
-        $type = str_replace('ntext', 'string', $type);
-        $type = str_replace('nstring', 'string', $type);
+        $type = str_replace('varchar', 'string', $type);
 
         $this->type = $type;
 
