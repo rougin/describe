@@ -16,6 +16,11 @@ class SqlServerDriverTest extends AbstractTestCase
      */
     public function doSetUp()
     {
+        if (! extension_loaded('sqlsrv'))
+        {
+            $this->markTestSkipped('"sqlsrv" not loaded');
+        }
+
         $dsn = 'sqlsrv:server=127.0.0.1;Database=tempdb';
 
         $pdo = new \PDO($dsn, 'sa', 'dbatools.I0');
