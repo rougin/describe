@@ -20,7 +20,7 @@ class DatabaseDriverTest extends AbstractTestCase
     {
         $config = array('password' => '');
 
-        $config['hostname'] = 'sqlite:' . __DIR__ . '/../Databases/test.db';
+        $config['hostname'] = 'sqlite:' . __DIR__ . '/../Databases/describe.db';
         $config['username'] = 'root';
         $config['database'] = 'test';
 

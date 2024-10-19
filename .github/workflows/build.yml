@@ -33,9 +33,9 @@ jobs:
     - name: Create the MySQL database
       run: |
         mysql -uroot -e 'CREATE DATABASE IF NOT EXISTS dscb;'
-        mysql -uroot -e 'USE dscb; CREATE TABLE IF NOT EXISTS `post` (`id` int(10) NOT NULL AUTO_INCREMENT, `subject` varchar(100) NOT NULL, `message` varchar(500) NOT NULL, `user_id` int(10) NOT NULL, `description` varchar(100) DEFAULT NULL, PRIMARY KEY (`id`), UNIQUE KEY `description` (`description`), KEY `user_id` (`user_id`)) AUTO_INCREMENT=1;'
-        mysql -uroot -e 'USE dscb; CREATE TABLE IF NOT EXISTS `user` (`id` int(10) NOT NULL AUTO_INCREMENT, `name` varchar(200) NOT NULL, `age` int(2) NOT NULL, `gender` varchar(10) NOT NULL, PRIMARY KEY (`id`)) AUTO_INCREMENT=1;'
-        mysql -uroot -e 'USE dscb; ALTER TABLE `post` ADD CONSTRAINT `post_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;'
+        mysql -uroot -e 'USE dscb; CREATE TABLE IF NOT EXISTS `post` (`id` int(10) NOT NULL AUTO_INCREMENT, `subject` varchar(100) NOT NULL, `message` varchar(500) NOT NULL, `resu_id` int(10) NOT NULL, `description` varchar(100) DEFAULT NULL, PRIMARY KEY (`id`), UNIQUE KEY `description` (`description`), KEY `resu_id` (`resu_id`)) AUTO_INCREMENT=1;'
+        mysql -uroot -e 'USE dscb; CREATE TABLE IF NOT EXISTS `resu` (`id` int(10) NOT NULL AUTO_INCREMENT, `name` varchar(200) NOT NULL, `age` int(2) NOT NULL, `gender` varchar(10) NOT NULL, PRIMARY KEY (`id`)) AUTO_INCREMENT=1;'
+        mysql -uroot -e 'USE dscb; ALTER TABLE `post` ADD CONSTRAINT `post_resu_id_foreign` FOREIGN KEY (`resu_id`) REFERENCES `resu` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;'
         mysql -uroot -e 'CREATE USER dscb@"%" IDENTIFIED BY "dscb";'
         mysql -uroot -e 'GRANT ALL PRIVILEGES ON dscb.* TO "dscb"@"%"; FLUSH PRIVILEGES;'
 
@@ -46,8 +46,8 @@ jobs:
 
     - name: Create the MSSQL database
       run: |
-        sqlcmd -S localhost -U sa -P dbatools.I0 -d tempdb -Q 'CREATE TABLE "user" (id INT NOT NULL PRIMARY KEY, name VARCHAR(200) NOT NULL, age INT NOT NULL, gender VARCHAR(10) NOT NULL);'
-        sqlcmd -S localhost -U sa -P dbatools.I0 -d tempdb -Q 'CREATE TABLE post (id INT NOT NULL PRIMARY KEY, subject VARCHAR(100) NOT NULL, message VARCHAR(500) NOT NULL, user_id INT NOT NULL, description VARCHAR(100) NULL, FOREIGN KEY (user_id) REFERENCES "user" (id));'
+        sqlcmd -S localhost -U sa -P dbatools.I0 -d tempdb -Q 'CREATE TABLE resu (id INT NOT NULL PRIMARY KEY, name VARCHAR(200) NOT NULL, age INT NOT NULL, gender VARCHAR(10) NOT NULL);'
+        sqlcmd -S localhost -U sa -P dbatools.I0 -d tempdb -Q 'CREATE TABLE post (id INT NOT NULL PRIMARY KEY, subject VARCHAR(100) NOT NULL, message VARCHAR(500) NOT NULL, resu_id INT NOT NULL, description VARCHAR(100) NULL, FOREIGN KEY (resu_id) REFERENCES resu (id));'
 
     - name: Install PHP
       uses: shivammathur/setup-php@v2
