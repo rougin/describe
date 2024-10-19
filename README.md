@@ -6,7 +6,7 @@
 [![Coverage Status][ico-coverage]][link-coverage]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-Describe is a PHP package that returns information about table structure from a database.
+Describe is a PHP package that returns information about a table structure from a database.
 
 ## Installation
 
@@ -34,11 +34,11 @@ $driver = new MysqlDriver($pdo, 'test');
 
 Below are the available drivers for specified vendors:
 
-| Driver                                 | Description                                  | Vendor                                                                        |
-|----------------------------------------|----------------------------------------------|-------------------------------------------------------------------------------|
-| Rougin\Describe\Driver\MysqlDriver     | Uses the `DESCRIBE` query.                   | [MySQL](https://www.mysql.com/)                                               |
-| Rougin\Describe\Driver\SqlServerDriver | Uses the `INFORMATION_SCHEMA.COLUMNS` query. | [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) |
-| Rougin\Describe\Driver\SqliteDriver    | Uses the `PRAGMA table_info()` query.        | [SQLite](https://www.sqlite.org/)                                             |
+| **Driver**                               | **Description**                              | **Vendor**                                                                    |
+|------------------------------------------|----------------------------------------------|-------------------------------------------------------------------------------|
+| `Rougin\Describe\Driver\MysqlDriver`     | Uses the `DESCRIBE` query.                   | [MySQL](https://www.mysql.com/)                                               |
+| `Rougin\Describe\Driver\SqlServerDriver` | Uses the `INFORMATION_SCHEMA.COLUMNS` query. | [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) |
+| `Rougin\Describe\Driver\SqliteDriver`    | Uses the `PRAGMA table_info()` query.        | [SQLite](https://www.sqlite.org/)                                             |
 
 Alternatively, the `DatabaseDriver` can also be used to use a vendor-specific driver based on keyword:
 
@@ -55,7 +55,7 @@ $driver = new DatabaseDriver('mysql', $creds);
 ```
 
 > [!NOTE]
-> `DatabaseDriver` is only available to `MysqlDriver` and `SqliteDriver` only.
+> `DatabaseDriver` is currently available to drivers `MysqlDriver` and `SqliteDriver` only.
 
 After specifying the driver, use the `columns` method to return a list of columns:
 
