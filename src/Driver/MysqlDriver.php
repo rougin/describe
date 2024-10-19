@@ -3,7 +3,6 @@
 namespace Rougin\Describe\Driver;
 
 use Rougin\Describe\Column;
-use Rougin\Describe\Exceptions\TableNotFoundException;
 use Rougin\Describe\Table;
 
 /**
@@ -11,7 +10,7 @@ use Rougin\Describe\Table;
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class MysqlDriver implements DriverInterface
+class MysqlDriver extends AbstractDriver
 {
     /**
      * @var string
@@ -19,21 +18,14 @@ class MysqlDriver implements DriverInterface
     protected $db;
 
     /**
-     * @var \PDO
-     */
-    protected $pdo;
-
-    /**
      * @param \PDO   $pdo
      * @param string $db
      */
     public function __construct(\PDO $pdo, $db)
     {
+        parent::__construct($pdo);
+
         $this->db = $db;
-
-        $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-
-        $this->pdo = $pdo;
     }
 
     /**
@@ -45,63 +37,7 @@ class MysqlDriver implements DriverInterface
      */
     public function columns($table)
     {
-        return $this->query($table, 'DESCRIBE ' . $table);
-    }
-
-    /**
-     * @deprecated since ~1.7, use "columns" instead.
-     * @codeCoverageIgnore
-     *
-     * Returns a list of columns from a table.
-     *
-     * @param string $table
-     *
-     * @return \Rougin\Describe\Column[]
-     */
-    public function getColumns($table)
-    {
-        return $this->columns($table);
-    }
-
-    /**
-     * @deprecated since ~1.7, use "columns" instead.
-     * @codeCoverageIgnore
-     *
-     * Returns a list of columns from a table.
-     *
-     * @param string $table
-     *
-     * @return \Rougin\Describe\Column[]
-     */
-    public function getTable($table)
-    {
-        return $this->getColumns($table);
-    }
-
-    /**
-     * @deprecated since ~1.6, use "tables" instead.
-     * @codeCoverageIgnore
-     *
-     * Returns a list of tables.
-     *
-     * @return \Rougin\Describe\Table[]
-     */
-    public function getTableNames()
-    {
-        return $this->tables();
-    }
-
-    /**
-     * @deprecated since ~1.4, use "getTableNames" instead.
-     * @codeCoverageIgnore
-     *
-     * Returns a list of tables.
-     *
-     * @return \Rougin\Describe\Table[]
-     */
-    public function showTables()
-    {
-        return $this->getTableNames();
+        return $this->setColumns($table, 'DESCRIBE ' . $table);
     }
 
     /**
@@ -131,14 +67,15 @@ class MysqlDriver implements DriverInterface
     /**
      * Prepares the defined columns.
      *
-     * @param \Rougin\Describe\Column $column
-     * @param string                  $table
-     * @param array<string, string>   $row
+     * @param string                $table
+     * @param array<string, string> $row
      *
      * @return \Rougin\Describe\Column
      */
-    protected function column(Column $column, $table, $row)
+    protected function newColumn($table, $row)
     {
+        $column = new Column;
+
         $column->setDataType($row['Type']);
 
         $column->setDefaultValue($row['Default']);
@@ -191,77 +128,36 @@ class MysqlDriver implements DriverInterface
             $column->setUnique(true);
         }
 
-        return $this->setForeign($table, $row, $column);
-    }
-
-    /**
-     * Returns the list of columns based on a query.
-     *
-     * @param string $table
-     * @param string $query
-     *
-     * @return \Rougin\Describe\Column[]
-     * @throws \Rougin\Describe\Exceptions\TableNotFoundException
-     */
-    protected function query($table, $query)
-    {
-        $columns = array();
-
-        $result = $this->pdo->prepare($query);
-
-        $result->execute();
-
-        $result->setFetchMode(\PDO::FETCH_ASSOC);
-
-        while ($row = $result->fetch())
-        {
-            /** @var array<string, string> */
-            $item = $row;
-
-            $column = $this->column(new Column, $table, $item);
-
-            $columns[] = $column;
-        }
-
-        if (count($columns) > 0)
-        {
-            return $columns;
-        }
-
-        $message = 'Table "' . $table . '" does not exists!';
-
-        throw new TableNotFoundException($message);
+        return $this->setForeign($column, $row, $table);
     }
 
     /**
      * Sets the properties of a column if it does exists.
      *
-     * @param string                  $name
      * @param array<string, string>   $row
      * @param \Rougin\Describe\Column $column
+     * @param string                  $table
      *
      * @return \Rougin\Describe\Column
      */
-    protected function setForeign($name, $row, Column $column)
+    protected function setForeign(Column $column, $row, $table)
     {
         $script = 'SELECT COLUMN_NAME as "column", REFERENCED_COLUMN_NAME as ' .
             '"referenced_column", CONCAT(REFERENCED_TABLE_SCHEMA, ".", ' .
             'REFERENCED_TABLE_NAME) as "referenced_table" FROM INFORMATION_SCHEMA' .
             '.KEY_COLUMN_USAGE WHERE CONSTRAINT_SCHEMA = "%s" AND TABLE_NAME = "%s";';
 
-        $query = sprintf($script, $this->db, $name);
+        $query = sprintf($script, $this->db, $table);
 
         $table = $this->pdo->prepare($query);
 
         $table->execute();
 
-        $table->setFetchMode(\PDO::FETCH_ASSOC);
+        /** @var array<string, string>[] */
+        $items = $table->fetchAll(\PDO::FETCH_ASSOC);
 
-        while ($result = $table->fetch())
+        foreach ($items as $item)
         {
-            /** @var array<string, string> */
-            $item = $result;
-
             if ($item['column'] !== $row['Field'])
             {
                 continue;

@@ -34,12 +34,13 @@ $driver = new MysqlDriver($pdo, 'test');
 
 Below are the available drivers for specified vendors:
 
-| Driver                              | Description                                 | Vendor |
-|-------------------------------------|---------------------------------------------|--------|
-| Rougin\Describe\Driver\MysqlDriver  | Uses the `DESCRIBE` query from `MySQL`.     | MySQL  |
-| Rougin\Describe\Driver\SqliteDriver | Uses the `PRAGMA table_info()` of `SQLite`. | SQLite |
+| Driver                                 | Description                                  | Vendor                                                                        |
+|----------------------------------------|----------------------------------------------|-------------------------------------------------------------------------------|
+| Rougin\Describe\Driver\MysqlDriver     | Uses the `DESCRIBE` query.                   | [MySQL](https://www.mysql.com/)                                               |
+| Rougin\Describe\Driver\SqlServerDriver | Uses the `INFORMATION_SCHEMA.COLUMNS` query. | [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) |
+| Rougin\Describe\Driver\SqliteDriver    | Uses the `PRAGMA table_info()` query.        | [SQLite](https://www.sqlite.org/)                                             |
 
-Alternatively, the `DatabaseDriver` can be used to use a vendor-specific driver based on keyword:
+Alternatively, the `DatabaseDriver` can also be used to use a vendor-specific driver based on keyword:
 
 ``` php
 use Rougin\Describe\Driver\DatabaseDriver;
@@ -121,13 +122,9 @@ The following projects below uses `Describe` as a valuable tool for getting a st
 
 * [Combustor](https://roug.in/combustor/)
 
-Combustor uses `Describe` for getting columns from a database table and as the basis for code generation.
-
-### [Combustor](https://roug.in/combustor/)
-
 Combustor is a utility package for [Codeigniter 3](https://codeigniter.com/userguide3/) that generates controllers, models, and views based on the provided database tables. It uses the [Describe](https://roug.in/describe/) package for getting columns from a database table and as the basis for code generation.
 
-### [Refinery](https://roug.in/refinery/)
+* [Refinery](https://roug.in/refinery/)
 
 Refinery is a console-based package of [Migrations Class](https://www.codeigniter.com/userguide3/libraries/migration.html) for the [Codeigniter 3](https://codeigniter.com/userguide3). It uses the [Describe](https://roug.in/describe/) package for retrieving the database tables for creating database migrations.
 
@@ -137,7 +134,7 @@ Please see [CHANGELOG][link-changelog] for more information what has changed rec
 
 ## Testing
 
-The unit tests for this package were written on [PHPUnit](https://phpunit.de/index.html).
+The unit tests for this package were written on [PHPUnit](https://phpunit.de/index.html):
 
 ``` bash
 $ composer test

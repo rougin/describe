@@ -10,23 +10,8 @@ use Rougin\Describe\Table;
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class SqliteDriver extends MysqlDriver
+class SqliteDriver extends AbstractDriver
 {
-    /**
-     * @var \PDO
-     */
-    protected $pdo;
-
-    /**
-     * @param \PDO $pdo
-     */
-    public function __construct(\PDO $pdo)
-    {
-        $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-
-        $this->pdo = $pdo;
-    }
-
     /**
      * Returns a list of columns from a table.
      *
@@ -36,63 +21,7 @@ class SqliteDriver extends MysqlDriver
      */
     public function columns($table)
     {
-        return $this->query($table, 'PRAGMA table_info("' . $table . '");');
-    }
-
-    /**
-     * @deprecated since ~1.7, use "columns" instead.
-     * @codeCoverageIgnore
-     *
-     * Returns a list of columns from a table.
-     *
-     * @param string $table
-     *
-     * @return \Rougin\Describe\Column[]
-     */
-    public function getColumns($table)
-    {
-        return $this->columns($table);
-    }
-
-    /**
-     * @deprecated since ~1.7, use "columns" instead.
-     * @codeCoverageIgnore
-     *
-     * Returns a list of columns from a table.
-     *
-     * @param string $table
-     *
-     * @return \Rougin\Describe\Column[]
-     */
-    public function getTable($table)
-    {
-        return $this->getColumns($table);
-    }
-
-    /**
-     * @deprecated since ~1.6, use "tables" instead.
-     * @codeCoverageIgnore
-     *
-     * Returns a list of tables.
-     *
-     * @return \Rougin\Describe\Table[]
-     */
-    public function getTableNames()
-    {
-        return $this->tables();
-    }
-
-    /**
-     * @deprecated since ~1.4, use "getTableNames" instead.
-     * @codeCoverageIgnore
-     *
-     * Returns a list of tables.
-     *
-     * @return \Rougin\Describe\Table[]
-     */
-    public function showTables()
-    {
-        return $this->getTableNames();
+        return $this->setColumns($table, 'PRAGMA table_info("' . $table . '");');
     }
 
     /**
@@ -108,15 +37,13 @@ class SqliteDriver extends MysqlDriver
 
         $result->execute();
 
-        $result->setFetchMode(\PDO::FETCH_ASSOC);
-
         $tables = array();
 
-        while ($row = $result->fetch())
-        {
-            /** @var array<string, string> $item */
-            $item = $row;
+        /** @var array<string, string>[] */
+        $items = $result->fetchAll(\PDO::FETCH_ASSOC);
 
+        foreach ($items as $item)
+        {
             if ($item['name'] === 'sqlite_sequence')
             {
                 continue;
@@ -131,14 +58,15 @@ class SqliteDriver extends MysqlDriver
     /**
      * Prepares the defined columns.
      *
-     * @param \Rougin\Describe\Column $column
-     * @param string                  $table
-     * @param array<string, string>   $row
+     * @param string                $table
+     * @param array<string, string> $row
      *
      * @return \Rougin\Describe\Column
      */
-    protected function column(Column $column, $table, $row)
+    protected function newColumn($table, $row)
     {
+        $column = new Column;
+
         $column->setDefaultValue($row['dflt_value']);
 
         $column->setField($row['name']);
@@ -156,7 +84,7 @@ class SqliteDriver extends MysqlDriver
         }
         // --------------------------------------------------
 
-        $column = $this->getForeign($table, $column);
+        $column = $this->setForeign($column, $table);
 
         if ($row['pk'])
         {
@@ -166,18 +94,17 @@ class SqliteDriver extends MysqlDriver
         }
 
         return $column->setNull(! $row['notnull']);
-
     }
 
     /**
      * Sets the properties of a column if it does exists.
      *
-     * @param string                  $table
      * @param \Rougin\Describe\Column $column
+     * @param string                  $table
      *
      * @return \Rougin\Describe\Column
      */
-    protected function getForeign($table, Column $column)
+    protected function setForeign(Column $column, $table)
     {
         $query = 'PRAGMA foreign_key_list("' . $table . '");';
 
@@ -185,13 +112,11 @@ class SqliteDriver extends MysqlDriver
 
         $result->execute();
 
-        $result->setFetchMode(\PDO::FETCH_ASSOC);
+        /** @var array<string, string>[] */
+        $items = $result->fetchAll(\PDO::FETCH_ASSOC);
 
-        while ($row = $result->fetch())
+        foreach ($items as $item)
         {
-            /** @var array<string, string> */
-            $item = $row;
-
             if ($column->getField() !== $item['from'])
             {
                 continue;
