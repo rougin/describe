@@ -44,8 +44,11 @@ jobs:
       with:
         install: sqlengine, sqlpackage
 
-    - name: Run a sample test
-      run: sqlcmd -S localhost -U sa -P dbatools.I0 -d tempdb -Q "SELECT @@version;"
+    - name: Create the MSSQL database
+      run: |
+        sqlcmd -S localhost -U sa -P dbatools.I0 -d tempdb -Q "CREATE DATABASE dscb;"
+        sqlcmd -S localhost -U sa -P dbatools.I0 -d tempdb -Q "USE dscb; CREATE TABLE users (id INT IDENTITY (1, 1) PRIMARY KEY, name VARCHAR (200) NOT NULL, age INT NOT NULL, gender VARCHAR (10) NOT NULL);"
+        sqlcmd -S localhost -U sa -P dbatools.I0 -d tempdb -Q "USE dscb; CREATE TABLE posts (id INT IDENTITY (1, 1) PRIMARY KEY, subject VARCHAR (100) NOT NULL, message VARCHAR (500) NOT NULL, user_id INT NOT NULL, description VARCHAR (100) NULL, FOREIGN KEY (user_id) REFERENCES users (id));"
 
     - name: Install PHP
       uses: shivammathur/setup-php@v2
