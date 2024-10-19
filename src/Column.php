@@ -232,18 +232,12 @@ class Column
      */
     public function setDataType($type)
     {
-        $types = array('integer', 'string', 'string');
-        $types[] = 'boolean';
-
-        $shorthand = array('int', 'varchar', 'text');
-        $shorthand[] = 'tinyint';
-
-        $index = array_search($type, $shorthand);
-
-        if ($index !== false)
-        {
-            $type = $types[$index];
-        }
+        $type = str_replace('int', 'integer', $type);
+        $type = str_replace('varchar', 'string', $type);
+        $type = str_replace('text', 'string', $type);
+        $type = str_replace('tinyint', 'boolean', $type);
+        $type = str_replace('nvarchar', 'string', $type);
+        $type = str_replace('ntext', 'string', $type);
 
         $this->type = $type;
 
