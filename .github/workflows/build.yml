@@ -39,6 +39,14 @@ jobs:
         mysql -uroot -e 'CREATE USER dscb@"%" IDENTIFIED BY "dscb";'
         mysql -uroot -e 'GRANT ALL PRIVILEGES ON dscb.* TO "dscb"@"%"; FLUSH PRIVILEGES;'
 
+    - name: Create the MSSQL server
+      uses: potatoqualitee/mssqlsuite@v1.7
+      with:
+        install: sqlengine, sqlpackage
+
+    - name: Run a sample test
+      run: sqlcmd -S localhost -U sa -P dbatools.I0 -d tempdb -Q "SELECT @@version;"
+
     - name: Install PHP
       uses: shivammathur/setup-php@v2
       with:
