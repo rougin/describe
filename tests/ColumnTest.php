@@ -141,7 +141,7 @@ class ColumnTest extends Testcase
     {
         $column = $this->columns[self::COLUMN_USER_ID];
 
-        $this->assertEquals('user_id', $column->getField());
+        $this->assertEquals('resu_id', $column->getField());
     }
 
     /**
@@ -161,7 +161,7 @@ class ColumnTest extends Testcase
     {
         $column = $this->columns[self::COLUMN_USER_ID];
 
-        $this->assertEquals('user', $column->getReferencedTable());
+        $this->assertEquals('resu', $column->getReferencedTable());
     }
 
     /**

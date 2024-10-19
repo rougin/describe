@@ -3,12 +3,11 @@
 namespace Rougin\Describe\Driver;
 
 use Rougin\Describe\Column;
+use Rougin\Describe\Exceptions\TableNotFoundException;
 use Rougin\Describe\Table;
 
 /**
  * @codeCoverageIgnore
- *
- * TODO: Add unit tests, setup "sqlsrv" in Github Actions.
  *
  * @package Describe
  *
@@ -39,6 +38,7 @@ class SqlServerDriver implements DriverInterface
      * @param string $table
      *
      * @return \Rougin\Describe\Column[]
+     * @throws \Rougin\Describe\Exceptions\TableNotFoundException
      */
     public function columns($table)
     {
@@ -63,6 +63,13 @@ class SqlServerDriver implements DriverInterface
         foreach ($items as $item)
         {
             $result[] = $this->setColumn($item, $table, $foreigns);
+        }
+
+        if (count($result) === 0)
+        {
+            $message = 'Table "' . $table . '" does not exists!';
+
+            throw new TableNotFoundException($message);
         }
 
         return $result;
@@ -105,7 +112,7 @@ class SqlServerDriver implements DriverInterface
     {
         $column = new Column;
 
-        $primary = $row['CONSTRAINT_TYPE'] === 'PRIMARY_KEY';
+        $primary = $row['CONSTRAINT_TYPE'] === 'PRIMARY KEY';
         $column->setPrimary($primary);
 
         $column->setField($row['COLUMN_NAME']);
@@ -122,7 +129,7 @@ class SqlServerDriver implements DriverInterface
         $type = $row['DATA_TYPE'];
         $column->setDataType($type);
 
-        if ($row['CONSTRAINT_TYPE'] !== 'FOREIGN_KEY')
+        if ($row['CONSTRAINT_TYPE'] !== 'FOREIGN KEY')
         {
             return $column;
         }
@@ -135,16 +142,14 @@ class SqlServerDriver implements DriverInterface
 
             $sameColumn = $item['FK_COLUMN_NAME'] === $field;
 
-            if (! $sameColumn || ! $sameTable)
+            if ($sameColumn && $sameTable)
             {
-                continue;
+                $column->setReferencedField($item['REFERENCED_TABLE_NAME']);
+
+                $column->setForeign(true);
+
+                $column->setReferencedTable($item['REFERENCED_COLUMN_NAME']);
             }
-
-            $column->setReferencedField($item['REFERENCED_TABLE_NAME']);
-
-            $column->setForeign(true);
-
-            $column->setReferencedTable($item['REFERENCED_COLUMN_NAME']);
         }
 
         return $column;

@@ -16,7 +16,7 @@ class SqliteDriverTest extends AbstractTestCase
      */
     public function doSetUp()
     {
-        $file = __DIR__ . '/../Databases/test.db';
+        $file = __DIR__ . '/../Databases/describe.db';
 
         $driver = new SqliteDriver(new \PDO('sqlite:' . $file));
 
@@ -73,7 +73,7 @@ class SqliteDriverTest extends AbstractTestCase
      */
     protected function getColumn($name)
     {
-        $columns = $this->describe->columns('user');
+        $columns = $this->describe->columns('resu');
 
         foreach ($columns as $column)
         {
