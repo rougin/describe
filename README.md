@@ -92,15 +92,6 @@ interface DriverInterface
 }
 ```
 
-To return the primary key of a specified table, the `primary` method can be used:
-
-``` php
-// index.php
-
-/** @var \Rougin\Describe\Column[] */
-$columns = $driver->primary();
-```
-
 ### Using `Table`
 
 The `Table` class is similar with the `DriverInterface` with the difference that it can return the primary key from the list of columns:
@@ -117,7 +108,7 @@ $columns = $driver->tables();
 $primary = $driver->primary();
 ```
 
-For more information regarding the `Column` object, kindly check it [here](https://github.com/rougin/describe/blob/master/src/Column.php).
+For more information regarding the `Column` object, kindly check its [code documentation](https://github.com/rougin/describe/blob/master/src/Column.php).
 
 ## Projects using Describe
 
