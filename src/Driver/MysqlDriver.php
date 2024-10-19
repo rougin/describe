@@ -96,10 +96,12 @@ class MysqlDriver extends AbstractDriver
         // In MySQL ~8.0, integer does not show its length ---
         if ($column->getDataType() === 'integer')
         {
+            // @codeCoverageIgnoreStart
             if (! isset($match[1]))
             {
                 $column->setLength(10);
             }
+            // @codeCoverageIgnoreEnd
         }
         // --------------------------------------------------
 

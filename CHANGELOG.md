@@ -2,16 +2,17 @@
 
 All notable changes to `Describe` will be documented in this file.
 
-## [1.8.0](https://github.com/rougin/describe/compare/v1.7.0...v1.8.0) - Unreleased
+## [1.8.0](https://github.com/rougin/describe/compare/v1.7.0...v1.8.0) - 2024-10-20
 
 ### Added
-- `SqlServerDriver` for handling `SQL Server` database tables
+- `SqlServerDriver` for handling tables from `SQL Server`
 - `SqliteDriver` - Cast `tinyint` as `boolean`
 
 ### Changed
-- Code documentation by `php-cs-fixer`, code quality by `phpstan`
-- Workflow from `Travis CI` to `Github Actions`
-- Code coverage from `Scrutinizer CI` to `Codecov`
+- Code coverage provider to `Codecov`
+- Code documentation by `php-cs-fixer`
+- Improved code quality by `phpstan`
+- Workflow provider to `Github Actions`
 
 ### Fixed
 - `SqliteDriver` - Incorrect data type from result
