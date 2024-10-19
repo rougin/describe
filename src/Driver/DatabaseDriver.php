@@ -129,7 +129,7 @@ class DatabaseDriver implements DriverInterface
         {
             $message = 'Database driver "%s" not found.';
 
-            $message = sprintf($message, (string) $name);
+            $message = sprintf($message, $name);
 
             throw new DriverNotFoundException($message);
         }
@@ -139,7 +139,7 @@ class DatabaseDriver implements DriverInterface
             return new SqliteDriver(new \PDO($data['hostname']));
         }
 
-        $dsn = (string) 'mysql:host={HOST};dbname={NAME}';
+        $dsn = 'mysql:host={HOST};dbname={NAME}';
 
         $dsn = str_replace('{HOST}', $data['hostname'], $dsn);
 

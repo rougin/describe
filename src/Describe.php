@@ -162,7 +162,7 @@ class Describe
 
         $method = str_replace($search, '', $words);
 
-        $method = lcfirst((string) $method);
+        $method = lcfirst($method);
         // ------------------------------------------
 
         /** @var callable */

@@ -409,7 +409,7 @@ class Column
 
         $method = str_replace($search, '', $words);
 
-        $method = lcfirst((string) $method);
+        $method = lcfirst($method);
         // ------------------------------------------
 
         if (method_exists($this, $method) === true)

@@ -6,7 +6,7 @@
 [![Coverage Status][ico-coverage]][link-coverage]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-Describe is a PHP package that returns details of each column based on the database table schema.
+Describe is a PHP package that returns information about table structure from a database.
 
 ## Installation
 
@@ -18,9 +18,11 @@ $ composer require rougin/describe
 
 ## Basic Usage
 
-### Using a vendor-specific driver
+Prior in getting information of a table structure, a vendor-specific driver must be implemented:
 
 ``` php
+// index.php
+
 use Rougin\Describe\Driver\MysqlDriver;
 
 $dsn = 'mysql:host=localhost;dbname=test';
@@ -30,12 +32,14 @@ $pdo = new PDO($dsn, 'root', '');
 $driver = new MysqlDriver($pdo, 'test');
 ```
 
-Available drivers:
+Below are the available drivers for specified vendors:
 
-* [MysqlDriver](https://github.com/rougin/describe/blob/master/src/Driver/MysqlDriver.php)
-* [SqliteDriver](https://github.com/rougin/describe/blob/master/src/Driver/SqliteDriver.php)
+| Driver                              | Description                                 | Vendor |
+|-------------------------------------|---------------------------------------------|--------|
+| Rougin\Describe\Driver\MysqlDriver  | Uses the `DESCRIBE` query from `MySQL`.     | MySQL  |
+| Rougin\Describe\Driver\SqliteDriver | Uses the `PRAGMA table_info()` of `SQLite`. | SQLite |
 
-### Using a `DatabaseDriver`
+Alternatively, the `DatabaseDriver` can be used to use a vendor-specific driver based on keyword:
 
 ``` php
 use Rougin\Describe\Driver\DatabaseDriver;
@@ -49,25 +53,18 @@ $creds['username'] = 'root';
 $driver = new DatabaseDriver('mysql', $creds);
 ```
 
-### Using `Table`
+After specifying the driver, use the `columns` method to return a list of columns:
 
 ``` php
-use Rougin\Describe\Table;
+// index.php
 
-$table = new Table('users', $driver);
-
-// Returns a list of columns
-var_dump($table->columns());
-
-// Returns the primary key "Column" from the table
-var_dump($table->primary());
+/** @var \Rougin\Describe\Column[] */
+$columns = $driver->columns('users');
 ```
-
-For more information regarding the `Column` object, kindly check it [here](https://github.com/rougin/describe/blob/master/src/Column.php).
 
 ### Adding a new database driver
 
-To add a driver for a specified database, just implement it to a `DriverInterface`:
+To add a new driver for a specified vendor, kindly implement it to a `DriverInterface`:
 
 ``` php
 namespace Rougin\Describe\Driver;
@@ -91,21 +88,56 @@ interface DriverInterface
 }
 ```
 
+To return the primary key of a specified table, the `primary` method can be used:
+
+``` php
+// index.php
+
+/** @var \Rougin\Describe\Column[] */
+$columns = $driver->primary();
+```
+
+### Using `Table`
+
+The `Table` class is similar with the `DriverInterface` with the difference that it can return the primary key from the list of columns:
+
+``` php
+use Rougin\Describe\Table;
+
+$table = new Table('users', $driver);
+
+/** @var \Rougin\Describe\Column[] */
+$columns = $driver->tables();
+
+/** @var \Rougin\Describe\Column */
+$primary = $driver->primary();
+```
+
+For more information regarding the `Column` object, kindly check it [here](https://github.com/rougin/describe/blob/master/src/Column.php).
+
 ## Projects using Describe
+
+The following projects below uses `Describe` as a valuable tool for getting a structure of a database table:
+
+* [Combustor](https://roug.in/combustor/)
+
+Combustor uses `Describe` for getting columns from a database table and as the basis for code generation.
 
 ### [Combustor](https://roug.in/combustor/)
 
-Combustor uses `Describe` for getting database information for generating a codebase.
+Combustor is a utility package for [Codeigniter 3](https://codeigniter.com/userguide3/) that generates controllers, models, and views based on the provided database tables. It uses the [Describe](https://roug.in/describe/) package for getting columns from a database table and as the basis for code generation.
 
 ### [Refinery](https://roug.in/refinery/)
 
-Same as Combustor, Refinery also uses `Describe` for creating database migrations for Codeigniter.
+Refinery is a console-based package of [Migrations Class](https://www.codeigniter.com/userguide3/libraries/migration.html) for the [Codeigniter 3](https://codeigniter.com/userguide3). It uses the [Describe](https://roug.in/describe/) package for retrieving the database tables for creating database migrations.
 
 ## Changelog
 
 Please see [CHANGELOG][link-changelog] for more information what has changed recently.
 
 ## Testing
+
+The unit tests for this package were written on [PHPUnit](https://phpunit.de/index.html).
 
 ``` bash
 $ composer test

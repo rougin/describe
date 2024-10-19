@@ -1,7 +1,7 @@
 {
   "name": "rougin/describe",
-  "description": "Returns column details from database tables.",
-  "keywords": [ "describe", "database", "php" ],
+  "description": "Obtain information of a database table.",
+  "keywords": [ "describe", "database-table", "php" ],
   "homepage": "https://roug.in/describe/",
   "license": "MIT",
   "authors":

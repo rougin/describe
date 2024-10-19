@@ -23,7 +23,7 @@ class MysqlDriverTest extends AbstractTestCase
 
         $pass = Testcase::TEST_PASS;
 
-        $pdo = new \PDO((string) $dsn, $user, $pass);
+        $pdo = new \PDO($dsn, $user, $pass);
 
         $driver = new MysqlDriver($pdo, 'dscb');
 

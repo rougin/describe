@@ -31,7 +31,7 @@ class Table
     {
         $this->driver = $driver;
 
-        $this->name = (string) $name;
+        $this->name = $name;
     }
 
     /**
