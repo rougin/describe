@@ -54,6 +54,9 @@ $creds['username'] = 'root';
 $driver = new DatabaseDriver('mysql', $creds);
 ```
 
+> [!NOTE]
+> `DatabaseDriver` is only available to `MysqlDriver` and `SqliteDriver` only.
+
 After specifying the driver, use the `columns` method to return a list of columns:
 
 ``` php
