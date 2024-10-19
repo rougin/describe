@@ -238,6 +238,7 @@ class Column
         $type = str_replace('tinyint', 'boolean', $type);
         $type = str_replace('nvarchar', 'string', $type);
         $type = str_replace('ntext', 'string', $type);
+        $type = str_replace('nstring', 'string', $type);
 
         $this->type = $type;
 
