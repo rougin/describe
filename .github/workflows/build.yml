@@ -42,7 +42,7 @@ jobs:
     - name: Create the MSSQL server
       uses: potatoqualitee/mssqlsuite@v1.11
       with:
-        install: sqlengine, sqlpackage
+        install: sqlclient, sqlengine, sqlpackage
         version: 2017
 
     - name: Create the MSSQL database
