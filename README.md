@@ -16,9 +16,9 @@ Install `Describe` via [Composer](https://getcomposer.org/):
 $ composer require rougin/describe
 ```
 
-## Basic Usage
+## Basic usage
 
-Prior in getting information of a table structure, a vendor-specific driver must be implemented:
+`Describe` requires a vendor-specific driver to get a database table's structure:
 
 ``` php
 // index.php
@@ -54,9 +54,6 @@ $creds['username'] = 'root';
 $driver = new DatabaseDriver('mysql', $creds);
 ```
 
-> [!NOTE]
-> `DatabaseDriver` is currently available to drivers `MysqlDriver` and `SqliteDriver` only.
-
 After specifying the driver, use the `columns` method to return a list of columns:
 
 ``` php
@@ -66,33 +63,7 @@ After specifying the driver, use the `columns` method to return a list of column
 $columns = $driver->columns('users');
 ```
 
-### Adding a new database driver
-
-To add a new driver for a specified vendor, kindly implement it to a `DriverInterface`:
-
-``` php
-namespace Rougin\Describe\Driver;
-
-interface DriverInterface
-{
-    /**
-     * Returns a list of columns from a table.
-     *
-     * @param  string $table
-     * @return \Rougin\Describe\Column[]
-     */
-    public function columns($table);
-
-    /**
-     * Returns a list of tables.
-     *
-     * @return \Rougin\Describe\Table[]
-     */
-    public function tables();
-}
-```
-
-### Using `Table`
+## Using `Table`
 
 The `Table` class is similar with the `DriverInterface` with the difference that it can return the primary key from the list of columns:
 
@@ -110,25 +81,72 @@ $primary = $driver->primary();
 
 For more information regarding the `Column` object, kindly check its [code documentation](https://github.com/rougin/describe/blob/master/src/Column.php).
 
-## Projects using Describe
+## Adding a new database driver
 
-The following projects below uses `Describe` as a valuable tool for getting a structure of a database table:
+Use the `DriverInterface` for implementing a vendor-specific driver:
 
-* [Combustor](https://roug.in/combustor/)
+``` php
+namespace Rougin\Describe\Driver;
 
-Combustor is a utility package for [Codeigniter 3](https://codeigniter.com/userguide3/) that generates controllers, models, and views based on the provided database tables. It uses the [Describe](https://roug.in/describe/) package for getting columns from a database table and as the basis for code generation.
+interface DriverInterface
+{
+    /**
+     * Returns a list of columns from a table.
+     *
+     * @param string $table
+     *
+     * @return \Rougin\Describe\Column[]
+     */
+    public function columns($table);
 
-* [Refinery](https://roug.in/refinery/)
+    /**
+     * Returns a list of tables.
+     *
+     * @return \Rougin\Describe\Table[]
+     */
+    public function tables();
+}
+```
 
-Refinery is a console-based package of [Migrations Class](https://www.codeigniter.com/userguide3/libraries/migration.html) for the [Codeigniter 3](https://codeigniter.com/userguide3). It uses the [Describe](https://roug.in/describe/) package for retrieving the database tables for creating database migrations.
+## Use-cases
+
+The following projects below uses `Describe` as a valuable tool:
+
+### Combustor
+
+[Combustor](https://roug.in/combustor/) is a utility package for [Codeigniter 3](https://codeigniter.com/userguide3/) that generates controllers, models, and views based on the provided database tables. It uses `Describe` for getting columns from a database table and as the basis for code generation.
+
+### Refinery
+
+[Refinery](https://roug.in/refinery/) is a console-based package of [Migrations Class](https://www.codeigniter.com/userguide3/libraries/migration.html) for the [Codeigniter 3](https://codeigniter.com/userguide3). It uses `Describe` for retrieving the database tables for creating database migrations.
 
 ## Changelog
 
-Please see [CHANGELOG][link-changelog] for more information what has changed recently.
+Please see [CHANGELOG][link-changelog] for more recent changes.
 
-## Testing
+## Development
 
-The unit tests for this package were written on [PHPUnit](https://phpunit.de/index.html):
+Includes tools for code quality, coding style, and unit tests.
+
+### Code quality
+
+Analyze code quality using [phpstan](https://phpstan.org/):
+
+``` bash
+$ phpstan
+```
+
+### Coding style
+
+Enforce coding style using [php-cs-fixer](https://cs.symfony.com/):
+
+``` bash
+$ php-cs-fixer fix --config=phpstyle.php
+```
+
+### Unit tests
+
+Execute unit tests using [phpunit](https://phpunit.de/index.html):
 
 ``` bash
 $ composer test
@@ -136,11 +154,11 @@ $ composer test
 
 ## Credits
 
-- [All contributors][link-contributors]
+Big thanks to [all contributors][link-contributors] in this package!
 
 ## License
 
-The MIT License (MIT). Please see [LICENSE][link-license] for more information.
+This package uses the [MIT Licenses (MIT)][link-license].
 
 [ico-build]: https://img.shields.io/github/actions/workflow/status/rougin/describe/build.yml?style=flat-square
 [ico-coverage]: https://img.shields.io/codecov/c/github/rougin/describe?style=flat-square
