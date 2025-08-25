@@ -22,15 +22,15 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Create the MySQL server
+    - name: Create "MySQL" server
       uses: shogo82148/actions-setup-mysql@v1
       with:
         mysql-version: '5.7'
 
-    - name: Check the MySQL version
+    - name: Show "MySQL" version
       run: mysql -uroot -e 'SELECT version();'
 
-    - name: Create the MySQL database
+    - name: Create "MySQL" database
       run: |
         mysql -uroot -e 'CREATE DATABASE IF NOT EXISTS dscb;'
         mysql -uroot -e 'USE dscb; CREATE TABLE IF NOT EXISTS `post` (`id` int(10) NOT NULL AUTO_INCREMENT, `subject` varchar(100) NOT NULL, `message` varchar(500) NOT NULL, `resu_id` int(10) NOT NULL, `description` varchar(100) DEFAULT NULL, PRIMARY KEY (`id`), UNIQUE KEY `description` (`description`), KEY `resu_id` (`resu_id`)) AUTO_INCREMENT=1;'
@@ -39,27 +39,32 @@ jobs:
         mysql -uroot -e 'CREATE USER dscb@"%" IDENTIFIED BY "dscb";'
         mysql -uroot -e 'GRANT ALL PRIVILEGES ON dscb.* TO "dscb"@"%"; FLUSH PRIVILEGES;'
 
-    - name: Create the MSSQL server
+    - name: Create "MSSQL" server
       uses: potatoqualitee/mssqlsuite@v1.11
       with:
         install: sqlengine, sqlclient, sqlpackage
         version: 2019
 
-    - name: Check the MSSQL version
+    - name: Show "MSSQL" version
       run: sqlcmd -S localhost -U sa -P dbatools.I0 -d tempdb -Q "SELECT @@version;" -C
 
-    - name: Create the MSSQL database
+    - name: Create "MSSQL" database
       run: |
         sqlcmd -S localhost -U sa -P dbatools.I0 -d tempdb -Q "CREATE TABLE resu (id INT NOT NULL PRIMARY KEY, name VARCHAR(200) NOT NULL, age INT NOT NULL, gender VARCHAR(10) NOT NULL);" -C
         sqlcmd -S localhost -U sa -P dbatools.I0 -d tempdb -Q "CREATE TABLE post (id INT NOT NULL PRIMARY KEY, subject VARCHAR(100) NOT NULL, message VARCHAR(500) NOT NULL, resu_id INT NOT NULL, description VARCHAR(100) NULL, FOREIGN KEY (resu_id) REFERENCES resu (id));" -C
+
+    - name: Install "Microsoft OBDC" driver
+      uses: Yarden-zamir/install-mssql-odbc@main
+      with:
+        ODBC_VERSION: 17
 
     - name: Install PHP
       uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ matrix.php-versions }}
-        extensions: pdo_sqlsrv, sqlsrv
+        extensions: sqlsrv
 
-    - name: Check the PHP version
+    - name: Show PHP version
       run: php -v
 
     - name: Validate composer.json and composer.lock
