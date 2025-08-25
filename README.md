@@ -126,7 +126,10 @@ Please see [CHANGELOG][link-changelog] for more recent changes.
 
 ## Development
 
-Includes tools for code quality, coding style, and unit tests.
+Includes configuration for code quality, coding style, and unit tests.
+
+> [!NOTE]
+> The sub-sections below are for those who need to access the package's source code for development, such as creating fixes or new features.
 
 ### Code quality
 
