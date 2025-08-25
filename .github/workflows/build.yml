@@ -42,7 +42,7 @@ jobs:
     - name: Create the MSSQL server
       uses: potatoqualitee/mssqlsuite@v1.7
       with:
-        install: sqlclient, sqlengine, sqlpackage
+        install: sqlengine, sqlclient, sqlpackage, localdb
 
     - name: Create the MSSQL database
       run: |
