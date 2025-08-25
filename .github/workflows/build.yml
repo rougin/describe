@@ -40,10 +40,9 @@ jobs:
         mysql -uroot -e 'GRANT ALL PRIVILEGES ON dscb.* TO "dscb"@"%"; FLUSH PRIVILEGES;'
 
     - name: Create the MSSQL server
-      uses: potatoqualitee/mssqlsuite@v1.11
+      uses: potatoqualitee/mssqlsuite@v1.7
       with:
         install: sqlclient, sqlengine, sqlpackage
-        version: 2017
 
     - name: Create the MSSQL database
       run: |
