@@ -53,13 +53,8 @@ jobs:
         sqlcmd -S localhost -U sa -P dbatools.I0 -d tempdb -Q "CREATE TABLE resu (id INT NOT NULL PRIMARY KEY, name VARCHAR(200) NOT NULL, age INT NOT NULL, gender VARCHAR(10) NOT NULL);" -C
         sqlcmd -S localhost -U sa -P dbatools.I0 -d tempdb -Q "CREATE TABLE post (id INT NOT NULL PRIMARY KEY, subject VARCHAR(100) NOT NULL, message VARCHAR(500) NOT NULL, resu_id INT NOT NULL, description VARCHAR(100) NULL, FOREIGN KEY (resu_id) REFERENCES resu (id));" -C
 
-    - name: Install "Microsoft OBDC" driver
-      uses: Yarden-zamir/install-mssql-odbc@main
-      with:
-        ODBC_VERSION: 17
-
     - name: Install PHP
-      uses: shivammathur/setup-php@v2
+      uses: shivammathur/setup-php@v2.32
       with:
         php-version: ${{ matrix.php-versions }}
         extensions: sqlsrv
