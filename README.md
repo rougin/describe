@@ -124,44 +124,13 @@ The following projects below uses `Describe` as a valuable tool:
 
 Please see [CHANGELOG][link-changelog] for more recent changes.
 
-## Development
+## Contributing
 
-Includes configuration for code quality, coding style, and unit tests.
-
-> [!NOTE]
-> The sub-sections below are for those who need to access the package's source code for development, such as creating fixes or new features.
-
-### Code quality
-
-Analyze code quality using [phpstan](https://phpstan.org/):
-
-``` bash
-$ phpstan
-```
-
-### Coding style
-
-Enforce coding style using [php-cs-fixer](https://cs.symfony.com/):
-
-``` bash
-$ php-cs-fixer fix --config=phpstyle.php
-```
-
-### Unit tests
-
-Execute unit tests using [phpunit](https://phpunit.de/index.html):
-
-``` bash
-$ composer test
-```
-
-## Credits
-
-Big thanks to [all contributors][link-contributors] in this package!
+See [CONTRIBUTING][link-contributing] on how to contribute.
 
 ## License
 
-This package uses the [MIT Licenses (MIT)][link-license].
+The MIT License (MIT). Please see [LICENSE][link-license] for more information.
 
 [ico-build]: https://img.shields.io/github/actions/workflow/status/rougin/describe/build.yml?style=flat-square
 [ico-coverage]: https://img.shields.io/codecov/c/github/rougin/describe?style=flat-square
@@ -171,8 +140,9 @@ This package uses the [MIT Licenses (MIT)][link-license].
 
 [link-build]: https://github.com/rougin/describe/actions
 [link-changelog]: https://github.com/rougin/describe/blob/master/CHANGELOG.md
-[link-contributors]: https://github.com/rougin/describe/contributors
+[link-contributing]: https://github.com/rougin/describe/blob/master/CONTRIBUTING.md
 [link-coverage]: https://app.codecov.io/gh/rougin/describe
 [link-downloads]: https://packagist.org/packages/rougin/describe
 [link-license]: https://github.com/rougin/describe/blob/master/LICENSE.md
 [link-packagist]: https://packagist.org/packages/rougin/describe
+[link-upgrading]: https://github.com/rougin/describe/blob/master/UPGRADING.md
