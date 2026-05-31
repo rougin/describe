@@ -2,6 +2,14 @@
 
 All notable changes to `Describe` will be documented in this file.
 
+## [1.8.2](https://github.com/rougin/describe/compare/v1.8.1...v1.8.2) - 2026-05-31
+
+### Added
+- Support for PHP `8.4`, `8.5`
+
+### Removed
+- Skipped `SqlServerDriverTest`
+
 ## [1.8.1](https://github.com/rougin/describe/compare/v1.8.0...v1.8.1) - 2024-10-20
 
 ### Fixed
